@@ -1,0 +1,51 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+body {
+    margin: 0;
+}
+
+.mybtn {
+    @apply bg-slate-200 text-indigo-900 bg-opacity-60 hover:bg-indigo-800 hover:bg-opacity-80 hover:text-slate-100 dark:bg-slate-400 rounded-md shadow-sm py-1 px-4 mr-4
+}
+
+.linear-gradient.inverse {
+    background-image: linear-gradient(-45deg,#32c5ff,#b620e0,#f7b500);
+}
+.linear-gradient {
+    background-image: linear-gradient(-45deg,#f7b500,#b620e0,#32c5ff);
+    background-size: 120% 120%;
+    animation: gradient 15s ease infinite;
+}
+.text-fill-transparent {
+    -webkit-text-fill-color: transparent;
+}
+
+.input-with-select .el-input-group__prepend {
+    color: #000;
+    padding: 0 0.7rem;
+    font-size: 1.3rem;
+}
+
+@layer components {
+    .hidden {
+        display: none !important;
+    }
+    .block {
+        display: block !important;
+    }
+    .flex {
+        display: flex !important;
+    }
+    .dark .block {
+        display: block;
+    }
+  }
+
+  .el-loading-mask {
+      background-color: rgba(200, 200, 200, 0.95) !important;
+      z-index: 1 !important;
+  }
+  .dark .el-loading-mask {
+    background-color: rgba(66, 66, 66, 0.95) !important;
+  }

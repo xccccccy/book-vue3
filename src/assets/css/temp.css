@@ -1,0 +1,24 @@
+.back-all {
+    background: #ffffff;
+    min-height: 100vh;
+    margin: 0;
+    /* background: url("./assets/img/back2.jpg") center center / cover no-repeat; */
+    /* background-size: cover; */
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+.back-all:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    backdrop-filter: blur(45px) brightness(95%);
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background: rgba(21,22,33,0.1);
+  }
+
+  

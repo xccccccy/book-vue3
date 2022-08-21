@@ -1,0 +1,355 @@
+body {
+    min-height: 100vh;
+}
+
+#box {
+    text-align: center;
+    background: #fff;
+    box-shadow: 2px -2px 100px #00000057;
+    min-height: 88vh;
+}
+
+.navigate {
+    text-align: left;
+    margin: .8rem 3%;
+    font-size: 1.1rem;
+    margin-top: 2.8rem;
+    padding: 1.6rem;
+    position: relative;
+    z-index: 2;
+}
+
+.navigate a {
+    font-size: 1.3rem;
+    padding: .2rem;
+    cursor: pointer;
+    text-decoration-line: underline;
+}
+
+.content .catalogue_name {
+    padding: .8rem;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.content {
+    text-align: left;
+    line-height: 2;
+    font-size: 1.2rem;
+    color: #000;
+}
+
+#control-catalogue {
+    padding-bottom: 3rem;
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+    z-index: 2;
+}
+
+#control-catalogue a {
+    text-decoration: underline;
+}
+
+#control-catalogue .next-content-btn {
+    color: #4a26b8e8;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+#control-catalogue .next-content-btn:hover {
+    color: #4a26b8;
+}
+
+#control-catalogue .catalogue {
+    font-size: 1.5rem;
+    margin: 0px 1%;
+}
+
+
+/* tool begin */
+
+.tool {
+    position: fixed;
+    z-index: 2;
+}
+
+.tool > div {
+    display: flex;
+    padding: .5rem;
+    fill: #000;
+    background: #ffffffbb;
+    margin-top: 1.25rem;
+    border-radius: 1.6rem;
+    width: max-content;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.tool a {
+    line-height: 0;
+    text-decoration: none;
+    fill: #000;
+}
+
+.tool img {
+    width: 2.5rem;
+    height: 2.5rem;
+    vertical-align: middle;
+    transition: all 300ms ease;
+    display: inline;
+}
+
+.tool img:hover {
+    transform: scale(1.1);
+}
+
+.tool span {
+    line-height: 100%;
+    color: #464646;
+    font-size: 1rem;
+    padding: 0 0.625rem;
+}
+
+.tool-left-bottom {
+    position: fixed;
+    bottom: 5%;
+    left: 5%;
+}
+
+.tool-right-top {
+    right: 5%;
+    top: 10%;
+}
+
+.tool-right-top img {
+    transition: 1s;
+}
+
+.tool-right-top img:hover {
+    transform: rotateZ(180deg);
+}
+
+.tool-right-bottom {
+    position: fixed;
+    right: 5%;
+    bottom: 5%;
+}
+
+.tool-left-top {
+    left: 3%;
+    top: 25%;
+}
+
+.go-top {
+    opacity: 0;
+}
+
+
+/* tool end */
+
+.child-setting {
+    background: #FFFFFFda;
+    padding: .6rem;
+    border-radius: .5rem;
+    text-align: center;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.child-setting > div {
+    border-bottom: 1px solid #72290225;
+    padding: .3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.fontsize-select {
+    padding: .6rem !important;
+    cursor: pointer;
+    color: #000 !important;
+}
+
+.fontsize-select:hover {
+    background: #9b999959;
+    border-radius: .6rem;
+}
+
+.fontsize-selected {
+    background: #9b999939;
+    border-radius: .6rem;
+}
+
+.fontsize-show {
+    background: #ffffff24;
+    border-bottom: 1px solid #722902a1;
+    padding: .1rem !important;
+    color: #000 !important;
+}
+
+.fontsize-select-jj {
+    background: #9b999939;
+    font-size: 1rem !important;
+    padding: .3rem !important;
+    margin: .3rem;
+    border-radius: .6rem;
+    cursor: pointer;
+    color: #000 !important;
+}
+
+.fontsize-select-jj:hover {
+    background: #9b999959;
+}
+
+.bj-color {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: .8rem;
+    box-shadow: 1px -1px 1.8rem #0000006b;
+    border-radius: .3rem;
+    cursor: pointer;
+    padding: 0 !important;
+}
+
+.bj-color-selected {
+    box-shadow: 2px -2px 10px #000000b7;
+}
+
+#skin-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.skin-select {
+    width: 0;
+    height: 0;
+    padding: 0px !important;
+    border-left: 1.5rem solid;
+    border-bottom: 1.3rem solid;
+    margin: .3rem .8rem;
+    font-size: 1.5rem;
+    box-shadow: 1px -1px 1.6rem #0000009b;
+    cursor: pointer;
+    border-left-color: #000;
+    border-bottom-color: #FFF;
+}
+
+.skin-selected {
+    box-shadow: 2px -2px 10px #000000b7;
+}
+
+.to-next-content-btn {
+    position: fixed;
+    right: 0;
+    top: 40%;
+    width: 16vh;
+    height: 16vh;
+}
+
+.to-next-content-btn>div {
+    background: #00000049;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    position: absolute;
+    right: -95%;
+    transition: all 0.3s ease;
+}
+
+.to-next-content-btn a {
+    width: 50%;
+    line-height: 0;
+}
+
+.to-next-content-btn svg {
+    vertical-align: middle;
+}
+
+.to-next-content-btn>div:hover {
+    right: -49%;
+}
+
+.catalogue-module {
+    position: fixed;
+    top: 0;
+    left: calc(.5rem - 50%);
+    height: 100%;
+    width: 50%;
+    transition: all 300ms ease;
+    display: flex;
+    z-index: 3;
+}
+
+.catalogue-module:hover {
+    left: 0%;
+}
+
+.catalogue-all {
+    background: #FFFFFFb9;
+    backdrop-filter: blur(20px);
+    border-radius: .6rem;
+    color: #000;
+    padding-top: 3rem;
+}
+
+.catalogue-container {
+    overflow: scroll;
+    padding-top: 1.3rem;
+    height: 100%;
+}
+
+.catalogue-list {
+    text-align: left;
+    font-size: 1.1rem;
+    max-width: 30rem;
+}
+
+.catalogue-list div {
+    margin: 3% 10px;
+    padding: .3125rem;
+    transition: all 100ms ease;
+    border-radius: 2px;
+    border-top: 1px solid #00000036;
+    cursor: pointer;
+}
+
+.catalogue-list div:hover {
+    transform: scale(1.02);
+    background: #5454543d;
+}
+
+.catalogue-list-show {
+    color: #00000000;
+}
+
+.catalogue_location {
+    position: absolute;
+    right: 3rem;
+    bottom: 3rem;
+    transition: all 300ms ease;
+}
+
+.catalogue_location a {
+    line-height: 0;
+    cursor: pointer;
+}
+
+.catalogue_location svg {
+    height: 2.5rem;
+    background: #FFFFFFac;
+    border-radius: 30%;
+}
+
+.catalogue_location:hover {
+    transform: scale(1.25);
+}

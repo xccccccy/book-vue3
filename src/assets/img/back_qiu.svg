@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="765px" height="765px" viewBox="0 0 765 765" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Oval</title>
+    <defs>
+        <radialGradient cx="96.1513277%" cy="12.4954841%" fx="96.1513277%" fy="12.4954841%" r="117.188557%" id="radialGradient-1">
+            <stop stop-color="#32C5FF" offset="0%"></stop>
+            <stop stop-color="#B620E0" offset="51.2583893%"></stop>
+            <stop stop-color="#F7B500" offset="100%"></stop>
+        </radialGradient>
+        <filter x="-29.0%" y="-29.0%" width="158.0%" height="158.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="50" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Homepage---dark" transform="translate(-488.000000, -491.000000)" fill="url(#radialGradient-1)">
+            <g id="work-experiences" transform="translate(110.000000, 615.000000)">
+                <circle id="Oval" filter="url(#filter-2)" cx="760.5" cy="258.5" r="258.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,21 @@
+import ElPopperArrow from './src/arrow.vue';
+import ElPopperTrigger from './src/trigger.vue';
+import ElPopperContent from './src/content.vue';
+export { ElPopperArrow, ElPopperTrigger, ElPopperContent };
+export declare const ElPopper: import("element-plus/es/utils").SFCWithInstall<import("vue").DefineComponent<{}, {
+    triggerRef: import("vue").Ref<HTMLElement | undefined>;
+    popperInstanceRef: import("vue").Ref<import("@popperjs/core").Instance | undefined>;
+    contentRef: import("vue").Ref<HTMLElement | undefined>;
+    referenceRef: import("vue").Ref<HTMLElement | undefined>;
+    popperProvides: import("../..").ElPopperInjectionContext;
+}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, import("vue").EmitsOptions, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{}>>, {}>> & Record<string, any>;
+export default ElPopper;
+export * from './src/popper';
+export * from './src/trigger';
+export * from './src/content';
+export * from './src/arrow';
+export { useDeprecateAppendToBody } from './src/deprecation';
+export type { Placement, Options } from '@popperjs/core';
+export declare type ElPopperArrowInstance = InstanceType<typeof ElPopperArrow>;
+export declare type ElPopperArrowTrigger = InstanceType<typeof ElPopperTrigger>;
+export declare type ElPopperArrowContent = InstanceType<typeof ElPopperContent>;
