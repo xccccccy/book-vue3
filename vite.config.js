@@ -5,6 +5,11 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+let localDevApiUrl = 'http://localhost:5001'
+let remoteApiUrl = 'http://8.142.136.153:5001'
+
+var realApiUrl = remoteApiUrl
+
 // https://vitejs.dev/config/
 export default defineConfig({
   // 要用到的插件数组
@@ -36,22 +41,22 @@ export default defineConfig({
     // 自定义代理规则
     proxy: {
       '/api': {
-        target: 'http://localhost:5001', // 8.142.136.153:5001
+        target: realApiUrl, // 8.142.136.153:5001
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api')
       },
       '/faceapi': {
-        target: 'http://localhost:5001', // localhost:5001
+        target: realApiUrl, // localhost:5001
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/faceapi/, '/faceapi')
       },
       '/_api': {
-        target: 'http://localhost:5001', // localhost:5001 
+        target: realApiUrl, // localhost:5001 
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/_api/, '/api')
       },
       '/spy/api': {
-        target: 'http://172.26.21.174:8080', // 8.142.136.153:5001
+        target: realApiUrl, // 8.142.136.153:5001
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/spy\/api/, '/')
       },
