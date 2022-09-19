@@ -115,6 +115,7 @@ export default {
       } else {
         $('html').removeClass('dark');
       }
+      context.emit('darkModeChange');
     }
 
     watch(darkmode, (newmode, oldValue) => {
