@@ -72,7 +72,6 @@ a {
   min-height: 100vh;
 }
 
-
 .footer {
   /* position:absolute;
     bottom:0%; */
