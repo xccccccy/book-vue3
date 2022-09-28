@@ -56,6 +56,12 @@ export default createRouter({
                 import ('@/components/game/spy.vue')
         },
         {
+            path: '/scm',
+            name: 'Scm',
+            component: () =>
+                import ('@/components/scm/scm.vue')
+        },
+        {
             path: '/404',
             name: 'notFound',
             component: () =>

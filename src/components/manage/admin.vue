@@ -1,11 +1,6 @@
 <template>
   <div class="app w-full sm:w-11/12 2xl:w-2/3 pt-12 sm:pt-16">
-    <div class="header space-x-0.5 sm:space-x-3.5 bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30">
-      <div class="home">
-        <a href="/" class="bg-clip-text linear-gradient inverse text-fill-transparent">Home</a>
-      </div>
-      <DrakMode></DrakMode>
-    </div>
+    <Header :headerSetting="{}"></Header>
     <div v-show="!admin_show">
       <div class="flex flex-col w-max my-0 mx-auto">
         <div>
@@ -29,7 +24,7 @@ import { ref, onMounted, defineComponent, watch, reactive } from 'vue'
 import $ from "jquery";
 import axios from 'axios';
 import Config from './config.vue';
-import DrakMode from '../DrakMode.vue';
+import Header from '../header/header.vue'
 
 export default {
   name: "AdminComponent",
@@ -106,7 +101,7 @@ export default {
     };
     return { admin_show, verification_code, getloading, getdisabled, getbtntext, adminData, get_verification_code, config_login };
   },
-  components: { Config, DrakMode }
+  components: { Config, Header }
 }
 </script>
 
@@ -126,38 +121,4 @@ input:focus {
   outline: 1px solid #100c958a;
 }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-end;
-  box-shadow: 2px -2px 10px #00000058;
-  backdrop-filter: blur(25px);
-  z-index: 99;
-}
-
-.header>div {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.header>div:hover {
-  border-bottom: 2px solid rgb(218, 175, 0);
-}
-
-.home {
-  margin-left: .6rem;
-  margin-right: auto !important;
-}
-
-.home a {
-  font-size: 1.5rem;
-  font-weight: 500;
-  vertical-align: middle;
-}
 </style>

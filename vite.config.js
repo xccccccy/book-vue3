@@ -50,6 +50,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/faceapi/, '/faceapi')
       },
+      '/scmapi': {
+        target: realApiUrl, // localhost:5001
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/scmapi/, '/scmapi')
+      },
       '/_api': {
         target: realApiUrl, // localhost:5001 
         changeOrigin: true,

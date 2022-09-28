@@ -11,7 +11,7 @@
         d="M512.9216 590.9504c-77.4144 0-140.3904-62.976-140.3904-140.3904s62.976-140.3904 140.3904-140.3904S653.312 373.1456 653.312 450.56s-62.976 140.3904-140.3904 140.3904z m0-219.3408c-43.52 0-78.9504 35.4304-78.9504 78.9504s35.4304 78.9504 78.9504 78.9504S591.9232 494.08 591.9232 450.56s-35.4304-78.9504-79.0016-78.9504z"
         class="fill-current" p-id="21198" />
     </svg>
-    <div v-show="loginShow" v-loading="logloading"
+    <div v-show="loginShow" v-loading="logloading" @mouseleave="loginShow = false"
       class="w-full sm:w-max rounded-md bg-white bg-opacity-90 dark:bg-slate-900 dark:bg-opacity-75 p-2 cursor-auto">
       <div class="login" v-show="!userloged">
         <div v-show="!logon_show">
@@ -137,13 +137,13 @@
                 </svg>
                 <span>Face +</span>
               </div>
-              <div v-show="admin_show">
+              <div v-show="admin_show" @click="$router.push('/admin')">
                 <svg viewBox="0 0 1024 1024" style="height: 1.7rem">
                   <path
                     d="M480.2 525.1c61.4 0 119.1-23.9 162.5-67.3 43.4-43.4 67.3-101.1 67.3-162.5s-23.9-119.1-67.3-162.5c-43.4-43.4-101.1-67.3-162.5-67.3s-119.1 23.9-162.5 67.3c-43.4 43.4-67.3 101.1-67.3 162.5s23.9 119.1 67.3 162.5c43.4 43.4 101.1 67.3 162.5 67.3z m0-387.8c87 0 157.9 70.8 157.9 157.9s-70.8 157.9-157.9 157.9-157.9-70.8-157.9-157.9 70.9-157.9 157.9-157.9zM890.7 600.4c19.9 0 36-16.1 36-36s-16.1-36-36-36h-72.3v-45.1h72.3c19.9 0 36-16.1 36-36s-16.1-36-36-36H782.4c-19.9 0-36 16.1-36 36v226.9c-62.2 16-108.3 72.6-108.3 139.8 0 79.6 64.7 144.3 144.3 144.3S926.7 893.6 926.7 814c0-67.2-46.1-123.7-108.3-139.8v-73.7h72.3z m-36 213.5c0 39.9-32.4 72.3-72.3 72.3s-72.3-32.4-72.3-72.3 32.4-72.3 72.3-72.3 72.3 32.4 72.3 72.3zM667.7 605.5c0-19.9-16.1-36-36-36h-342c-50.9 0-98.9 18.6-135.2 52.3-37 34.4-57.3 80.3-57.3 129.3v139.1c0 19.9 16.1 36 36 36s36-16.1 36-36V751.1c0-60.4 54-109.6 120.5-109.6h342c19.9 0 36-16.1 36-36z"
                     class="fill-current" p-id="2878"></path>
                 </svg>
-                <a href="/admin">Admin set</a>
+                <span>Admin set</span>
               </div>
             </div>
           </div>
@@ -220,6 +220,9 @@ export default {
             localStorage.bookuser = JSON.stringify(_user);
             ElNotification({ title: '登录成功', message: '欢迎你，' + user.name, type: 'success', duration: 2000 });
             context.emit('userLog', 'login')
+            if (user.id == '001') {
+              admin_show.value = true;
+            }
             loginShow.value = false;
           } else {
             ElNotification({ title: '登录失败', message: res.data.context, type: 'error', duration: 3000 });
@@ -252,6 +255,9 @@ export default {
             localStorage.bookuser = JSON.stringify(_user);
             ElNotification({ message: '注册成功。', type: 'success', duration: 1000 });
             context.emit('userLog', 'logon');
+            if (user.id == '001') {
+              admin_show.value = true;
+            }
             userLogon.id = null;
             userLogon.name = null;
             userLogon.passwd = null;

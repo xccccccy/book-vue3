@@ -1,13 +1,7 @@
 <template>
   <div :style="{ background: backimg }" class="w-full bookinfo-back z-0">
     <div id="app">
-      <div class="header space-x-0.5 sm:space-x-3.5 bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30">
-        <div class="home">
-          <a @click="$router.push('/book')" class="bg-clip-text linear-gradient inverse text-fill-transparent">Book</a>
-        </div>
-        <DrakMode></DrakMode>
-        <User @userLog="userLog"></User>
-      </div>
+      <Header :headerSetting="headerSetting"></Header>
       <div id="box" v-loading="!bookboxshow"
         class="w-full sm:w-2/3 mt-0 sm:mt-16 pt-12 sm:pt-0 mb-0 sm:mb-12 bg-white dark:bg-slate-900 dark-transition">
         <div class="bookbox">
@@ -83,14 +77,27 @@ export default {
       continueread_show: false,
       joinShelfBtnShow: true,
       backimg: "url('/rain.jpeg') center center / cover fixed no-repeat",
+      headerSetting: {}
     };
   },
   mounted() {
+    this.initHeader();
     this.initCatalogue();
     this.initBookShelf();
     $("html,body").scrollTop(0);
   },
   methods: {
+    initHeader() {
+      this.headerSetting = {
+        userSetting: {
+          userLogHandle: this.userLog
+        },
+        homeSetting: {
+          homeString: 'Home',
+          homeHref: '/book'
+        }
+      }
+    },
     initCatalogue() {
       axios
         .get("/api/bookinfo/" + this.book.book_id)
@@ -154,38 +161,6 @@ export default {
 
 <style scoped>
 @import "../../assets/css/bookinfo.css";
-
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  box-shadow: 2px -2px 10px #00000058;
-  backdrop-filter: blur(25px);
-  z-index: 99;
-}
-
-.header>div {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.home {
-  margin-left: .6rem;
-  margin-right: auto !important;
-  /* align-self: flex-end; */
-}
-
-.home a {
-  font-size: 1.5rem;
-  font-weight: 500;
-  vertical-align: middle;
-}
 
 .bookinfo {
   display: flex;

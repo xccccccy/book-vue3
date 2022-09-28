@@ -12,6 +12,8 @@ declare module 'vue' {
     Bookshelfbox: typeof import('./src/components/book/bookshelfbox.vue')['default']
     Camera: typeof import('./src/components/camera.vue')['default']
     Cataloguebox: typeof import('./src/components/book/cataloguebox.vue')['default']
+    CommitInfo: typeof import('./src/components/scm/commitInfo.vue')['default']
+    CommonHeader: typeof import('./src/components/header/commonHeader.vue')['default']
     Config: typeof import('./src/components/manage/config.vue')['default']
     DrakMode: typeof import('./src/components/DrakMode.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -24,6 +26,9 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     FaceRecognition: typeof import('./src/components/FaceRecognition.vue')['default']
+    Footer: typeof import('./src/components/footer/footer.vue')['default']
+    Header: typeof import('./src/components/header/header.vue')['default']
+    HeaderHome: typeof import('./src/components/header/headerHome.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Home: typeof import('./src/components/home.vue')['default']
     Like: typeof import('./src/components/like.vue')['default']
@@ -31,8 +36,11 @@ declare module 'vue' {
     Music: typeof import('./src/components/music.vue')['default']
     MusicPlayer: typeof import('./src/components/MusicPlayer.vue')['default']
     Notfound: typeof import('./src/components/notfound.vue')['default']
+    Scm: typeof import('./src/components/scm/scm.vue')['default']
+    SearchHeader: typeof import('./src/components/header/searchHeader.vue')['default']
     Spy: typeof import('./src/components/game/spy.vue')['default']
     User: typeof import('./src/components/User.vue')['default']
+    VersionHistory: typeof import('./src/components/scm/versionHistory.vue')['default']
   }
 }
 
