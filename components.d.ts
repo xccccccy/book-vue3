@@ -26,6 +26,7 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     FaceRecognition: typeof import('./src/components/FaceRecognition.vue')['default']
+    Footer: typeof import('./src/components/footer/footer.vue')['default']
     Header: typeof import('./src/components/header/header.vue')['default']
     HeaderHome: typeof import('./src/components/header/headerHome.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']

@@ -1,13 +1,14 @@
 <template>
   <div class="app w-full" :style="{ background: setting.currentbjcolor }">
     <transition name="bounce">
-      <div class="header bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30" v-show="header_show">
+      <Header :headerSetting="headerSetting"></Header>
+      <!-- <div class="header bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30" v-show="header_show">
         <div class="home">
           <a @click="$router.push('/book')" class="bg-clip-text linear-gradient text-fill-transparent">Book</a>
         </div>
         <DrakMode @darkModeChange="darkModeChange"></DrakMode>
         <User @userLog="userLog"></User>
-      </div>
+      </div> -->
     </transition>
     <div id="box" :style="{ background: setting.currentskin[1] }"
       class="w-full sm:w-2/3 mb-0 sm:mb-12 mt-0 sm:mt-14 rounded-none sm:rounded-lg" v-loading="contentloading">
@@ -117,7 +118,7 @@
                   </span>
                   <span class="fontsize-show" style="margin: 0 .3rem">
                     {{
-                        setting.currentlineheight
+                    setting.currentlineheight
                     }}
                   </span>
                   <span class="fontsize-select-jj" @click="setlineheight(+0.2)" onselectstart="() => {return false}">
@@ -266,9 +267,11 @@ export default {
       header_show: false,
       self_mask_show: false,
       joinShelfBtnShow: true,
+      headerSetting: {}
     };
   },
   mounted() {
+    this.initHeader();
     this.judgeismobile();
     this.monitorscorll();
     this.monitorkeydowm();
@@ -325,6 +328,20 @@ export default {
     }
   },
   methods: {
+    initHeader() {
+      this.headerSetting = {
+        userSetting: {
+          userLogHandle: this.userLog
+        },
+        darkmodeSetting: {
+          darkModeChangeHandle: this.darkModeChange
+        },
+        homeSetting: {
+          homeString: 'Home',
+          homeHref: '/book'
+        }
+      }
+    },
     test() { },
     to_bottom() {
       $("html,body").animate(
@@ -363,7 +380,7 @@ export default {
       }
       this.setting.currentFontsize = Number(this.setting.currentFontsize.toFixed(1));
       this.setLocalStorageSet('currentFontsize');
-      
+
     },
     setlineheight(lineheight_) {
       this.setting.currentlineheight += lineheight_;
@@ -542,7 +559,7 @@ export default {
         .then((res) => {
           this.next_content = res.data.content;
           this.next_catalogue_name = res.data.catalogue_name;
-          ElNotification({ message: '预读下一章成功。', type: 'success', duration: 1800 });
+          // ElNotification({ message: '预读下一章成功。', type: 'success', duration: 1800 });
         })
         .catch((err) => {
           // 5秒之后重新get，重复三次，成功continue，失败就null
@@ -792,38 +809,6 @@ export default {
     -ms-transform: translateY(0);
     transform: translateY(0);
   }
-}
-
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  box-shadow: 2px -2px 10px #00000058;
-  backdrop-filter: blur(45px);
-  z-index: 99;
-}
-
-.header>div {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.home {
-  margin-left: .6rem;
-  margin-right: auto !important;
-  /* align-self: flex-end; */
-}
-
-.home a {
-  font-size: 1.5rem;
-  font-weight: 500;
-  vertical-align: middle;
 }
 
 .back-mask {

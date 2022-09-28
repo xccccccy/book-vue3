@@ -20,7 +20,7 @@
           class="fill-sky-500"></path>
       </svg>
     </div>
-    <ul v-show="dark_mode_span_show"
+    <ul v-show="dark_mode_span_show" @mouseleave="dark_mode_span_show = false"
       class="absolute top-full right-1 bg-white rounded-lg ring-1 ring-slate-900/10 shadow-lg overflow-hidden w-36 py-1 text-sm text-slate-700 font-semibold dark:bg-slate-800 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 mt-1"
       aria-labelledby="headlessui-listbox-label-2" aria-orientation="vertical" role="listbox" tabindex="0">
       <li class="py-1 px-2 flex items-center cursor-pointer text-sky-500" role="option" tabindex="-1"

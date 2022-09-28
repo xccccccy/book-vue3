@@ -1,30 +1,6 @@
 <template>
   <div class="app w-full sm:w-3/4 2xl:w-2/3 pt-12 sm:pt-20">
-    <div class="header space-x-0.5 sm:space-x-3.5 bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30">
-      <div class="home">
-        <a href="/" class="bg-clip-text linear-gradient inverse text-fill-transparent">Home</a>
-      </div>
-      <div class="search w-52 hidden sm:flex" v-if="!ismobile">
-        <el-input v-model="search_string" placeholder="搜索书籍。" class="input-with-select" @keyup.enter="searchbook()">
-          <template #suffix>
-            <el-icon class="el-input__icon" @click="searchbook()">
-              <search />
-            </el-icon>
-          </template>
-        </el-input>
-      </div>
-      <div @click="backbookshelf" title="我的书架" :class="{ headeractivate: bookshelf_show }">
-        <span>书架</span>
-      </div>
-      <div @click="back_search" title="搜索结果" :class="{ headeractivate: bookbox_list_show }">
-        <span>搜索</span>
-      </div>
-      <div @click="shangqian" title="赏钱" :class="{ headeractivate: shang_show }">
-        <span style="font-weight: 500; color: #CD9D02">Shǎng</span>
-      </div>
-      <DarkMode></DarkMode>
-      <User @userLog="userLog"></User>
-    </div>
+    <Header :headerSetting="headerSetting"></Header>
     <div class="backpic absolute left-0 top-0">
       <img src="../../assets/img/back1.avif" />
       <img src="../../assets/img/back_qiu.svg" />
@@ -100,6 +76,7 @@ export default {
       shang_show: false,
       searchloading: false,
       ismobile: false,
+      headerSetting: {}
     };
   },
   watch: {
@@ -107,6 +84,7 @@ export default {
   computed: {
   },
   mounted() {
+    this.initHeader();
     this.initLocalStorage();
     this.initSearchUrl();
     this.initBookShelf();
@@ -115,6 +93,37 @@ export default {
     $("html,body").scrollTop(0);
   },
   methods: {
+    initHeader() {
+      this.headerSetting = {
+        headerSettings: 
+        [
+          {
+            type: 'search',
+            placeholder: "搜索书籍。",
+            clickHandle: this.searchbook
+          },
+          {
+            type: 'common',
+            headerString: '书架',
+            clickHandle: this.backbookshelf
+          },
+          {
+            type: 'common',
+            headerString: '搜索',
+            clickHandle: this.back_search
+          },
+          {
+            type: 'common',
+            headerString: 'Shǎng',
+            clickHandle: this.shangqian,
+            style: "font-weight: 500; color: #CD9D02"
+          }
+        ],
+        userSetting: {
+          userLogHandle: this.userLog
+        }
+      }
+    },
     initBookShelf() {
       this.bookshelf = JSON.parse(localStorage.bookshelf);
       getBookShelf().then((res) => {
@@ -262,56 +271,12 @@ export default {
     DarkMode: DarkModeComponent,
     User,
     Like
-}
+  }
 };
 </script>
 
 <style scoped>
 @import "../../assets/css/book.css";
-
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-end;
-  box-shadow: 2px -2px 10px #00000058;
-  backdrop-filter: blur(25px);
-  z-index: 99;
-}
-
-.header>div {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.header>div:hover {
-  border-bottom: 2px solid rgb(218, 175, 0);
-}
-
-.headeractivate {
-  border-bottom: 2px solid rgb(20, 175, 103);
-}
-
-.home {
-  margin-left: .6rem;
-  margin-right: auto !important;
-}
-
-.home a {
-  font-size: 1.5rem;
-  font-weight: 500;
-  vertical-align: middle;
-}
-
-.search:hover {
-  background: none !important;
-  border-bottom: none !important;
-}
 
 .input-with-select {
   opacity: 0.8;
