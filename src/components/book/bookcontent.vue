@@ -2,13 +2,6 @@
   <div class="app w-full" :style="{ background: setting.currentbjcolor }">
     <transition name="bounce">
       <Header :headerSetting="headerSetting"></Header>
-      <!-- <div class="header bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30" v-show="header_show">
-        <div class="home">
-          <a @click="$router.push('/book')" class="bg-clip-text linear-gradient text-fill-transparent">Book</a>
-        </div>
-        <DrakMode @darkModeChange="darkModeChange"></DrakMode>
-        <User @userLog="userLog"></User>
-      </div> -->
     </transition>
     <div id="box" :style="{ background: setting.currentskin[1] }"
       class="w-full sm:w-2/3 mb-0 sm:mb-12 mt-0 sm:mt-14 rounded-none sm:rounded-lg" v-loading="contentloading">

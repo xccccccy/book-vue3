@@ -1,15 +1,15 @@
 <template>
-    <div class="app w-full sm:w-11/12 2xl:w-2/3 pt-12 sm:pt-16 text-left">
+    <div class="app w-full sm:w-11/12 2xl:w-2/3 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
-        <div>
-            <div>
+        <div class="">
+            <div class="flex space-x-10 p-4 version-info">
+                <div>
+                    <span>Repository : </span>
+                    <span class="link"><a href="baidu.com">flask-vue-myworld</a></span>
+                </div>
                 <div>
                     <span>Now Version : </span>
                     <span>1.0.0</span>
-                </div>
-                <div>
-                    <span>Repository : </span>
-                    <span><a href="baidu.com">flask-vue-myworld</a></span>
                 </div>
             </div>
             <div>
@@ -93,14 +93,15 @@ export default {
 </script>
 
 <style scoped>
-.home {
-    margin-left: .6rem;
-    margin-right: auto !important;
+.version-info span:first-child{
+    font-size: 1.35rem;
+}
+.version-info span:last-child{
+    font-size: 1rem;
+    color: rgb(193, 171, 3);
 }
 
-.home a {
-    font-size: 1.5rem;
-    font-weight: 500;
-    vertical-align: middle;
+.link {
+    text-decoration: underline;
 }
 </style>
