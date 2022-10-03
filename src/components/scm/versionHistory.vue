@@ -5,7 +5,9 @@
             <div class="flex py-2 px-5 space-x-6 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
                 @click="self_open = !self_open">
                 <div>
-                    <img src="https://avatars.githubusercontent.com/u/97515896?v=4" class="avatar">
+                    <a :href="versionInfo.versionAuthorUrl">
+                        <img :src="versionInfo.versionAuthorAvatar" class="avatar">
+                    </a>
                 </div>
                 <div>
                     <span>Version : </span>
@@ -20,7 +22,7 @@
                     <span>{{ versionInfo.versionDate }}</span>
                 </div>
                 <div v-show="isnowversion" style="margin-left:auto"
-                    class=" rounded-2xl bg-violet-600 text-gray-100 px-2 text-sm font-medium">now</div>
+                    class=" rounded-2xl bg-violet-600 text-gray-100 px-2 text-sm font-medium">now version</div>
                 <div :class="{ mlauto: !isnowversion}">
                     <div class="inline-block">
                         <el-switch v-model="self_open" />
@@ -31,9 +33,9 @@
         <el-collapse-transition>
             <div v-show="self_open">
                 <div class="flex div-1">
-                    <div class="flex-1">
+                    <div class="flex-1 flex">
                         <div>
-                            <div class=" font-bold text-xl border-b">基础信息</div>
+                            <div class=" font-bold text-xl border-b"><a :href="versionInfo.branchUrl">基础信息</a></div>
                             <div>
                                 <div>
                                     <span>Version : </span>
@@ -41,12 +43,17 @@
                                 </div>
                                 <div>
                                     <span>分支 : </span>
-                                    <span><a :href="versionInfo.branchLink"></a>{{ versionInfo.branch }}</span>
+                                    <span><a :href="versionInfo.branchUrl"></a>{{ versionInfo.branch }}</span>
                                 </div>
                             </div>
                             <div>
                                 <div>
                                     <span>发版人 : </span>
+                                    <span>
+                                        <a :href="versionInfo.versionAuthorUrl">
+                                            <img :src="versionInfo.versionAuthorAvatar" class="avatar avatar-mini">
+                                        </a>
+                                    </span>
                                     <span>{{ versionInfo.versionAuthor }}</span>
                                 </div>
                                 <div>
@@ -55,8 +62,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div>关联Commit</div>
+                        <div style="margin-left: 6%;">
+                            <div><a :href="versionInfo.commitUrl">关联Commit</a></div>
                             <CommitInfo :data="versionInfo.commitInfo"></CommitInfo>
                         </div>
                     </div>
@@ -92,9 +99,11 @@ export default {
             type: Object,
             default: {
                 branch: 'alpha/1.0.0',
-                branchLink: 'https://github.com/xccccccy/flask-vue-myworld/tree/alpha/1.0.0',
+                branchUrl: 'https://github.com/xccccccy/flask-vue-myworld/tree/alpha/1.0.0',
                 version: '1.0.0',
                 versionAuthor: 'xccccccy',
+                versionAuthorUrl: 'https://github.com/xccccccy',
+                versionAuthorAvatar: 'https://avatars.githubusercontent.com/u/97515896?v=4',
                 versionDate: '2022年9月22日 19:26:58',
                 commitInfo: {
                     commitMessage: 'init commit',
@@ -105,15 +114,17 @@ export default {
                 }
             }
         },
-        isfold: {
-            type: Boolean,
-            default: true
+        index: {
+            type: Number,
+            default: 0
         }
     },
     setup(props) {
-        let _self_open = !props.isfold
-        const self_open = ref(true);
-        const isnowversion = ref(true);
+        let isopen = props.index == 0;
+        const self_open = ref(isopen);
+        const isnowversion = computed(() => {
+            return props.index == 0;
+        })
         const setnowversion = ref(false);
         return { self_open, isnowversion, setnowversion };
     }
@@ -163,5 +174,21 @@ export default {
     object-position: center;
     margin: 1.2vmin;
     transition: all 0.2s ease;
+    /* border = "5px solid #f36"; */
+}
+
+.avatar-mini {
+    display: inline;
+    width: 3vmin;
+    height: 3vmin;
+    margin: .7vmin;
+}
+
+div>span:first-child {
+    padding-right: .3rem;
+}
+
+.link {
+    text-decoration: underline;
 }
 </style>

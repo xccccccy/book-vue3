@@ -1,6 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
 body {
     margin: 0;
 }
@@ -10,13 +11,15 @@ body {
 }
 
 .linear-gradient.inverse {
-    background-image: linear-gradient(-45deg,#32c5ff,#b620e0,#f7b500);
+    background-image: linear-gradient(-45deg, #32c5ff, #b620e0, #f7b500);
 }
+
 .linear-gradient {
-    background-image: linear-gradient(-45deg,#f7b500,#b620e0,#32c5ff);
+    background-image: linear-gradient(-45deg, #f7b500, #b620e0, #32c5ff);
     background-size: 120% 120%;
     animation: gradient 15s ease infinite;
 }
+
 .text-fill-transparent {
     -webkit-text-fill-color: transparent;
 }
@@ -31,21 +34,48 @@ body {
     .hidden {
         display: none !important;
     }
+
     .block {
         display: block !important;
     }
+
     .flex {
         display: flex !important;
     }
+
     .dark .block {
         display: block;
     }
-  }
+}
 
-  .el-loading-mask {
-      background-color: rgba(200, 200, 200, 0.95) !important;
-      z-index: 1 !important;
-  }
-  .dark .el-loading-mask {
+.el-loading-mask {
+    background-color: rgba(200, 200, 200, 0.95) !important;
+    z-index: 1 !important;
+}
+
+.dark .el-loading-mask {
     background-color: rgba(66, 66, 66, 0.95) !important;
-  }
+}
+
+.el-tabs__item {
+    font-size: 1.2rem !important;
+    /* padding-left: .8rem !important;
+    padding-right: .8rem !important; */
+}
+.el-tabs__item:hover {
+    color: #7C3AED !important;
+}
+.el-tabs__item.is-active {
+    color: #7C3AED !important;
+    /* border: #7C3AED 1px solid;
+    border-bottom: none;
+    border-radius: .5rem;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%; */
+}
+.el-tabs__active-bar {
+    background-color: #7C3AED !important;
+}
+.el-tabs__nav-wrap::after {
+    background-color: #9768e74a  !important;
+}

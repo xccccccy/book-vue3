@@ -20,7 +20,7 @@
 <script>
 
 export default {
-    name: "HomeHeader",
+    name: "Footer",
     props: {
         footer_show: {
             type: Boolean,

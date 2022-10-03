@@ -49,4 +49,7 @@ export default {
 
 <style scoped>
 
+div > span {
+    padding-right: .3rem;
+}
 </style>
