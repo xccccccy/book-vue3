@@ -65,11 +65,11 @@
                         </div>
                     </div>
                     <div class=" border-l dark:border-violet-500 dark:border-opacity-60">
-                        <div>
+                        <div class="h-full flex flex-col">
                             <div>操作区</div>
-                            <div class="flex flex-col operation">
+                            <div class="flex flex-col operation flex-1 justify-center">
                                 <span></span>
-                                <span class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
+                                <span v-show="!isnowversion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
                                 <span class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
                             </div>
                         </div>
@@ -152,7 +152,7 @@ export default {
 }
 
 .operation span {
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .avatar {

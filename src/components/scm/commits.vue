@@ -72,11 +72,11 @@
                         <div>
                             <div>操作区</div>
                             <div class="flex flex-col operation">
-                                <span>对应版本
+                                <!-- <span>对应版本
                                     <el-switch v-model="commitInfo.isnowversion" />
-                                </span>
-                                <span>设置为当前版本</span>
-                                <span v-show="false">删除此版本</span>
+                                </span> -->
+                                <span></span>
+                                <span v-show="!commitInfo.isversion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">在此commit上新建version</span>
                             </div>
                         </div>
                     </div>
@@ -144,12 +144,6 @@ export default {
 
 .div-1>div>div>div>div {
     padding: .15rem;
-}
-
-.operation span {
-    font-size: 1.1rem;
-    padding: .25rem;
-    margin: .25rem;
 }
 
 .mlauto {
