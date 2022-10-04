@@ -50,6 +50,10 @@ export default {
 <style scoped>
 
 div > span {
-    padding-right: .3rem;
+    padding-right: .5rem;
+}
+
+div > div {
+    margin-bottom: .3rem;
 }
 </style>

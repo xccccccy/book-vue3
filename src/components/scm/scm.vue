@@ -43,14 +43,14 @@ export default {
                 baseInfo: {
                     name: 'flask-vue-myworld',
                     url: 'https://github.com/xccccccy/flask-vue-myworld',
-                    version: '1.0.0'
+                    version: 'v1.0.0'
                 },
                 versionHistorys: [
                     {
                         branch: 'alpha/1.0.1',
                         branchUrl: 'https://github.com/xccccccy/flask-vue-myworld/tree/alpha/1.0.0',
                         commitUrl: 'https://github.com/xccccccy/flask-vue-myworld/commit/811dc3e1115565866a50a92f137dcb1fde45d327',
-                        version: '1.0.0',
+                        version: 'v1.0.0',
                         versionAuthor: 'xccccccy',
                         versionAuthorUrl: 'https://github.com/xccccccy',
                         versionAuthorAvatar: 'https://avatars.githubusercontent.com/u/97515896?v=4',
@@ -63,7 +63,9 @@ export default {
                             commitSha: 'cdysud98uewyhe8whe8duwedy8wegfy7wegf7w6'
                         }
                     }
-                ]
+                ],
+                nowCommitSha: 'cdysud98uewyhe8whe8duwedy8wegfy7wegf7w6',
+                versionCommitShas: ['cdysud98uewyhe8whe8duwedy8wegfy7wegf7w6']
             }
         })
 
@@ -89,6 +91,8 @@ export default {
                 var allVersionInfo = res.data;
 
                 var version_historys = []
+                var nowCommitSha;
+                var versionCommitShas = {};
                 for (let version_name in allVersionInfo.version_historys) {
                     let version_info = allVersionInfo.version_historys[version_name]
                     let version_history = {
@@ -104,11 +108,12 @@ export default {
                             commitMessage: version_info['commit']['commit']['message'],
                             commitAuthor: version_info['commit']['commit']['author']['name'],
                             commitEmail: version_info['commit']['commit']['author']['email'],
-                            commitDate: version_info['commit']['commit']['author']['date'],
+                            commitDate: version_info['commit']['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
                             commitSha: version_info['commit']['sha']
                         }
                     }
                     version_historys.push(version_history)
+                    versionCommitShas[version_history['commitInfo']['commitSha']] = version_history.version
                 }
 
                 let now_version = allReposInfos[repos]['now_version'];
@@ -116,6 +121,7 @@ export default {
                 version_historys = version_historys.sort((a, b) => {
                     return a.version == now_version ? -1 : (b.version == now_version ? 1 : (a.version < b.version ? 1 : -1))
                 })
+                nowCommitSha = version_historys[0]['commitInfo']['commitSha'];
                 console.log(version_historys);
                 var baseInfo = {
                     name: repos,
@@ -125,15 +131,17 @@ export default {
 
                 repositoryInfos[repos] = {
                     'baseInfo': baseInfo,
-                    'versionHistorys': version_historys
+                    'versionHistorys': version_historys,
+                    'nowCommitSha': nowCommitSha,
+                    'versionCommitShas': versionCommitShas
                 }
                 repository_loading.value[repos] = false;
             })
         }
 
-        // initRepos()
-        repos_loading.value = false;
-        repository_loading.value['flask-vue-myworld'] = false;
+        initRepos()
+        // repos_loading.value = false;
+        // repository_loading.value['flask-vue-myworld'] = false;
 
         return { repos_loading, repository_loading, repositoryInfos };
     }

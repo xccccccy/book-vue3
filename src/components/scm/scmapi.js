@@ -20,3 +20,14 @@ export const getAllVersionInfo = (repos) => {
             console.log('ERROR => ', err);
         });
 }
+
+export const getAllCommitsInfo = (repos) => {
+    return axios
+        .post("/scmapi/get/" + repos + "/commits", {
+            'repos': repos
+        })
+        .catch((err) => {
+            ElNotification({ message: '获取CommitsInfo失败。', type: 'warning', duration: 3000 });
+            console.log('ERROR => ', err);
+        });
+}

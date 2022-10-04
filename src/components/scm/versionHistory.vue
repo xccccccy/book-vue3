@@ -2,7 +2,7 @@
     <div
         class=" px-2 border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 border mb-5 rounded-md dark-transition shadow-xl dark:shadow-none bg-slate-200 dark:bg-slate-700 backdrop-filter bg-opacity-50 dark:bg-opacity-50">
         <div class="">
-            <div class="flex py-2 px-5 space-x-6 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
+            <div class="flex py-2 px-5 space-x-5 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
                 @click="self_open = !self_open">
                 <div>
                     <a :href="versionInfo.versionAuthorUrl">
@@ -22,11 +22,8 @@
                     <span>{{ versionInfo.versionDate }}</span>
                 </div>
                 <div v-show="isnowversion" style="margin-left:auto"
-                    class=" rounded-2xl bg-violet-600 text-gray-100 px-2 text-sm font-medium">now version</div>
-                <div :class="{ mlauto: !isnowversion}">
-                    <div class="inline-block">
-                        <el-switch v-model="self_open" />
-                    </div>
+                    class=" rounded-2xl bg-violet-600 text-gray-100 px-3 text-sm font-medium">
+                    now version
                 </div>
             </div>
         </div>
@@ -35,7 +32,7 @@
                 <div class="flex div-1">
                     <div class="flex-1 flex">
                         <div>
-                            <div class=" font-bold text-xl border-b"><a :href="versionInfo.branchUrl">基础信息</a></div>
+                            <div class="link font-bold text-xl border-b"><a :href="versionInfo.branchUrl">基础信息</a></div>
                             <div>
                                 <div>
                                     <span>Version : </span>
@@ -63,7 +60,7 @@
                             </div>
                         </div>
                         <div style="margin-left: 6%;">
-                            <div><a :href="versionInfo.commitUrl">关联Commit</a></div>
+                            <div class="link"><a :href="versionInfo.commitUrl">关联Commit</a></div>
                             <CommitInfo :data="versionInfo.commitInfo"></CommitInfo>
                         </div>
                     </div>
@@ -71,11 +68,9 @@
                         <div>
                             <div>操作区</div>
                             <div class="flex flex-col operation">
-                                <span>当前版本
-                                    <el-switch v-model="isnowversion" />
-                                </span>
-                                <span>设置为当前版本</span>
-                                <span v-show="false">删除此版本</span>
+                                <span></span>
+                                <span class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
+                                <span class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
                             </div>
                         </div>
                     </div>
@@ -158,12 +153,6 @@ export default {
 
 .operation span {
     font-size: 1.1rem;
-    padding: .25rem;
-    margin: .25rem;
-}
-
-.mlauto {
-    margin-left: auto !important;
 }
 
 .avatar {
