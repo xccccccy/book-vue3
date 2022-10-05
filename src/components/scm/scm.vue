@@ -1,5 +1,5 @@
 <template>
-    <div class="app w-full sm:w-11/12 2xl:w-2/3 pt-12 sm:pt-16 text-left pb-14">
+    <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
         <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
             <el-tabs tab-position="top">

@@ -22,19 +22,22 @@
             </div>
         </div>
         <div v-show="versions_show">
+            <div class="pb-2 text-lg pl-2">Versions</div>
             <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys"
                 :key="versionHistory.version" :index="index" :versionInfo="versionHistory">
             </VersionHistory>
         </div>
         <div v-show="!versions_show" v-loading="commitInfos_loading" style="min-height: 60vh;">
-            <Commits v-for="commitInfo in allCommitInfos" :commitInfo="commitInfo" :key="commitInfo.commitSha"></Commits>
+            <div class="pb-2 text-lg pl-2">Commits</div>
+            <Commits v-for="commitInfo in allCommitInfos" :commitInfo="commitInfo" :key="commitInfo.commitSha" @newVersionWithCommitSha="newVersionWithCommitSha"></Commits>
         </div>
+        <Drawer :data="newVersionDrawerData" v-model:isopen="newVersionDrawerOpen" @newVersionConfirm="newVersionConfirm"></Drawer>
     </div>
 </template>
 
 <script>
 import { reactive, ref } from 'vue';
-import { getAllVersionInfo, getAllCommitsInfo } from './scmapi'
+import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from './scmapi'
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
 import { GobletSquareFull, Plus, House } from '@element-plus/icons-vue'
@@ -88,6 +91,11 @@ export default {
 
         const versions_show = ref(true);
         const commitInfos_loading = ref(true);
+        const newVersionDrawerOpen = ref(false);
+        const newVersionDrawerData = ref({
+            'repos': props.RepositoryInfo.baseInfo.name,
+            'commitSha': 'iushdjhjfdbfdjkf'
+        });
 
         const allCommitInfos = ref([
             {
@@ -137,7 +145,6 @@ export default {
             })
         }
 
-
         const newVersion = () => {
             versions_show.value = !versions_show.value;
             if (!versions_show.value && !allCommitLooaded) {
@@ -145,7 +152,19 @@ export default {
             }
         }
 
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading };
+        const newVersionWithCommitSha = (commitSha) => {
+            newVersionDrawerData.value['commitSha'] = commitSha;
+            newVersionDrawerOpen.value = true;
+        }
+
+        const newVersionConfirm = (data) => {
+            let { repos, commitSha, version } = data;
+            newVersionWithData(repos, commitSha, version).then(() => {
+                console.log(res);
+            })
+        }
+
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm };
     }
 }
 

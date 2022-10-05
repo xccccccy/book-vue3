@@ -76,7 +76,7 @@
                                     <el-switch v-model="commitInfo.isnowversion" />
                                 </span> -->
                                 <span></span>
-                                <span v-show="!commitInfo.isversion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">在此commit上新建version</span>
+                                <span v-show="!commitInfo.isversion" @click="newVersion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">在此commit上新建version</span>
                             </div>
                         </div>
                     </div>
@@ -94,6 +94,7 @@ import BottomLine from '../foundation/bottomLine.vue'
 export default {
     name: "CommitsForNewVersion",
     components: { BottomLine },
+    emits: ['newVersionWithCommitSha'],
     props: {
         commitInfo: {
             type: Object,
@@ -112,11 +113,14 @@ export default {
             }
         }
     },
-    setup(props) {
-        console.log(props);
+    setup(props, context) {
         const self_open = ref(false);
+
+        const newVersion = () => {
+            context.emit('newVersionWithCommitSha', props.commitInfo.commitSha)
+        }
         
-        return { self_open };
+        return { self_open, newVersion };
     }
 }
 
