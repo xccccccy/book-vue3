@@ -44,3 +44,15 @@ export const newVersionWithData = (repos, commitSha, version) => {
           console.log('ERROR => ', err);
       });
 }
+
+export const updateVersion = (repos, version) => {
+  return axios
+      .post("/scmapi/update/version", {
+          'repos': repos,
+          'version': version
+      })
+      .catch((err) => {
+          ElNotification({ message: '更新Version失败。', type: 'warning', duration: 3000 });
+          console.log('ERROR => ', err);
+      });
+}

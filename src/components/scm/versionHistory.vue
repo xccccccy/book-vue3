@@ -69,8 +69,8 @@
                             <div>操作区</div>
                             <div class="flex flex-col operation flex-1 justify-center">
                                 <span></span>
-                                <span v-show="!isnowversion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
-                                <span class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
+                                <span @click="setnowversion" v-show="!isnowversion" class=" px-3 py-2 m-2 mb-5 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
+                                <span @click="delVersion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
                             </div>
                         </div>
                     </div>
@@ -85,17 +85,20 @@
 import { computed, ref } from 'vue';
 import CommitInfo from './commitInfo.vue'
 import BottomLine from '../foundation/bottomLine.vue'
+import { updateVersion } from './scmapi'
 
 export default {
     name: "VersionHistory",
     components: { CommitInfo, BottomLine },
+    emits: ['updateRepository'],
     props: {
         versionInfo: {
             type: Object,
             default: {
+                repos: 'flask-vue-myworld',
                 branch: 'alpha/1.0.0',
                 branchUrl: 'https://github.com/xccccccy/flask-vue-myworld/tree/alpha/1.0.0',
-                version: '1.0.0',
+                version: 'v1.0.0',
                 versionAuthor: 'xccccccy',
                 versionAuthorUrl: 'https://github.com/xccccccy',
                 versionAuthorAvatar: 'https://avatars.githubusercontent.com/u/97515896?v=4',
@@ -114,14 +117,25 @@ export default {
             default: 0
         }
     },
-    setup(props) {
+    setup(props, context) {
         let isopen = props.index == 0;
         const self_open = ref(isopen);
         const isnowversion = computed(() => {
             return props.index == 0;
         })
-        const setnowversion = ref(false);
-        return { self_open, isnowversion, setnowversion };
+        const setnowversion = () => {
+            let repos = props.versionInfo.repos;
+            let version = props.versionInfo.version;
+            updateVersion(repos, version).then((res) => {
+                console.log(res);
+                context.emit('updateRepository', repos);
+                ElNotification({ message: '更新Version成功。', type: 'success', duration: 2000 });
+            })
+        };
+        const delVersion = () => {
+            ElNotification({ message: '暂不支持删除Version！', type: 'warning', duration: 1500 });
+        }
+        return { self_open, isnowversion, setnowversion, delVersion };
     }
 }
 

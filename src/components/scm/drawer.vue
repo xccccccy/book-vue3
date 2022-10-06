@@ -19,7 +19,13 @@
                     <el-input v-model="data.commitSha" disabled />
                 </div>
                 <div>
+                    <div class="flex justify-between">
                     <span>Version</span>
+                    <div 
+                        class=" rounded-2xl bg-green-600 text-gray-100 px-3 text-sm font-medium">
+                        now version: <span>{{ data.nowversion }}</span>
+                    </div>
+                    </div>
                     <el-input v-model="version" />
                 </div>
             </div>
@@ -27,7 +33,7 @@
         <template #footer>
             <div style="flex: auto">
                 <el-button @click="cancelClick">cancel</el-button>
-                <el-button type="primary" @click="confirmClick">confirm</el-button>
+                <el-button type="primary" @click="confirmClick" :loading="isloading">confirm</el-button>
             </div>
         </template>
     </el-drawer>
@@ -42,15 +48,20 @@ import { DataAnalysis } from '@element-plus/icons-vue'
 export default {
     name: "NewVersionDrawer",
     components: { DataAnalysis },
-    emits: ['update:isopen', 'newVersionConfirm'],
+    emits: ['update:isopen', 'update:isloading', 'newVersionConfirm'],
     props: {
         isopen: {
+            type: Boolean,
+            default: false
+        },
+        isloading: {
             type: Boolean,
             default: false
         },
         data: {
             type: Object,
             default: {
+                'nowversion': 'v1.0.0',
                 'repos': 'book-vue3',
                 'commitSha': 'iushdjhjfdbfdjkf'
             }
@@ -68,8 +79,7 @@ export default {
                 'commitSha': props.data.commitSha,
                 'version': version.value
             })
-            context.emit('update:isopen', false)
-
+            context.emit('update:isloading', true)
         }
 
         const handleClose = (done) => {
@@ -77,7 +87,7 @@ export default {
             done()
         }
 
-        const version = ref('v1.0.1')
+        const version = ref(props.data.nowversion)
 
         return { cancelClick, confirmClick, handleClose, version };
     }

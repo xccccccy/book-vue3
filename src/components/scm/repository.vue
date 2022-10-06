@@ -23,15 +23,17 @@
         </div>
         <div v-show="versions_show">
             <div class="pb-2 text-lg pl-2">Versions</div>
-            <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys"
+            <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys" @updateRepository="updateRepository"
                 :key="versionHistory.version" :index="index" :versionInfo="versionHistory">
             </VersionHistory>
         </div>
         <div v-show="!versions_show" v-loading="commitInfos_loading" style="min-height: 60vh;">
             <div class="pb-2 text-lg pl-2">Commits</div>
-            <Commits v-for="commitInfo in allCommitInfos" :commitInfo="commitInfo" :key="commitInfo.commitSha" @newVersionWithCommitSha="newVersionWithCommitSha"></Commits>
+            <Commits v-for="commitInfo in allCommitInfos" :commitInfo="commitInfo" :key="commitInfo.commitSha"
+                @newVersionWithCommitSha="newVersionWithCommitSha"></Commits>
         </div>
-        <Drawer :data="newVersionDrawerData" v-model:isopen="newVersionDrawerOpen" @newVersionConfirm="newVersionConfirm"></Drawer>
+        <Drawer v-model:isopen="newVersionDrawerOpen" v-model:isloading="newVersionDrawerLoading"
+            @newVersionConfirm="newVersionConfirm" :data="newVersionDrawerData"></Drawer>
     </div>
 </template>
 
@@ -46,6 +48,7 @@ import { GobletSquareFull, Plus, House } from '@element-plus/icons-vue'
 export default {
     name: "Repository",
     components: { VersionHistory, GobletSquareFull, Plus, House, Commits },
+    emits: ['updateRepository'],
     props: {
         RepositoryInfo: {
             type: Object,
@@ -87,12 +90,14 @@ export default {
             default: '/'
         }
     },
-    setup(props) {
+    setup(props, context) {
 
         const versions_show = ref(true);
         const commitInfos_loading = ref(true);
         const newVersionDrawerOpen = ref(false);
+        const newVersionDrawerLoading = ref(false);
         const newVersionDrawerData = ref({
+            'nowversion': props.RepositoryInfo.baseInfo.version,
             'repos': props.RepositoryInfo.baseInfo.name,
             'commitSha': 'iushdjhjfdbfdjkf'
         });
@@ -159,12 +164,26 @@ export default {
 
         const newVersionConfirm = (data) => {
             let { repos, commitSha, version } = data;
-            newVersionWithData(repos, commitSha, version).then(() => {
+            version = version.startsWith('v') ? version : 'v' + version
+            let versions = props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version });
+            if (versions.find(item => { return item == version })) {
+                ElNotification({ message: '已经存在Version: ' + version, type: 'error', duration: 3000 });
+                return
+            }
+            newVersionWithData(repos, commitSha, version).then((res) => {
                 console.log(res);
+                ElNotification({ message: '添加Version: ' + version + '成功！', type: 'success', duration: 3000 });
+                newVersionDrawerLoading.value = false;
+                newVersionDrawerOpen.value = false;
+                context.emit('updateRepository', repos)
             })
         }
 
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm };
+        const updateRepository = (repos) => {
+            context.emit('updateRepository', repos)
+        }
+
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository };
     }
 }
 

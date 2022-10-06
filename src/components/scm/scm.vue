@@ -5,7 +5,7 @@
             <el-tabs tab-position="top">
                 <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
                     :label="repositoryName">
-                    <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
+                    <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;" @updateRepository="updateNowRepositoryInfo"
                         v-loading="repository_loading[repositoryName]"></Repository>
                 </el-tab-pane>
             </el-tabs>
@@ -39,17 +39,18 @@ export default {
         const repository_loading = ref({ 'flask-vue-myworld': true })
 
         const repositoryInfos = reactive({
-            "flask-vue-myworld": {
+            "book-vue3": {
                 baseInfo: {
-                    name: 'flask-vue-myworld',
-                    url: 'https://github.com/xccccccy/flask-vue-myworld',
+                    name: 'book-vue3',
+                    url: 'https://github.com/xccccccy/book-vue3',
                     version: 'v1.0.0'
                 },
                 versionHistorys: [
                     {
+                        repos: 'book-vue3',
                         branch: 'alpha/1.0.1',
-                        branchUrl: 'https://github.com/xccccccy/flask-vue-myworld/tree/alpha/1.0.0',
-                        commitUrl: 'https://github.com/xccccccy/flask-vue-myworld/commit/811dc3e1115565866a50a92f137dcb1fde45d327',
+                        branchUrl: 'https://github.com/xccccccy/book-vue3/tree/alpha/1.0.0',
+                        commitUrl: 'https://github.com/xccccccy/book-vue3/commit/811dc3e1115565866a50a92f137dcb1fde45d327',
                         version: 'v1.0.0',
                         versionAuthor: 'xccccccy',
                         versionAuthorUrl: 'https://github.com/xccccccy',
@@ -86,9 +87,11 @@ export default {
         }
 
         const updateNowRepositoryInfo = (repos) => {
+            repository_loading.value[repos] = true;
             getAllVersionInfo(repos).then((res) => {
                 console.log(res.data)
                 var allVersionInfo = res.data;
+                if (Object.keys(allVersionInfo.version_historys).length == 0) {return;}
 
                 var version_historys = []
                 var nowCommitSha;
@@ -96,6 +99,7 @@ export default {
                 for (let version_name in allVersionInfo.version_historys) {
                     let version_info = allVersionInfo.version_historys[version_name]
                     let version_history = {
+                        repos: repos,
                         branch: version_info['name'],
                         branchUrl: version_info['_links']['html'],
                         commitUrl: version_info['commit']['html_url'],
@@ -116,8 +120,7 @@ export default {
                     versionCommitShas[version_history['commitInfo']['commitSha']] = version_history.version
                 }
 
-                let now_version = allReposInfos[repos]['now_version'];
-                console.log(now_version);
+                let now_version = allVersionInfo['now_version'];
                 version_historys = version_historys.sort((a, b) => {
                     return a.version == now_version ? -1 : (b.version == now_version ? 1 : (a.version < b.version ? 1 : -1))
                 })
@@ -126,7 +129,7 @@ export default {
                 var baseInfo = {
                     name: repos,
                     url: allReposInfos[repos]['url'],
-                    version: allReposInfos[repos]['now_version']
+                    version: allVersionInfo['now_version']
                 }
 
                 repositoryInfos[repos] = {
@@ -143,7 +146,7 @@ export default {
         // repos_loading.value = false;
         // repository_loading.value['flask-vue-myworld'] = false;
 
-        return { repos_loading, repository_loading, repositoryInfos };
+        return { repos_loading, repository_loading, repositoryInfos, updateNowRepositoryInfo };
     }
 }
 
