@@ -76,7 +76,7 @@
                                     <el-switch v-model="commitInfo.isnowversion" />
                                 </span> -->
                                 <span></span>
-                                <span v-show="!commitInfo.isversion" @click="newVersion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">在此commit上新建version</span>
+                                <span v-show="!commitInfo.isversion" @click="newVersion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-yellow-600 hover:bg-yellow-700 cursor-pointer text-white">在此commit上新建version</span>
                             </div>
                         </div>
                     </div>
