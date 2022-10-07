@@ -7,7 +7,7 @@
                     <GobletSquareFull />
                 </el-icon>
                 <span class="title">Repository : </span>
-                <span class="link"><a :href="RepositoryInfo.baseInfo.url">{{ RepositoryInfo.baseInfo.name }}</a></span>
+                <span class="link"><a :href="RepositoryInfo.baseInfo.url" target="_blank">{{ RepositoryInfo.baseInfo.name }}</a></span>
             </div>
             <div>
                 <span class="title">Now Version : </span>
@@ -23,8 +23,9 @@
         </div>
         <div v-show="versions_show">
             <div class="pb-2 text-lg pl-2">Versions</div>
-            <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys" @updateRepository="updateRepository"
-                :key="versionHistory.version" :index="index" :versionInfo="versionHistory">
+            <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys"
+                @updateRepository="updateRepository" :key="versionHistory.version" :index="index"
+                :versionInfo="versionHistory">
             </VersionHistory>
         </div>
         <div v-show="!versions_show" v-loading="commitInfos_loading" style="min-height: 60vh;">
@@ -168,6 +169,7 @@ export default {
             let versions = props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version });
             if (versions.find(item => { return item == version })) {
                 ElNotification({ message: '已经存在Version: ' + version, type: 'error', duration: 3000 });
+                newVersionDrawerLoading.value = false;
                 return
             }
             newVersionWithData(repos, commitSha, version).then((res) => {
@@ -176,6 +178,11 @@ export default {
                 newVersionDrawerLoading.value = false;
                 newVersionDrawerOpen.value = false;
                 context.emit('updateRepository', repos)
+            }).catch((err) => {
+                let error_message = err.response.data;
+                newVersionDrawerLoading.value = false;
+                ElNotification({ title: '创建Version失败。', message: error_message, type: 'warning', duration: 5000 });
+                console.log('ERROR => ', err);
             })
         }
 

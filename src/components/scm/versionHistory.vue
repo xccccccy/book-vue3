@@ -5,7 +5,7 @@
             <div class="flex py-2 px-5 space-x-5 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
                 @click="self_open = !self_open">
                 <div>
-                    <a :href="versionInfo.versionAuthorUrl">
+                    <a :href="versionInfo.versionAuthorUrl" target="_blank" >
                         <img :src="versionInfo.versionAuthorAvatar" class="avatar">
                     </a>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="flex div-1">
                     <div class="flex-1 flex">
                         <div>
-                            <div class="link font-bold text-xl border-b"><a :href="versionInfo.branchUrl">基础信息</a></div>
+                            <div class="link font-bold text-xl border-b"><a :href="versionInfo.branchUrl" target="_blank" >基础信息</a></div>
                             <div>
                                 <div>
                                     <span>Version : </span>
@@ -40,14 +40,14 @@
                                 </div>
                                 <div>
                                     <span>分支 : </span>
-                                    <span><a :href="versionInfo.branchUrl"></a>{{ versionInfo.branch }}</span>
+                                    <span><a :href="versionInfo.branchUrl" target="_blank" ></a>{{ versionInfo.branch }}</span>
                                 </div>
                             </div>
                             <div>
                                 <div>
                                     <span>发版人 : </span>
                                     <span>
-                                        <a :href="versionInfo.versionAuthorUrl">
+                                        <a :href="versionInfo.versionAuthorUrl" target="_blank" >
                                             <img :src="versionInfo.versionAuthorAvatar" class="avatar avatar-mini">
                                         </a>
                                     </span>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div style="margin-left: 6%;">
-                            <div class="link"><a :href="versionInfo.commitUrl">关联Commit</a></div>
+                            <div class="link"><a :href="versionInfo.commitUrl" target="_blank" >关联Commit</a></div>
                             <CommitInfo :data="versionInfo.commitInfo"></CommitInfo>
                         </div>
                     </div>

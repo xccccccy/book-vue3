@@ -39,10 +39,6 @@ export const newVersionWithData = (repos, commitSha, version) => {
           'commitSha': commitSha,
           'version': version
       })
-      .catch((err) => {
-          ElNotification({ message: '创建Version失败。', type: 'warning', duration: 3000 });
-          console.log('ERROR => ', err);
-      });
 }
 
 export const updateVersion = (repos, version) => {

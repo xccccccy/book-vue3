@@ -5,7 +5,7 @@
             <div class="flex py-2 px-5 space-x-5 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
                 @click="self_open = !self_open">
                 <div>
-                    <a :href="commitInfo.commitAuthorUrl">
+                    <a :href="commitInfo.commitAuthorUrl" target="_blank" >
                         <img :src="commitInfo.commitAuthorAvatar" class="avatar">
                     </a>
                 </div>
@@ -36,12 +36,12 @@
                 <div class="flex div-1">
                     <div class="flex-1">
                         <div>
-                            <div class="link font-bold text-xl border-b"><a :href="commitInfo.commitUrl">详细信息</a></div>
+                            <div class="link font-bold text-xl border-b"><a :href="commitInfo.commitUrl" target="_blank" >详细信息</a></div>
                             <div class="flex items-center space-x-4">
                                 <div>
                                     <span>Author : </span>
                                     <span>
-                                        <a :href="commitInfo.versionAuthorUrl">
+                                        <a :href="commitInfo.versionAuthorUrl" target="_blank" >
                                             <img :src="commitInfo.commitAuthorAvatar" class="avatar avatar-mini">
                                         </a>
                                     </span>
