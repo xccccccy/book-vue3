@@ -32,12 +32,13 @@ export const getAllCommitsInfo = (repos) => {
         });
 }
 
-export const newVersionWithData = (repos, commitSha, version) => {
+export const newVersionWithData = (repos, commitSha, version, mode) => {
   return axios
       .post("/scmapi/new/version", {
           'repos': repos,
           'commitSha': commitSha,
-          'version': version
+          'version': version,
+          'mode': mode
       })
 }
 

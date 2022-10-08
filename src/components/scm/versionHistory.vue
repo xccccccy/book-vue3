@@ -171,11 +171,11 @@ export default {
 
 .avatar {
     border-radius: 50%;
-    width: 6vmin;
-    height: 6vmin;
+    width: 5vmin;
+    height: 5vmin;
     object-fit: cover;
     object-position: center;
-    margin: 1.2vmin;
+    margin: 1vmin;
     transition: all 0.2s ease;
     /* border = "5px solid #f36"; */
 }
