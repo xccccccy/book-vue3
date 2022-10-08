@@ -46,6 +46,7 @@ import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from './scma
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
 import { GobletSquareFull, Plus, House } from '@element-plus/icons-vue'
+import { utc2beijing } from '../utils'
 
 
 export default {
@@ -140,15 +141,16 @@ export default {
                         commitAuthorUrl: commitInfo['author'] ? commitInfo['author']['html_url'] : 'https://github.com/xccccccy ',
                         commitAuthorAvatar: commitInfo['author'] ? commitInfo['author']['avatar_url'] : 'https://avatars.githubusercontent.com/u/97515896?v=4',
                         commitEmail: commitInfo['commit']['author']['email'],
-                        commitDate: commitInfo['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                        commitDate: utc2beijing(commitInfo['commit']['author']['date']),
                         commitMessage: commitInfo['commit']['message'],
                         commitSha: commitInfo['sha'],
                         commitUrl: commitInfo['html_url'],
                         isversion: Object.keys(props.RepositoryInfo.versionCommitShas).indexOf(commitInfo['sha']) != -1,
-                        isnowversion: props.RepositoryInfo.nowCommitSha == commitInfo['sha'],
-                        dateGuide: commitInfo['commit']['author']['date'].slice(0, commitInfo['commit']['author']['date'].indexOf('T'))
+                        isnowversion: props.RepositoryInfo.nowCommitSha == commitInfo['sha']
                     }
                     temp['version'] = temp.isversion ? props.RepositoryInfo.versionCommitShas[commitInfo['sha']] : '';
+                    let time = utc2beijing(commitInfo['commit']['author']['date'])
+                    temp['dateGuide'] = time.slice(0, time.indexOf(' '))
                     temp['showDateGuide'] = showDateNow == temp.dateGuide ? false : true;
                     showDateNow = temp.dateGuide;
                     commits.push(temp);

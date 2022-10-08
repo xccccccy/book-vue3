@@ -18,6 +18,7 @@ import { reactive, ref } from 'vue';
 import { getAllReposInfo, getAllVersionInfo } from './scmapi'
 import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
+import { utc2beijing } from '../utils'
 
 export default {
     name: "Scm",
@@ -107,12 +108,12 @@ export default {
                         versionAuthor: version_info['commit']['commit']['author']['name'],
                         versionAuthorUrl: version_info['commit']['author'] ? version_info['commit']['author']['html_url'] : "https://github.com/xccccccy",
                         versionAuthorAvatar: version_info['commit']['author'] ? version_info['commit']['author']['avatar_url'] : "https://avatars.githubusercontent.com/u/97515896?v=4",
-                        versionDate: version_info['commit']['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                        versionDate: utc2beijing(version_info['commit']['commit']['author']['date']),
                         commitInfo: {
                             commitMessage: version_info['commit']['commit']['message'],
                             commitAuthor: version_info['commit']['commit']['author']['name'],
                             commitEmail: version_info['commit']['commit']['author']['email'],
-                            commitDate: version_info['commit']['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                            commitDate: utc2beijing(version_info['commit']['commit']['author']['date']),
                             commitSha: version_info['commit']['sha']
                         }
                     }
