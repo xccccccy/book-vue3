@@ -62,6 +62,12 @@ export default createRouter({
                 import ('@/components/scm/scm.vue')
         },
         {
+            path: '/scmlogin',
+            name: 'ScmLogin',
+            component: () =>
+                import ('@/components/scm/scmlogin.vue')
+        },
+        {
             path: '/404',
             name: 'notFound',
             component: () =>
