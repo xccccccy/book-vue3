@@ -22,7 +22,17 @@
             </div>
         </div>
         <div v-show="versions_show">
-            <div class="pb-2 text-lg pl-2">Versions</div>
+            <div class="flex items-center mb-2">
+                <div class="text-lg pl-2">Versions</div>
+                <div class="flex ml-auto space-x-5 mr-3">
+                    <div class=" hover:bg-violet-500 rounded-full h-min p-1 cursor-pointer" @click="expandAll">
+                        <Expand style="width: 1.3rem; height: 1.3rem;" />
+                    </div>
+                    <div class=" hover:bg-violet-500 rounded-full h-min p-1 cursor-pointer" @click="foldAll">
+                        <Fold style="width: 1.3rem; height: 1.3rem;" />
+                    </div>
+                </div>
+            </div>
             <VersionHistory v-for="(versionHistory, index) in RepositoryInfo.versionHistorys"
                 @updateRepository="updateRepository" :key="versionHistory.version" :index="index"
                 :versionInfo="versionHistory">
@@ -43,12 +53,12 @@ import { reactive, ref } from 'vue';
 import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from './scmapi'
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
-import { GobletSquareFull, Plus, House } from '@element-plus/icons-vue'
+import { GobletSquareFull, Plus, House, Fold, Expand } from '@element-plus/icons-vue'
 
 
 export default {
     name: "Repository",
-    components: { VersionHistory, GobletSquareFull, Plus, House, Commits },
+    components: { VersionHistory, GobletSquareFull, Plus, House, Commits, Fold, Expand },
     emits: ['updateRepository'],
     props: {
         RepositoryInfo: {
@@ -190,7 +200,15 @@ export default {
             context.emit('updateRepository', repos)
         }
 
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository };
+        const expandAll = () => {
+
+        }
+
+        const foldAll = () => {
+
+        }
+
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, expandAll, foldAll };
     }
 }
 

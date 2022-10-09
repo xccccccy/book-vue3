@@ -3,7 +3,7 @@
         <div class="header space-x-0.5 sm:space-x-2 w-full sm:w-11/12  mx-auto">
             <HeaderHome :homeSetting="homeSetting"></HeaderHome>
             <component v-for="(headerSetting, index) in headerSettings" :is="headers[headerSetting.type]"
-                v-show="!headerSetting.hidden" @click="activateHeaderOfIndex(index)"
+                v-show="!headerSetting.hidden" @click="activateHeaderOfIndex(index)" :key="index"
                 :class="{ headeractivate: headeractivate[index] }" :headerSetting="headerSetting"></component>
             <DrakMode @darkModeChange="darkModeChange"></DrakMode>
             <User @userLog="userLog"></User>
