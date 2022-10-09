@@ -28,7 +28,9 @@ service.interceptors.response.use(response => {
             case 403:
                 error.message = '拒绝访问';
                 ElNotification({ message: "请先登录！", type: 'warning', duration: 3000 });
-                router.push('/scmlogin');
+                setTimeout(() => {
+                    router.push('/scmlogin');
+                }, 2000);
                 setTimeout(() => {
                     
                 }, 3000);

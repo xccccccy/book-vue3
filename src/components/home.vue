@@ -1,5 +1,6 @@
 <template>
   <div class="back-all w-full min-h-screen">
+    <Header></Header>
     <div id="main">
       <div class="page-title">
         <span

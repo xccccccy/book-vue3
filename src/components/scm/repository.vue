@@ -234,7 +234,6 @@ export default {
             context.emit('updateRepository', repos)
         }
 
-<<<<<<< HEAD
         const expandAll = () => {
 
         }
@@ -242,9 +241,7 @@ export default {
         const foldAll = () => {
 
         }
-
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, expandAll, foldAll };
-=======
+        
         const updateCommits = () => {
             initAllCommits(props.RepositoryInfo.baseInfo.name)
         }
@@ -256,8 +253,7 @@ export default {
         }
 
 
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, updateCommits, updateVersionWithCommitSha };
->>>>>>> 27c947908e7460d332d020950bfac8cbc7f31347
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, updateCommits, updateVersionWithCommitSha, expandAll, foldAll };
     }
 }
 
