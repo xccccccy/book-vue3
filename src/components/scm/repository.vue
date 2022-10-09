@@ -1,20 +1,21 @@
 <template>
     <div class="">
         <div
-            class="flex items-center space-x-10 p-4 version-info border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 border mb-5 rounded-md dark-transition shadow-xl dark:shadow-none bg-slate-200 dark:bg-slate-700 backdrop-filter bg-opacity-50 dark:bg-opacity-50">
+            class="flex items-center space-x-10 p-2 version-info border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 border mb-4 rounded-md dark-transition shadow-xl dark:shadow-none bg-slate-200 dark:bg-slate-700 backdrop-filter bg-opacity-50 dark:bg-opacity-50">
             <div>
-                <el-icon style="vertical-align: bottom;" color="#601cd6" class="mx-3" size="2rem">
+                <el-icon style="vertical-align: bottom;" color="#601cd6" class="mx-3" size="1.6rem">
                     <GobletSquareFull />
                 </el-icon>
                 <span class="title">Repository : </span>
-                <span class="link"><a :href="RepositoryInfo.baseInfo.url" target="_blank">{{ RepositoryInfo.baseInfo.name }}</a></span>
+                <span class="link"><a :href="RepositoryInfo.baseInfo.url" target="_blank">{{
+                RepositoryInfo.baseInfo.name }}</a></span>
             </div>
             <div>
                 <span class="title">Now Version : </span>
                 <span>{{ RepositoryInfo.baseInfo.version }}</span>
             </div>
             <div style="margin-left: auto;margin-right: 1rem;;">
-                <div class=" p-4 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
+                <div class=" p-3 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
                     @click="newVersion">
                     <Plus v-show="versions_show" style="width: 1.3rem; height: 1.3rem;"></Plus>
                     <House v-show="!versions_show" style="width: 1.3rem; height: 1.3rem;"></House>
@@ -41,7 +42,8 @@
         <div v-show="!versions_show" v-loading="commitInfos_loading" style="min-height: 60vh;">
             <div class="pb-2 text-lg pl-2">Commits</div>
             <Commits v-for="commitInfo in allCommitInfos" :commitInfo="commitInfo" :key="commitInfo.commitSha"
-                @newVersionWithCommitSha="newVersionWithCommitSha"></Commits>
+                @newVersionWithCommitSha="newVersionWithCommitSha"
+                @updateVersionWithCommitSha="updateVersionWithCommitSha"></Commits>
         </div>
         <Drawer v-model:isopen="newVersionDrawerOpen" v-model:isloading="newVersionDrawerLoading"
             @newVersionConfirm="newVersionConfirm" :data="newVersionDrawerData"></Drawer>
@@ -54,6 +56,7 @@ import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from './scma
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
 import { GobletSquareFull, Plus, House, Fold, Expand } from '@element-plus/icons-vue'
+import { utc2beijing } from '../utils'
 
 
 export default {
@@ -108,9 +111,11 @@ export default {
         const newVersionDrawerOpen = ref(false);
         const newVersionDrawerLoading = ref(false);
         const newVersionDrawerData = ref({
+            'newMode': true,
             'nowversion': props.RepositoryInfo.baseInfo.version,
             'repos': props.RepositoryInfo.baseInfo.name,
-            'commitSha': 'iushdjhjfdbfdjkf'
+            'commitSha': 'iushdjhjfdbfdjkf',
+            'versions': props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version })
         });
 
         const allCommitInfos = ref([
@@ -125,31 +130,39 @@ export default {
                 commitUrl: 'https://github.com/xccccccy/book-vue3/commit/04cb8ecd641d77b640367eb50f52d14cea46f735',
                 isversion: true,
                 isnowversion: true,
-                version: 'v1.0.0'
+                version: 'v1.0.0',
+                showDateGuide: true,
+                dateGuide: '2022-10-8'
             }
         ])
 
         var allCommitLooaded = false;
         const initAllCommits = (repos) => {
+            commitInfos_loading.value = true;
             getAllCommitsInfo(repos).then((res) => {
                 console.log(res.data.data)
 
                 let commitInfos = res.data.data;
                 let commits = [];
+                let showDateNow = '';
                 for (var commitInfo of commitInfos) {
                     let temp = {
                         commitAuthor: commitInfo['commit']['author']['name'],
                         commitAuthorUrl: commitInfo['author'] ? commitInfo['author']['html_url'] : 'https://github.com/xccccccy ',
                         commitAuthorAvatar: commitInfo['author'] ? commitInfo['author']['avatar_url'] : 'https://avatars.githubusercontent.com/u/97515896?v=4',
                         commitEmail: commitInfo['commit']['author']['email'],
-                        commitDate: commitInfo['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                        commitDate: utc2beijing(commitInfo['commit']['author']['date']),
                         commitMessage: commitInfo['commit']['message'],
                         commitSha: commitInfo['sha'],
                         commitUrl: commitInfo['html_url'],
                         isversion: Object.keys(props.RepositoryInfo.versionCommitShas).indexOf(commitInfo['sha']) != -1,
-                        isnowversion: props.RepositoryInfo.nowCommitSha == commitInfo['sha'],
+                        isnowversion: props.RepositoryInfo.nowCommitSha == commitInfo['sha']
                     }
                     temp['version'] = temp.isversion ? props.RepositoryInfo.versionCommitShas[commitInfo['sha']] : '';
+                    let time = utc2beijing(commitInfo['commit']['author']['date'])
+                    temp['dateGuide'] = time.slice(0, time.indexOf(' '))
+                    temp['showDateGuide'] = showDateNow == temp.dateGuide ? false : true;
+                    showDateNow = temp.dateGuide;
                     commits.push(temp);
                 }
 
@@ -158,7 +171,10 @@ export default {
 
                 allCommitLooaded = true;
                 commitInfos_loading.value = false;
-            })
+            }).catch((err) => {
+                ElNotification({ message: '获取CommitsInfo失败。', type: 'warning', duration: 3000 });
+                console.log('ERROR => ', err);
+            });
         }
 
         const newVersion = () => {
@@ -169,37 +185,56 @@ export default {
         }
 
         const newVersionWithCommitSha = (commitSha) => {
+            newVersionDrawerData.value['newMode'] = true;
             newVersionDrawerData.value['commitSha'] = commitSha;
             newVersionDrawerOpen.value = true;
         }
 
         const newVersionConfirm = (data) => {
             let { repos, commitSha, version } = data;
-            version = version.startsWith('v') ? version : 'v' + version
-            let versions = props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version });
-            if (versions.find(item => { return item == version })) {
-                ElNotification({ message: '已经存在Version: ' + version, type: 'error', duration: 3000 });
-                newVersionDrawerLoading.value = false;
-                return
+            if (newVersionDrawerData.value['newMode']) {
+                version = version.startsWith('v') ? version : 'v' + version
+                let versions = props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version });
+                if (versions.find(item => { return item == version })) {
+                    ElNotification({ message: '已经存在Version: ' + version, type: 'error', duration: 3000 });
+                    newVersionDrawerLoading.value = false;
+                    return
+                }
+                let mode = 'new';
+                newVersionWithData(repos, commitSha, version, mode).then((res) => {
+                    console.log(res);
+                    ElNotification({ message: '添加Version: ' + version + '成功！', type: 'success', duration: 3000 });
+                    newVersionDrawerLoading.value = false;
+                    newVersionDrawerOpen.value = false;
+                    context.emit('updateRepository', repos)
+                }).catch((err) => {
+                    let error_message = err.response.data;
+                    newVersionDrawerLoading.value = false;
+                    ElNotification({ title: '创建Version失败。', message: error_message, type: 'warning', duration: 5000 });
+                    console.log('ERROR => ', err);
+                })
+            } else {
+                let mode = 'update';
+                newVersionWithData(repos, commitSha, version, mode).then((res) => {
+                    console.log(res);
+                    ElNotification({ message: '更新Version: ' + version + '成功！', type: 'success', duration: 3000 });
+                    newVersionDrawerLoading.value = false;
+                    newVersionDrawerOpen.value = false;
+                    context.emit('updateRepository', repos)
+                }).catch((err) => {
+                    let error_message = err.response.data;
+                    newVersionDrawerLoading.value = false;
+                    ElNotification({ title: '更新Version失败。', message: error_message, type: 'warning', duration: 5000 });
+                    console.log('ERROR => ', err);
+                })
             }
-            newVersionWithData(repos, commitSha, version).then((res) => {
-                console.log(res);
-                ElNotification({ message: '添加Version: ' + version + '成功！', type: 'success', duration: 3000 });
-                newVersionDrawerLoading.value = false;
-                newVersionDrawerOpen.value = false;
-                context.emit('updateRepository', repos)
-            }).catch((err) => {
-                let error_message = err.response.data;
-                newVersionDrawerLoading.value = false;
-                ElNotification({ title: '创建Version失败。', message: error_message, type: 'warning', duration: 5000 });
-                console.log('ERROR => ', err);
-            })
         }
 
         const updateRepository = (repos) => {
             context.emit('updateRepository', repos)
         }
 
+<<<<<<< HEAD
         const expandAll = () => {
 
         }
@@ -209,6 +244,20 @@ export default {
         }
 
         return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, expandAll, foldAll };
+=======
+        const updateCommits = () => {
+            initAllCommits(props.RepositoryInfo.baseInfo.name)
+        }
+
+        const updateVersionWithCommitSha = (commitSha) => {
+            newVersionDrawerData.value['newMode'] = false;
+            newVersionDrawerData.value['commitSha'] = commitSha;
+            newVersionDrawerOpen.value = true;
+        }
+
+
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, updateCommits, updateVersionWithCommitSha };
+>>>>>>> 27c947908e7460d332d020950bfac8cbc7f31347
     }
 }
 
@@ -216,11 +265,11 @@ export default {
 
 <style scoped>
 .version-info .title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 .version-info span:last-child {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: rgb(193, 171, 3);
 }
 

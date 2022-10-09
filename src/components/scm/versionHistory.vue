@@ -5,7 +5,7 @@
             <div class="flex py-2 px-5 space-x-5 border-b items-center dark:border-violet-500 dark:border-opacity-60 text-lg"
                 @click="self_open = !self_open">
                 <div>
-                    <a :href="versionInfo.versionAuthorUrl" target="_blank" >
+                    <a :href="versionInfo.versionAuthorUrl" target="_blank">
                         <img :src="versionInfo.versionAuthorAvatar" class="avatar">
                     </a>
                 </div>
@@ -32,7 +32,8 @@
                 <div class="flex div-1">
                     <div class="flex-1 flex">
                         <div>
-                            <div class="link font-bold text-xl border-b"><a :href="versionInfo.branchUrl" target="_blank" >基础信息</a></div>
+                            <div class="link font-bold text-xl border-b"><a :href="versionInfo.branchUrl"
+                                    target="_blank">基础信息</a></div>
                             <div>
                                 <div>
                                     <span>Version : </span>
@@ -40,14 +41,15 @@
                                 </div>
                                 <div>
                                     <span>分支 : </span>
-                                    <span><a :href="versionInfo.branchUrl" target="_blank" ></a>{{ versionInfo.branch }}</span>
+                                    <span><a :href="versionInfo.branchUrl" target="_blank"></a>{{ versionInfo.branch
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
                                 <div>
                                     <span>发版人 : </span>
                                     <span>
-                                        <a :href="versionInfo.versionAuthorUrl" target="_blank" >
+                                        <a :href="versionInfo.versionAuthorUrl" target="_blank">
                                             <img :src="versionInfo.versionAuthorAvatar" class="avatar avatar-mini">
                                         </a>
                                     </span>
@@ -60,7 +62,7 @@
                             </div>
                         </div>
                         <div style="margin-left: 6%;">
-                            <div class="link"><a :href="versionInfo.commitUrl" target="_blank" >关联Commit</a></div>
+                            <div class="link"><a :href="versionInfo.commitUrl" target="_blank">关联Commit</a></div>
                             <CommitInfo :data="versionInfo.commitInfo"></CommitInfo>
                         </div>
                     </div>
@@ -69,8 +71,10 @@
                             <div>操作区</div>
                             <div class="flex flex-col operation flex-1 justify-center">
                                 <span></span>
-                                <span @click="setnowversion" v-show="!isnowversion" class=" px-3 py-2 m-2 mb-5 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
-                                <span @click="delVersion" class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
+                                <span @click="setnowversion" v-show="!isnowversion"
+                                    class=" px-3 py-2 m-2 mb-5 rounded-lg shadow-2xl bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white">设置为当前版本</span>
+                                <span @click="delVersion"
+                                    class=" px-3 py-2 m-1 rounded-lg shadow-2xl bg-red-500 hover:bg-red-600 cursor-pointer text-white text-center">删除此版本</span>
                             </div>
                         </div>
                     </div>
@@ -130,7 +134,10 @@ export default {
                 console.log(res);
                 context.emit('updateRepository', repos);
                 ElNotification({ message: '更新Version成功。', type: 'success', duration: 2000 });
-            })
+            }).catch((err) => {
+                ElNotification({ message: '更新Version失败。', type: 'warning', duration: 3000 });
+                console.log('ERROR => ', err);
+            });
         };
         const delVersion = () => {
             ElNotification({ message: '暂不支持删除Version！', type: 'warning', duration: 1500 });
@@ -171,11 +178,11 @@ export default {
 
 .avatar {
     border-radius: 50%;
-    width: 6vmin;
-    height: 6vmin;
+    width: 5vmin;
+    height: 5vmin;
     object-fit: cover;
     object-position: center;
-    margin: 1.2vmin;
+    margin: 1vmin;
     transition: all 0.2s ease;
     /* border = "5px solid #f36"; */
 }

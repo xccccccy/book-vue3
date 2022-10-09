@@ -4,7 +4,8 @@
             <div class=" text-slate-800 dark:text-slate-200 text-lg">
                 <div class="flex space-x-3">
                     <DataAnalysis style="width: 1.3rem; height: 1.3rem;" />
-                    <span>新建Version</span>
+                    <span v-show="!data.newMode">更新Version</span>
+                    <span v-show="data.newMode">新建Version</span>
                 </div>
             </div>
         </template>
@@ -20,20 +21,25 @@
                 </div>
                 <div>
                     <div class="flex justify-between">
-                    <span>Version</span>
-                    <div 
-                        class=" rounded-2xl bg-green-600 text-gray-100 px-3 text-sm font-medium">
-                        now version: <span>{{ data.nowversion }}</span>
+                        <span>Version</span>
+                        <div class=" rounded-2xl bg-green-600 text-gray-100 px-3 text-sm font-medium">
+                            now version: <span>{{ data.nowversion }}</span>
+                        </div>
                     </div>
-                    </div>
-                    <el-input v-model="version" />
+                    <el-input v-if="data.newMode" v-model="version" />
+                    <el-select v-if="!data.newMode" v-model="version" class="w-full" placeholder="Select" size="large">
+                        <el-option v-for="item in data.versions" :key="item" :label="item" :value="item" />
+                    </el-select>
                 </div>
             </div>
         </template>
         <template #footer>
             <div style="flex: auto">
                 <el-button @click="cancelClick">cancel</el-button>
-                <el-button type="primary" @click="confirmClick" :loading="isloading">confirm</el-button>
+                <el-button type="primary" @click="confirmClick" :loading="isloading">
+                    <span v-show="data.newMode">confirm</span>
+                    <span v-show="!data.newMode">update</span>
+                </el-button>
             </div>
         </template>
     </el-drawer>
@@ -63,7 +69,9 @@ export default {
             default: {
                 'nowversion': 'v1.0.0',
                 'repos': 'book-vue3',
-                'commitSha': 'iushdjhjfdbfdjkf'
+                'commitSha': 'iushdjhjfdbfdjkf',
+                'newMode': true,
+                'versions': ['v1.0.0', 'v1.0.1']
             }
         }
     },

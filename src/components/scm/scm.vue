@@ -1,12 +1,14 @@
 <template>
     <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
+        <BackGround></BackGround>
         <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
             <el-tabs tab-position="top">
                 <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
                     :label="repositoryName">
-                    <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;" @updateRepository="updateNowRepositoryInfo"
-                        v-loading="repository_loading[repositoryName]"></Repository>
+                    <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
+                        @updateRepository="updateNowRepositoryInfo" v-loading="repository_loading[repositoryName]">
+                    </Repository>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -18,10 +20,12 @@ import { reactive, ref } from 'vue';
 import { getAllReposInfo, getAllVersionInfo } from './scmapi'
 import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
+import { utc2beijing } from '../utils'
+import BackGround from '../foundation/background.vue'
 
 export default {
     name: "Scm",
-    components: { VersionHistory, Repository },
+    components: { VersionHistory, Repository, BackGround },
     props: {
         homeString: {
             type: String,
@@ -74,6 +78,7 @@ export default {
 
         const initRepos = () => {
             getAllReposInfo().then((res) => {
+                console.log('all repos in!!')
                 console.log(res.data)
                 allReposInfos = res.data;
                 repos_loading.value = false;
@@ -83,7 +88,10 @@ export default {
                     repository_loading.value[reposName] = true;
                     updateNowRepositoryInfo(reposName)
                 }
-            })
+            }).catch((err) => {
+                ElNotification({ message: '获取Repos失败。', type: 'warning', duration: 3000 });
+                console.log('ERROR => ', err);
+            });
         }
 
         const updateNowRepositoryInfo = (repos) => {
@@ -91,7 +99,7 @@ export default {
             getAllVersionInfo(repos).then((res) => {
                 console.log(res.data)
                 var allVersionInfo = res.data;
-                if (Object.keys(allVersionInfo.version_historys).length == 0) {return;}
+                if (Object.keys(allVersionInfo.version_historys).length == 0) { return; }
 
                 var version_historys = []
                 var nowCommitSha;
@@ -107,12 +115,12 @@ export default {
                         versionAuthor: version_info['commit']['commit']['author']['name'],
                         versionAuthorUrl: version_info['commit']['author'] ? version_info['commit']['author']['html_url'] : "https://github.com/xccccccy",
                         versionAuthorAvatar: version_info['commit']['author'] ? version_info['commit']['author']['avatar_url'] : "https://avatars.githubusercontent.com/u/97515896?v=4",
-                        versionDate: version_info['commit']['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                        versionDate: utc2beijing(version_info['commit']['commit']['author']['date']),
                         commitInfo: {
                             commitMessage: version_info['commit']['commit']['message'],
                             commitAuthor: version_info['commit']['commit']['author']['name'],
                             commitEmail: version_info['commit']['commit']['author']['email'],
-                            commitDate: version_info['commit']['commit']['author']['date'].replace('T', '  ').replace('Z', '   '),
+                            commitDate: utc2beijing(version_info['commit']['commit']['author']['date']),
                             commitSha: version_info['commit']['sha']
                         }
                     }
@@ -125,7 +133,6 @@ export default {
                     return a.version == now_version ? -1 : (b.version == now_version ? 1 : (a.version < b.version ? 1 : -1))
                 })
                 nowCommitSha = version_historys[0]['commitInfo']['commitSha'];
-                console.log(version_historys);
                 var baseInfo = {
                     name: repos,
                     url: allReposInfos[repos]['url'],
@@ -139,7 +146,10 @@ export default {
                     'versionCommitShas': versionCommitShas
                 }
                 repository_loading.value[repos] = false;
-            })
+            }).catch((err) => {
+                ElNotification({ message: '获取VersionInfo失败。', type: 'warning', duration: 3000 });
+                console.log('ERROR => ', err);
+            });
         }
 
         initRepos()
