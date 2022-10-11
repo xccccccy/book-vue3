@@ -30,7 +30,7 @@ service.interceptors.response.use(response => {
                 ElNotification({ message: "请先登录！", type: 'warning', duration: 3000 });
                 setTimeout(() => {
                     router.push('/scmlogin');
-                }, 2000);
+                }, 1000);
                 setTimeout(() => {
                     
                 }, 3000);

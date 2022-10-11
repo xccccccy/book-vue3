@@ -2,16 +2,23 @@
     <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
         <BackGround></BackGround>
-        <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
+        <div style="min-height: 80vh;" class="w-full">
             <el-tabs tab-position="top">
-                <el-tab-pane label="App Version Manage">
+                <el-tab-pane label="App Version Control">
                     <AppVersionManage />
                 </el-tab-pane>
-                <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
-                    :label="repositoryName" lazy>
-                    <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
-                        @updateRepository="updateNowRepositoryInfo" v-loading="repository_loading[repositoryName]">
-                    </Repository>
+                <el-tab-pane label="Sub-repos Setting">
+                    <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
+                        <el-tabs tab-position="top">
+                            <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos"
+                                :key="repositoryName" :label="repositoryName" lazy>
+                                <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
+                                    @updateRepository="updateNowRepositoryInfo"
+                                    v-loading="repository_loading[repositoryName]">
+                                </Repository>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -155,7 +162,7 @@ export default {
             });
         }
 
-        initRepos()
+        // initRepos()
         // repos_loading.value = false;
         // repository_loading.value['flask-vue-myworld'] = false;
 
