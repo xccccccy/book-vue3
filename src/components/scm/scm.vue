@@ -4,8 +4,11 @@
         <BackGround></BackGround>
         <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
             <el-tabs tab-position="top">
+                <el-tab-pane label="App Version Manage">
+                    <AppVersionManage />
+                </el-tab-pane>
                 <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
-                    :label="repositoryName">
+                    :label="repositoryName" lazy>
                     <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
                         @updateRepository="updateNowRepositoryInfo" v-loading="repository_loading[repositoryName]">
                     </Repository>
@@ -22,10 +25,11 @@ import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
 import { utc2beijing } from '../utils'
 import BackGround from '../foundation/background.vue'
+import AppVersionManage from './appversionmanage.vue';
 
 export default {
     name: "Scm",
-    components: { VersionHistory, Repository, BackGround },
+    components: { VersionHistory, Repository, BackGround, AppVersionManage },
     props: {
         homeString: {
             type: String,
@@ -78,7 +82,6 @@ export default {
 
         const initRepos = () => {
             getAllReposInfo().then((res) => {
-                console.log('all repos in!!')
                 console.log(res.data)
                 allReposInfos = res.data;
                 repos_loading.value = false;

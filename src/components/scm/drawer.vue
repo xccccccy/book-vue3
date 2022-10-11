@@ -1,6 +1,6 @@
 <template>
     <el-drawer v-model="isopen" direction="rtl" :before-close="handleClose" custom-class="drawer-bg">
-        <template #title>
+        <template #header>
             <div class=" text-slate-800 dark:text-slate-200 text-lg">
                 <div class="flex space-x-3">
                     <DataAnalysis style="width: 1.3rem; height: 1.3rem;" />

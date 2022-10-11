@@ -49,12 +49,12 @@ body {
 }
 
 .el-loading-mask {
-    background-color: rgba(200, 200, 200, 0.95) !important;
+    /* background-color: rgba(200, 200, 200, 0.95) !important; */
     z-index: 1 !important;
 }
 
 .dark .el-loading-mask {
-    background-color: rgba(66, 66, 66, 0.95) !important;
+    /* background-color: rgba(66, 66, 66, 0.95) !important; */
 }
 
 .el-tabs__item {
