@@ -8,6 +8,9 @@
                     <AppVersionManage />
                 </el-tab-pane>
                 <el-tab-pane label="Sub-repos Setting">
+                    <div @click="initRepos" class=" p-3 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white">
+                        <Refresh style="width: 1.3rem; height: 1.3rem; margin-left: 50%;"/>
+                    </div>
                     <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
                         <el-tabs tab-position="top">
                             <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos"
@@ -28,6 +31,7 @@
 <script>
 import { reactive, ref } from 'vue';
 import { getAllReposInfo, getAllVersionInfo } from './scmapi'
+import { Refresh } from '@element-plus/icons-vue'
 import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
 import { utc2beijing } from '../utils'
@@ -36,7 +40,7 @@ import AppVersionManage from './appversionmanage.vue';
 
 export default {
     name: "Scm",
-    components: { VersionHistory, Repository, BackGround, AppVersionManage },
+    components: { VersionHistory, Repository, BackGround, AppVersionManage, Refresh },
     props: {
         homeString: {
             type: String,
@@ -166,7 +170,7 @@ export default {
         // repos_loading.value = false;
         // repository_loading.value['flask-vue-myworld'] = false;
 
-        return { repos_loading, repository_loading, repositoryInfos, updateNowRepositoryInfo };
+        return { repos_loading, repository_loading, repositoryInfos, updateNowRepositoryInfo, initRepos };
     }
 }
 

@@ -2,22 +2,27 @@
     <div class=" text-2xl">
         <div>
             <span>APP Name : </span>
-            <span>{{ }}</span>
+            <span>{{ appName }}</span>
         </div>
-        <el-table :data="filterTableData" style="width: 100%; font-size: 1.5rem;">
-            <el-table-column v-for="key in data" :key="key" label="Version" prop="version" />
-            <el-table-column label="Version" prop="version" />
-            <el-table-column label="Name" prop="name" />
-            <el-table-column align="right">
-                <template #header>
-                    <el-input v-model="search" placeholder="Type to search" />
-                </template>
-                <template #default="scope">
-                    <el-button @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <div>
+            <div class="flex mt-3 py-2 border-b">
+                <div class="flex-1 space-x-4 flex">
+                    <div v-for="(key) in Object.keys(tableData[0])" :key="key" class=" w-1/3">{{ key }}</div>
+                </div>
+                <el-input v-model="search" placeholder="Type to search" style="width: 15rem;"/>
+            </div>
+            <div>
+                <div v-for="(data, index) in filterTableData" :key="data.version" class="flex mt-4 py-1 border-b">
+                    <div class="flex-1 space-x-4 flex">
+                        <span v-for="(value, key) in data" :key="key" class=" w-1/3">{{ value }}</span>
+                    </div>
+                    <div class="flex space-x-3 mr-2 justify-end" style="width: 15rem;">
+                        <el-button @click="handleEdit(index, data)">Edit</el-button>
+                        <el-button type="danger" @click="handleDelete(index, data)">Delete</el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -35,6 +40,7 @@ export default {
                 "flask-vue-myworld_version": 'v1.0.0',
             }
         ])
+        const appName = ref('My Wrold')
         // 请求的数据
         let data = {
             "v1.0.0": {
@@ -44,15 +50,22 @@ export default {
                 "flask-vue-myworld": {
                     "version": "v1.0.0"
                 }
+            }, "v1.0.1": {
+                "book-vue3": {
+                    "version": "v1.0.1"
+                },
+                "flask-vue-myworld": {
+                    "version": "v1.0.1"
+                }
             }
         }
 
         let _tableData = []
         Object.keys(data).forEach((version) => {
-            let subRepos = Object.keys(version);
             let temp = {
                 'version': version
             }
+            let subRepos = Object.keys(data[version]);
             subRepos.forEach((subRepo) => {
                 temp[subRepo + "_version"] = data[version][subRepo]["version"]
             })
@@ -61,7 +74,7 @@ export default {
         tableData.value = _tableData;
 
         const filterTableData = computed(() =>
-            tableData.filter((data) =>
+            tableData.value.filter((data) =>
                 !search.value ||
                 data.version.toLowerCase().includes(search.value.toLowerCase())
             )
@@ -73,7 +86,7 @@ export default {
             console.log(index, row)
         }
 
-        return { filterTableData, handleEdit, handleDelete }
+        return { tableData, filterTableData, handleEdit, handleDelete, search, appName }
     }
 }
 </script>
