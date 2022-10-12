@@ -25,6 +25,10 @@ export default {
     overflow: hidden;
 }
 
+.dark .backpic {
+    filter: brightness(0.75);
+}
+
 .backpic img:nth-child(1) {
     top: 0;
     left: 5%;

@@ -2,28 +2,43 @@
     <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
         <BackGround></BackGround>
-        <div style="min-height: 80vh;" class="w-full">
-            <el-tabs tab-position="top">
-                <el-tab-pane label="App Version Control">
-                    <AppVersionManage />
-                </el-tab-pane>
-                <el-tab-pane label="Sub-repos Setting">
-                    <div @click="initRepos" class=" p-3 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white">
-                        <Refresh style="width: 1.3rem; height: 1.3rem; margin-left: 50%;"/>
-                    </div>
-                    <div v-loading="repos_loading" style="min-height: 80vh;" class="w-full">
-                        <el-tabs tab-position="top">
-                            <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos"
-                                :key="repositoryName" :label="repositoryName" lazy>
-                                <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
-                                    @updateRepository="updateNowRepositoryInfo"
-                                    v-loading="repository_loading[repositoryName]">
-                                </Repository>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </div>
-                </el-tab-pane>
-            </el-tabs>
+        <div style="min-height: 90vh;" class="w-full flex">
+            <div class="mt-2 mr-4">
+                <div class=" text-center">MENU</div>
+                <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
+                    <el-menu-item index="1">
+                        <el-icon>
+                            <Menu></Menu>
+                        </el-icon>
+                        <span>App Version Control</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <el-icon>
+                            <Setting></Setting>
+                        </el-icon>
+                        <span>Sub-repos Setting</span>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+            <div v-show="menu1_show" class="flex-auto mt-5">
+                <AppVersionManage />
+            </div>
+            <div v-show="menu2_show" class="flex-auto mt-5">
+                <div v-if="repos_loading" @click="initRepos" class="mt-12 cursor-pointer">
+                    <el-empty description="点击加载" />
+                </div>
+                <div v-else style="min-height: 80vh;" class="w-full">
+                    <el-tabs tab-position="top">
+                        <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
+                            :label="repositoryName" lazy>
+                            <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
+                                @updateRepository="updateNowRepositoryInfo"
+                                v-loading="repository_loading[repositoryName]">
+                            </Repository>
+                        </el-tab-pane>
+                    </el-tabs>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -31,7 +46,7 @@
 <script>
 import { reactive, ref } from 'vue';
 import { getAllReposInfo, getAllVersionInfo } from './scmapi'
-import { Refresh } from '@element-plus/icons-vue'
+import { Refresh, Setting, Menu } from '@element-plus/icons-vue'
 import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
 import { utc2beijing } from '../utils'
@@ -40,7 +55,7 @@ import AppVersionManage from './appversionmanage.vue';
 
 export default {
     name: "Scm",
-    components: { VersionHistory, Repository, BackGround, AppVersionManage, Refresh },
+    components: { VersionHistory, Repository, BackGround, AppVersionManage, Refresh, Setting, Menu },
     props: {
         homeString: {
             type: String,
@@ -54,6 +69,8 @@ export default {
     setup() {
 
         const repos_loading = ref(true)
+        const menu1_show = ref(true);
+        const menu2_show = ref(false);
 
         const repository_loading = ref({ 'flask-vue-myworld': true })
 
@@ -166,11 +183,17 @@ export default {
             });
         }
 
-        // initRepos()
-        // repos_loading.value = false;
-        // repository_loading.value['flask-vue-myworld'] = false;
+        const handleSelect = (key, keyPath) => {
+            if (key == 1) {
+                menu2_show.value = false;
+                menu1_show.value = true;
+            } else {
+                menu1_show.value = false;
+                menu2_show.value = true;
+            }
+        }
 
-        return { repos_loading, repository_loading, repositoryInfos, updateNowRepositoryInfo, initRepos };
+        return { repos_loading, menu1_show, menu2_show, repository_loading, repositoryInfos, updateNowRepositoryInfo, initRepos, handleSelect };
     }
 }
 
