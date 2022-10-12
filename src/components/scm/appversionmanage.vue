@@ -12,7 +12,7 @@
                 <el-input v-model="search" placeholder="Type to search" style="width: 15rem;"/>
             </div>
             <div>
-                <div v-for="(data, index) in filterTableData" :key="data.version" class="flex mt-4 py-1 border-b">
+                <div v-for="(data, index) in filterTableData" :key="data.version" class="flex mt-4 py-1 border-b hover:bg-slate-500">
                     <div class="flex-1 space-x-4 flex">
                         <span v-for="(value, key) in data" :key="key" class=" w-1/3">{{ value }}</span>
                     </div>
