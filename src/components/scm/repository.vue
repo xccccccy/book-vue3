@@ -46,7 +46,7 @@
                 @updateVersionWithCommitSha="updateVersionWithCommitSha"></Commits>
         </div>
         <Drawer v-model:isopen="newVersionDrawerOpen" v-model:isloading="newVersionDrawerLoading"
-            @newVersionConfirm="newVersionConfirm" :data="newVersionDrawerData"></Drawer>
+            @confirm="drawerConfirm" :drawerData="DrawerData"></Drawer>
     </div>
 </template>
 
@@ -57,11 +57,12 @@ import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
 import { GobletSquareFull, Plus, House, Fold, Expand } from '@element-plus/icons-vue'
 import { utc2beijing } from '../utils'
+import Drawer from '../foundation/drawer/drawer.vue'
 
 
 export default {
     name: "Repository",
-    components: { VersionHistory, GobletSquareFull, Plus, House, Commits, Fold, Expand },
+    components: { VersionHistory, GobletSquareFull, Plus, House, Commits, Fold, Expand, Drawer },
     emits: ['updateRepository'],
     props: {
         RepositoryInfo: {
@@ -110,13 +111,6 @@ export default {
         const commitInfos_loading = ref(true);
         const newVersionDrawerOpen = ref(false);
         const newVersionDrawerLoading = ref(false);
-        const newVersionDrawerData = ref({
-            'newMode': true,
-            'nowversion': props.RepositoryInfo.baseInfo.version,
-            'repos': props.RepositoryInfo.baseInfo.name,
-            'commitSha': 'iushdjhjfdbfdjkf',
-            'versions': props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version })
-        });
 
         const allCommitInfos = ref([
             {
@@ -184,15 +178,45 @@ export default {
             }
         }
 
+        const DrawerData = ref({
+            'title': "新建Version",
+            'items': {
+                'repos': {
+                    'title': 'Repos',
+                    'type': 'input',
+                    'default': props.RepositoryInfo.baseInfo.name,
+                    'disable': true,
+                },
+                'commitSha': {
+                    'title': 'Commit Sha',
+                    'type': 'input',
+                    'default': 'iushdjhjfdbfdjkf',
+                    'disable': true
+                },
+                'version': {
+                    'title': 'Version',
+                    'type': 'select',
+                    'default': props.RepositoryInfo.baseInfo.version,
+                    'options': props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version }),
+                    'mark': "now version: " + props.RepositoryInfo.baseInfo.version
+                }
+            },
+            'yesTitle': 'confirm',
+            'nowversion': 'v1.0.0',
+        })
+
+        var mode = 'new';
+
         const newVersionWithCommitSha = (commitSha) => {
-            newVersionDrawerData.value['newMode'] = true;
-            newVersionDrawerData.value['commitSha'] = commitSha;
+            mode = 'new';
+            DrawerData.value['yesTitle'] = 'confirm';
+            DrawerData.value['items']['commitSha']['default'] = commitSha;
             newVersionDrawerOpen.value = true;
         }
 
-        const newVersionConfirm = (data) => {
+        const drawerConfirm = (data) => {
             let { repos, commitSha, version } = data;
-            if (newVersionDrawerData.value['newMode']) {
+            if (mode == 'new') {
                 version = version.startsWith('v') ? version : 'v' + version
                 let versions = props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version });
                 if (versions.find(item => { return item == version })) {
@@ -200,7 +224,6 @@ export default {
                     newVersionDrawerLoading.value = false;
                     return
                 }
-                let mode = 'new';
                 newVersionWithData(repos, commitSha, version, mode).then((res) => {
                     console.log(res);
                     ElNotification({ message: '添加Version: ' + version + '成功！', type: 'success', duration: 3000 });
@@ -214,7 +237,6 @@ export default {
                     console.log('ERROR => ', err);
                 })
             } else {
-                let mode = 'update';
                 newVersionWithData(repos, commitSha, version, mode).then((res) => {
                     console.log(res);
                     ElNotification({ message: '更新Version: ' + version + '成功！', type: 'success', duration: 3000 });
@@ -241,19 +263,21 @@ export default {
         const foldAll = () => {
 
         }
-        
+
         const updateCommits = () => {
             initAllCommits(props.RepositoryInfo.baseInfo.name)
         }
 
         const updateVersionWithCommitSha = (commitSha) => {
-            newVersionDrawerData.value['newMode'] = false;
-            newVersionDrawerData.value['commitSha'] = commitSha;
+            mode = 'update';
+            DrawerData.value['yesTitle'] = 'update';
+            DrawerData.value['items']['commitSha']['default'] = commitSha;
+            console.log(DrawerData.value)
             newVersionDrawerOpen.value = true;
         }
 
 
-        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, newVersionDrawerData, newVersionDrawerOpen, newVersionConfirm, newVersionDrawerLoading, updateRepository, updateCommits, updateVersionWithCommitSha, expandAll, foldAll };
+        return { versions_show, newVersion, allCommitInfos, commitInfos_loading, newVersionWithCommitSha, DrawerData, newVersionDrawerOpen, drawerConfirm, newVersionDrawerLoading, updateRepository, updateCommits, updateVersionWithCommitSha, expandAll, foldAll };
     }
 }
 

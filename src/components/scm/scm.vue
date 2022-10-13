@@ -3,9 +3,9 @@
         <Header></Header>
         <BackGround></BackGround>
         <div style="min-height: 90vh;" class="w-full flex">
-            <div class="mt-2 mr-4">
+            <div class="mt-2 mr-6">
                 <div class=" text-center">MENU</div>
-                <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
+                <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect" style="background: none;">
                     <el-menu-item index="1">
                         <el-icon>
                             <Menu></Menu>

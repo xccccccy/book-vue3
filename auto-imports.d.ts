@@ -2,5 +2,4 @@
 export {}
 declare global {
   const ElNotification: typeof import('element-plus/es')['ElNotification']
-  const ElTag: typeof import('element-plus/es')['ElTag']
 }

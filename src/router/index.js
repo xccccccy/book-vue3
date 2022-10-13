@@ -68,6 +68,12 @@ export default createRouter({
                 import ('@/components/scm/scmlogin.vue')
         },
         {
+            path: '/d',
+            name: 'Drawer',
+            component: () =>
+                import ('@/components/foundation/drawer/drawer.vue')
+        },
+        {
             path: '/404',
             name: 'notFound',
             component: () =>
