@@ -13,12 +13,11 @@
                     <el-input v-model="search" placeholder="Type to search" />
                 </td>
             </tr>
-            <tr v-for="(data, index) in filterTableData" :key="data.version"
-                class=" mt-4 py-1 border-b">
+            <tr v-for="(data, index) in filterTableData" :key="data.version" class=" mt-4 py-1 border-b">
                 <td v-for="(value, key) in data" :key="key" class="">
-                    <div class="p-2 my-1 mr-2">{{ value }}</div>
+                    <div class="p-2 pb-1 my-1 mr-2">{{ value }}</div>
                 </td>
-                <td class="flex space-x-3 mr-2 justify-end p-2 my-1" >
+                <td class="flex space-x-3 mr-2 justify-end p-2 pb-1 my-1">
                     <el-button @click="handleEdit(index, data)">Edit</el-button>
                     <el-button type="danger" @click="handleDelete(index, data)">Delete</el-button>
                 </td>
@@ -42,11 +41,13 @@
                 </div>
             </div> -->
         </table>
+        <Drawer v-model:isopen="drawerOpen" v-model:isloading="drawerLoading" @confirm="drawerConfirm"
+            :drawerData="drawerData"></Drawer>
     </div>
 </template>
   
 <script>
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 export default {
     name: "AppVersionManage",
@@ -98,14 +99,45 @@ export default {
                 data.version.toLowerCase().includes(search.value.toLowerCase())
             )
         )
+
+        const drawerData = reactive({
+            'title': "编辑Version",
+            'items': {
+                'version': {
+                    'title': 'App Version',
+                    'type': 'input',
+                    'default': 'null',
+                    'disable': true,
+                }
+            },
+            'yesTitle': 'confirm',
+            'nowversion': 'v1.0.0',
+        })
+        const drawerOpen = ref(false)
+        const drawerLoading = ref(false)
         const handleEdit = (index, row) => {
-            console.log(index, row)
+            console.log(index, row);
+            Object.keys(data[Object.keys(data)[0]]).map(() => {
+                
+            })
+            drawerData['items']['kn'] = {
+                'title': 'Version',
+                'type': 'select',
+                'default': props.RepositoryInfo.baseInfo.version,
+                'options': props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version }),
+                'mark': "now version: " + props.RepositoryInfo.baseInfo.version
+            }
         }
-        const handleDelete = (index, row) => {
-            console.log(index, row)
+        const drawerConfirm = (data) => {
+            console.log(data)
         }
 
-        return { tableData, filterTableData, handleEdit, handleDelete, search, appName }
+        const handleDelete = (index, row) => {
+            console.log(index, row);
+            ElNotification({ message: '暂不支持删除App Version！', type: 'warning', duration: 1500 });
+        }
+
+        return { tableData, filterTableData, handleEdit, handleDelete, search, appName, drawerData, drawerOpen, drawerLoading, drawerConfirm }
     }
 }
 </script>

@@ -191,7 +191,7 @@ export default {
                     'title': 'Commit Sha',
                     'type': 'input',
                     'default': 'iushdjhjfdbfdjkf',
-                    // 'disable': true
+                    'disable': true
                 },
                 'version': {
                     'title': 'Version',
@@ -202,15 +202,16 @@ export default {
                 }
             },
             'yesTitle': 'confirm',
-            'nowversion': 'v1.0.0',
         })
 
         var mode = 'new';
 
         const newVersionWithCommitSha = (commitSha) => {
             mode = 'new';
+            DrawerData['title'] = '新建Version';
             DrawerData['yesTitle'] = 'confirm';
             DrawerData['items']['commitSha']['default'] = commitSha;
+            DrawerData['items']['version']['type'] = 'input';
             newVersionDrawerOpen.value = true;
         }
 
@@ -270,8 +271,10 @@ export default {
 
         const updateVersionWithCommitSha = (commitSha) => {
             mode = 'update';
+            DrawerData['title'] = '更新Version';
             DrawerData['yesTitle'] = 'update';
             DrawerData['items']['commitSha']['default'] = commitSha;
+            DrawerData['items']['version']['type'] = 'select';
             newVersionDrawerOpen.value = true;
         }
 
