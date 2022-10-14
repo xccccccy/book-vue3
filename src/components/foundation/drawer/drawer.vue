@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { DataAnalysis } from '@element-plus/icons-vue'
 import DrawerInput from './drawer_input.vue'
 import DrawerSelect from './drawer_select.vue'
@@ -97,7 +97,14 @@ export default {
         Object.keys(props.drawerData.items).forEach((key) => {
             tempModels[key] = props.drawerData.items[key]['default'];
         })
-        const models = ref(tempModels);
+
+        const models = computed(() => {
+            let tempModels = {}
+            Object.keys(props.drawerData.items).forEach((key) => {
+                tempModels[key] = props.drawerData.items[key]['default'];
+            })
+            return tempModels;
+        })
 
         function confirmClick() {
             let confirmData = {}

@@ -178,7 +178,7 @@ export default {
             }
         }
 
-        const DrawerData = ref({
+        const DrawerData = reactive({
             'title': "新建Version",
             'items': {
                 'repos': {
@@ -191,7 +191,7 @@ export default {
                     'title': 'Commit Sha',
                     'type': 'input',
                     'default': 'iushdjhjfdbfdjkf',
-                    'disable': true
+                    // 'disable': true
                 },
                 'version': {
                     'title': 'Version',
@@ -209,8 +209,8 @@ export default {
 
         const newVersionWithCommitSha = (commitSha) => {
             mode = 'new';
-            DrawerData.value['yesTitle'] = 'confirm';
-            DrawerData.value['items']['commitSha']['default'] = commitSha;
+            DrawerData['yesTitle'] = 'confirm';
+            DrawerData['items']['commitSha']['default'] = commitSha;
             newVersionDrawerOpen.value = true;
         }
 
@@ -270,9 +270,8 @@ export default {
 
         const updateVersionWithCommitSha = (commitSha) => {
             mode = 'update';
-            DrawerData.value['yesTitle'] = 'update';
-            DrawerData.value['items']['commitSha']['default'] = commitSha;
-            console.log(DrawerData.value)
+            DrawerData['yesTitle'] = 'update';
+            DrawerData['items']['commitSha']['default'] = commitSha;
             newVersionDrawerOpen.value = true;
         }
 
