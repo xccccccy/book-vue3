@@ -14,7 +14,11 @@
                 <span class="title">Now Version : </span>
                 <span>{{ RepositoryInfo.baseInfo.version }}</span>
             </div>
-            <div style="margin-left: auto;margin-right: 1rem;;">
+            <div style="margin-left: auto;margin-right: 1rem;;" class="flex space-x-3">
+                <div class=" p-3 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
+                    @click="updateCommits" v-show="!versions_show">
+                    <RefreshRight style="width: 1.3rem; height: 1.3rem;"></RefreshRight>
+                </div>
                 <div class=" p-3 m-1 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
                     @click="newVersion">
                     <Plus v-show="versions_show" style="width: 1.3rem; height: 1.3rem;"></Plus>
@@ -55,14 +59,14 @@ import { reactive, ref } from 'vue';
 import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from './scmapi'
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
-import { GobletSquareFull, Plus, House, Fold, Expand } from '@element-plus/icons-vue'
+import { GobletSquareFull, Plus, House, Fold, Expand, RefreshRight } from '@element-plus/icons-vue'
 import { utc2beijing } from '../utils'
 import Drawer from '../foundation/drawer/drawer.vue'
 
 
 export default {
     name: "Repository",
-    components: { VersionHistory, GobletSquareFull, Plus, House, Commits, Fold, Expand, Drawer },
+    components: { VersionHistory, GobletSquareFull, Plus, House, Commits, Fold, Expand, Drawer, RefreshRight },
     emits: ['updateRepository'],
     props: {
         RepositoryInfo: {
@@ -216,6 +220,7 @@ export default {
         }
 
         const drawerConfirm = (data) => {
+            newVersionDrawerLoading.value = true;
             let { repos, commitSha, version } = data;
             if (mode == 'new') {
                 version = version.startsWith('v') ? version : 'v' + version

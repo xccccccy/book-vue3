@@ -1,10 +1,24 @@
 <template>
     <div class="">
-        <div>
-            <span>APP Name : </span>
-            <span>{{ appName }}</span>
+        <div class="mb-7 flex justify-between items-center">
+            <div>
+                <span>APP Name : </span>
+                <span>{{ appName }}</span>
+            </div>
+            <div class="flex space-x-2 items-center">
+                <div class="flex items-center p-2 mr-4 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
+                    @click="newversion">
+                    <Plus style="width: 1.3rem; height: 1.3rem;"></Plus>
+                </div>
+                <el-tooltip content="快速发布最新Develop版本" placement="bottom" effect="dark">
+                    <div class="flex items-center p-3 mr-4 rounded-full shadow-2xl bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white"
+                        @click="updateFastVersion">
+                        <Promotion style="width: 1.3rem; height: 1.3rem;"></Promotion>
+                    </div>
+                </el-tooltip>
+            </div>
         </div>
-        <table class="mt-4 w-full">
+        <table class="w-full ">
             <tr class=" space-x-4 space-y-2">
                 <td v-for="(key) in Object.keys(tableData[0])" :key="key" class="">
                     <div class="mx-2 my-1">{{ key }}</div>
@@ -22,24 +36,6 @@
                     <el-button type="danger" @click="handleDelete(index, data)">Delete</el-button>
                 </td>
             </tr>
-            <!-- <div class="flex mt-3 py-2 border-b">
-                <div class="flex-1 space-x-4 flex">
-                    <div v-for="(key) in Object.keys(tableData[0])" :key="key" class=" w-1/3">{{ key }}</div>
-                </div>
-                <el-input v-model="search" placeholder="Type to search" style="width: 15rem;" />
-            </div>
-            <div>
-                <div v-for="(data, index) in filterTableData" :key="data.version"
-                    class="flex mt-4 py-1 border-b hover:bg-slate-500">
-                    <div class="flex-1 space-x-4 flex">
-                        <span v-for="(value, key) in data" :key="key" class=" w-1/3">{{ value }}</span>
-                    </div>
-                    <div class="flex space-x-3 mr-2 justify-end" style="width: 15rem;">
-                        <el-button @click="handleEdit(index, data)">Edit</el-button>
-                        <el-button type="danger" @click="handleDelete(index, data)">Delete</el-button>
-                    </div>
-                </div>
-            </div> -->
         </table>
         <Drawer v-model:isopen="drawerOpen" v-model:isloading="drawerLoading" @confirm="drawerConfirm"
             :drawerData="drawerData"></Drawer>
@@ -48,9 +44,12 @@
   
 <script>
 import { computed, reactive, ref } from 'vue'
+import { Plus, Promotion } from '@element-plus/icons-vue'
+import { updateFastVersionApi } from './scmapi'
 
 export default {
     name: "AppVersionManage",
+    components: { Promotion, Plus },
     setup() {
         const search = ref('')
         const tableData = ref([
@@ -117,19 +116,25 @@ export default {
         const drawerLoading = ref(false)
         const handleEdit = (index, row) => {
             console.log(index, row);
-            Object.keys(data[Object.keys(data)[0]]).map(() => {
-                
-            })
-            drawerData['items']['kn'] = {
-                'title': 'Version',
-                'type': 'select',
-                'default': props.RepositoryInfo.baseInfo.version,
-                'options': props.RepositoryInfo.versionHistorys.map((item, index, self) => { return item.version }),
-                'mark': "now version: " + props.RepositoryInfo.baseInfo.version
+            for (let key in row) {
+                let value = row[key];
+                if (key == 'version') {
+                    drawerData['items'][key]['default'] = value;
+                    continue
+                }
+                drawerData['items'][key] = {
+                    'title': key.replace('_', ' '),
+                    'type': 'input',
+                    'default': value,
+                    'mark': "now version: " + value
+                }
             }
+            drawerOpen.value = true;
         }
         const drawerConfirm = (data) => {
+            drawerLoading.value = true;
             console.log(data)
+            drawerLoading.value = false;
         }
 
         const handleDelete = (index, row) => {
@@ -137,11 +142,28 @@ export default {
             ElNotification({ message: '暂不支持删除App Version！', type: 'warning', duration: 1500 });
         }
 
-        return { tableData, filterTableData, handleEdit, handleDelete, search, appName, drawerData, drawerOpen, drawerLoading, drawerConfirm }
+        const updateFastVersion = () => {
+            updateFastVersionApi(appName.value)
+                .then((res) => {
+                    console.log(res.data);
+                    ElNotification({ message: '快速发布最新Develop版本成功', type: 'success', duration: 2500 });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    ElNotification({ message: err.response.data, type: 'error', duration: 3000 });
+                })
+        }
+
+        return { tableData, filterTableData, handleEdit, handleDelete, search, appName, drawerData, drawerOpen, drawerLoading, drawerConfirm, updateFastVersion }
     }
 }
 </script>
   
 <style>
-
+/* 网格背景下 */
+.herderbg {
+    background-image: radial-gradient(transparent 2px, #000 2px);
+    background-size: 4px 4px;
+    backdrop-filter: saturate(50%) blur(4px);
+}
 </style>

@@ -133,3 +133,10 @@ export const updateVersion = (repos, version) => {
             'version': version
         })
 }
+
+export const updateFastVersionApi = (appName) => {
+    return service
+        .post("/scmapi/update/fastversion", {
+            'app': appName,
+        })
+}

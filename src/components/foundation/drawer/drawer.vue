@@ -111,9 +111,7 @@ export default {
             Object.keys(props.drawerData.items).forEach((key) => {
                 confirmData[key] = models.value[key];
             })
-            console.log(confirmData)
             context.emit('confirm', confirmData)
-            context.emit('update:isloading', true)
         }
 
 
