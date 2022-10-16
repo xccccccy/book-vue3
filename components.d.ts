@@ -7,7 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Admin: typeof import('./src/components/manage/admin.vue')['default']
+    Admin: typeof import('./src/components/admin/admin.vue')['default']
     Appversionmanage: typeof import('./src/components/scm/appversionmanage.vue')['default']
     Background: typeof import('./src/components/foundation/background.vue')['default']
     Book: typeof import('./src/components/book/book.vue')['default']
@@ -21,7 +21,7 @@ declare module '@vue/runtime-core' {
     CommitInfo: typeof import('./src/components/scm/commitInfo.vue')['default']
     Commits: typeof import('./src/components/scm/commits.vue')['default']
     CommonHeader: typeof import('./src/components/header/commonHeader.vue')['default']
-    Config: typeof import('./src/components/manage/config.vue')['default']
+    Config: typeof import('./src/components/admin/config.vue')['default']
     DrakMode: typeof import('./src/components/DrakMode.vue')['default']
     Drawer: typeof import('./src/components/foundation/drawer/drawer.vue')['default']
     Drawer_input: typeof import('./src/components/foundation/drawer/drawer_input.vue')['default']

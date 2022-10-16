@@ -31,9 +31,6 @@ service.interceptors.response.use(response => {
                 setTimeout(() => {
                     router.push('/scmlogin');
                 }, 1000);
-                setTimeout(() => {
-                    
-                }, 3000);
                 break;
             case 404:
                 error.message = '请求错误,未找到该资源';

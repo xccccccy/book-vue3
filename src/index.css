@@ -79,3 +79,10 @@ body {
 .el-tabs__nav-wrap::after {
     background-color: #9768e74a  !important;
 }
+.el-sub-menu .el-sub-menu__icon-arrow {
+    position: relative !important;
+    right: 0px !important;
+    top: 3px !important;
+    margin-left: 5px;
+    font-size: 13px !important;
+}

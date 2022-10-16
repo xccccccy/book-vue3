@@ -1,76 +1,32 @@
 <template>
-    <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
-        <Header></Header>
-        <BackGround></BackGround>
-        <div style="min-height: 90vh;" class="w-full flex">
-            <div class="mt-2 mr-6">
-                <div class=" text-center">MENU</div>
-                <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect" style="background: none;">
-                    <el-menu-item index="1">
-                        <el-icon>
-                            <Menu></Menu>
-                        </el-icon>
-                        <span>App Version Control</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <el-icon>
-                            <Setting></Setting>
-                        </el-icon>
-                        <span>Sub-repos Setting</span>
-                    </el-menu-item>
-                </el-menu>
-            </div>
-            <div v-show="menu1_show" class="flex-auto mt-5">
-                <AppVersionManage />
-            </div>
-            <div v-show="menu2_show" class="flex-auto mt-5">
-                <div v-if="repos_loading" @click="initRepos" class="mt-12 cursor-pointer">
-                    <el-empty description="点击加载" />
-                </div>
-                <div v-else style="min-height: 80vh;" class="w-full">
-                    <el-tabs tab-position="top">
-                        <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
-                            :label="repositoryName" lazy>
-                            <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
-                                @updateRepository="updateNowRepositoryInfo"
-                                v-loading="repository_loading[repositoryName]">
-                            </Repository>
-                        </el-tab-pane>
-                    </el-tabs>
-                </div>
-            </div>
-        </div>
+    <div v-if="repos_loading" @click="initRepos" class="mt-12 cursor-pointer">
+        <el-empty description="点击加载" />
+    </div>
+    <div v-else style="min-height: 80vh;" class="w-full">
+        <el-tabs tab-position="top">
+            <el-tab-pane v-for="(repositoryInfo, repositoryName) in repositoryInfos" :key="repositoryName"
+                :label="repositoryName" lazy>
+                <Repository :RepositoryInfo="repositoryInfo" style="min-height: 80vh;"
+                    @updateRepository="updateNowRepositoryInfo" v-loading="repository_loading[repositoryName]">
+                </Repository>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
 <script>
 import { reactive, ref } from 'vue';
 import { getAllReposInfo, getAllVersionInfo } from './scmapi'
-import { Refresh, Setting, Menu } from '@element-plus/icons-vue'
-import VersionHistory from './versionHistory.vue';
 import Repository from './repository.vue';
 import { utc2beijing } from '../utils'
-import BackGround from '../foundation/background.vue'
-import AppVersionManage from './appversionmanage.vue';
 
 export default {
-    name: "Scm",
-    components: { VersionHistory, Repository, BackGround, AppVersionManage, Refresh, Setting, Menu },
-    props: {
-        homeString: {
-            type: String,
-            default: 'Home'
-        },
-        homeHref: {
-            type: String,
-            default: '/'
-        }
-    },
+    name: "SubReposSetting",
+    components: { Repository },
+    props: { },
     setup() {
 
-        const repos_loading = ref(true)
-        const menu1_show = ref(true);
-        const menu2_show = ref(false);
+        const repos_loading = ref(false)
 
         const repository_loading = ref({ 'flask-vue-myworld': true })
 
@@ -124,6 +80,7 @@ export default {
                 console.log('ERROR => ', err);
             });
         }
+        initRepos();
 
         const updateNowRepositoryInfo = (repos) => {
             repository_loading.value[repos] = true;
@@ -183,33 +140,12 @@ export default {
             });
         }
 
-        const handleSelect = (key, keyPath) => {
-            if (key == 1) {
-                menu2_show.value = false;
-                menu1_show.value = true;
-            } else {
-                menu1_show.value = false;
-                menu2_show.value = true;
-            }
-        }
-
-        return { repos_loading, menu1_show, menu2_show, repository_loading, repositoryInfos, updateNowRepositoryInfo, initRepos, handleSelect };
+        return { repos_loading, repository_loading, repositoryInfos, updateNowRepositoryInfo, initRepos };
     }
 }
 
 </script>
 
-<style scoped>
-.version-info span:first-child {
-    font-size: 1.4rem;
-}
+<style>
 
-.version-info span:last-child {
-    font-size: 1.2rem;
-    color: rgb(193, 171, 3);
-}
-
-.link {
-    text-decoration: underline;
-}
 </style>

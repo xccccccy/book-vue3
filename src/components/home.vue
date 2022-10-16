@@ -1,6 +1,7 @@
 <template>
   <div class="back-all w-full min-h-screen">
     <Header></Header>
+    <BackGround></BackGround>
     <div id="main">
       <div class="page-title">
         <span
@@ -78,15 +79,18 @@
 
 <script>
 import $ from "jquery";
+import BackGround from './foundation/background.vue'
+
 export default {
   name: "home",
+  components: { BackGround },
   data() {
     return {
       module_more_show: false,
     };
   },
   mounted() {
-    ElNotification({ title: '🐶', message: '目前只支持读书功能。', type: 'info', duration: 0 });
+    ElNotification({ title: '🐶', message: '目前只支持读书功能。', type: 'info', duration: 1000 });
   }
 };
 </script>

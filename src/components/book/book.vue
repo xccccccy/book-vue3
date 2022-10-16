@@ -54,11 +54,8 @@ import $ from "jquery";
 import { defineAsyncComponent } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getBookShelf, fromBookshelfDelBook, addBookToBookshelf } from './managebookshelf'
-import User from "../User.vue";
 import Like from "../like.vue";
-// import { DarkModeComponent } from "../DrakMode.vue";
 
-const DarkModeComponent = defineAsyncComponent(() => import('../DrakMode.vue'))
 const Bookbox = defineAsyncComponent(() => import('./bookbox.vue'))
 const Bookshelfbox = defineAsyncComponent(() => import('./bookshelfbox.vue'))
 
@@ -268,8 +265,6 @@ export default {
     bookbox: Bookbox,
     bookshelfbox: Bookshelfbox,
     Search: Search,
-    DarkMode: DarkModeComponent,
-    User,
     Like
   }
 };

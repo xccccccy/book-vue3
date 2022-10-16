@@ -35,7 +35,7 @@ export default {
             scmlogin(token.value).then((res) => {
                 console.log(res.data)
                 localStorage.scmToken = token.value;
-                router.push('/scm');
+                router.push('/admin');
             }).catch((err) => {
                 ElNotification({ message: '无效或者失效的Token。', type: 'warning', duration: 3000 });
                 console.log('ERROR => ', err);
@@ -46,7 +46,7 @@ export default {
         const initLog = () => {
             scmtesttoken().then((res) => {
                 if (res.data == 'success') {
-                    router.push('/scm');
+                    router.push('/admin');
                 }
             }).catch(() => {
                 if (localStorage.scmToken) {
@@ -71,7 +71,6 @@ input {
     font-size: 16px;
     padding: 0.2rem 0.5rem;
     vertical-align: middle;
-    color: #000;
 }
 
 input:focus {
