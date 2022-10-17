@@ -8,7 +8,7 @@
                 <!-- 幽灵公主 -->
                 <div class="card princess-mononoke">
                     <div class="card__bg"></div>
-                    <img class="card__img" src="./img/3dr_mono.png" />
+                    <img class="card__img" src="@/assets/img/3dr_mono.png" />
                     <div class="card__text">
                         <p class="card__title">Princess Mononoke</p>
                     </div>
@@ -16,7 +16,7 @@
                 <!-- 千与千寻 -->
                 <div class="card spirited-away">
                     <div class="card__bg"></div>
-                    <img class="card__img" src="./img/3dr_chihiro.png" />
+                    <img class="card__img" src="@/assets/img/3dr_chihiro.png" />
                     <div class="card__text">
                         <p class="card__title">Spirited Away</p>
                     </div>
@@ -24,7 +24,7 @@
                 <!-- 哈尔的移动城堡 -->
                 <div class="card howl-s-moving-castle">
                     <div class="card__bg"></div>
-                    <img class="card__img" src="./img/3dr_howlcastle.png" />
+                    <img class="card__img" src="@/assets/img/3dr_howlcastle.png" />
                     <div class="card__text">
                         <p class="card__title">Howl's Moving Castle</p>
                     </div>
@@ -240,7 +240,7 @@ h3 {
 
 /* 幽灵公主 背景 */
 .princess-mononoke .card__bg {
-    background: url("img/3dr_monobg.jpg") center/cover no-repeat;
+    background: url("@/assets/img/3dr_monobg.jpg") center/cover no-repeat;
 }
 
 /* 千与千寻 图片 */
@@ -250,7 +250,7 @@ h3 {
 
 /* 千与千寻 背景 */
 .spirited-away .card__bg {
-    background: url("img/3dr_spirited.jpg") center/cover no-repeat;
+    background: url("@/assets/img/3dr_spirited.jpg") center/cover no-repeat;
 }
 
 /* 哈尔的移动城堡 图片 */
@@ -262,7 +262,7 @@ h3 {
 
 /* 哈尔的移动城堡 背景 */
 .howl-s-moving-castle .card__bg {
-    background: url("img/3dr_howlbg.jpg") center/cover no-repeat;
+    background: url("@/assets/img/3dr_howlbg.jpg") center/cover no-repeat;
 }
 
 /* 卡片的文本内容 */
