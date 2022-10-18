@@ -158,7 +158,6 @@ export default {
                     updateFastLoading.close()
                 })
         }
-        ElNotification({ message: 'err.response.data', type: 'error', duration: 0 });
 
         return { tableData, filterTableData, handleEdit, handleDelete, search, appName, drawerData, drawerOpen, drawerLoading, drawerConfirm, updateFastVersion }
     }
