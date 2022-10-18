@@ -40,11 +40,11 @@ export default {
             '4': 'Parallax'
         }
         const handleSelect = (key, keyPath) => {
-
-            if (Object.keys(tempRouter).includes(key)) {
-                router.push(tempRouter[key])
+            if (Object.keys(tempRouter).includes(String(key))) {
+                router.push('/template/' + tempRouter[key])
             }
         }
+        handleSelect(1,1)
 
         return { handleSelect }
     }

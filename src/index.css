@@ -86,3 +86,7 @@ body {
     margin-left: 5px;
     font-size: 13px !important;
 }
+.el-notification.right {
+    right: 16px;
+    margin-top: 2.1rem;
+}

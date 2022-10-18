@@ -46,6 +46,7 @@
 import { computed, reactive, ref } from 'vue'
 import { Plus, Promotion } from '@element-plus/icons-vue'
 import { updateFastVersionApi } from './scmapi'
+import { ElLoading } from 'element-plus'
 
 export default {
     name: "AppVersionManage",
@@ -143,6 +144,7 @@ export default {
         }
 
         const updateFastVersion = () => {
+            const updateFastLoading = ElLoading.service({ fullscreen: true, lock: true, text: '正在快速发布最新Develop版本中' })
             updateFastVersionApi(appName.value)
                 .then((res) => {
                     console.log(res.data);
@@ -152,7 +154,11 @@ export default {
                     console.log(err);
                     ElNotification({ message: err.response.data, type: 'error', duration: 3000 });
                 })
+                .finally(() => {
+                    updateFastLoading.close()
+                })
         }
+        ElNotification({ message: 'err.response.data', type: 'error', duration: 0 });
 
         return { tableData, filterTableData, handleEdit, handleDelete, search, appName, drawerData, drawerOpen, drawerLoading, drawerConfirm, updateFastVersion }
     }
