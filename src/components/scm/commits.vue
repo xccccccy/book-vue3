@@ -111,7 +111,7 @@
 
 <script>
 import { computed, ref } from 'vue';
-import BottomLine from '../foundation/bottomLine.vue'
+import BottomLine from '../common/bottomLine.vue'
 
 export default {
     name: "CommitsForNewVersion",

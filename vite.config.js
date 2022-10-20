@@ -6,7 +6,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 let localDevApiUrl = 'http://localhost:5001'
-let remoteApiUrl = 'http://8.142.136.153:5001'
+let remoteApiUrl = ''
 
 var realApiUrl = localDevApiUrl
 
@@ -54,6 +54,11 @@ export default defineConfig({
         target: realApiUrl, // localhost:5001
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/scmapi/, '/scmapi')
+      },
+      '/cmsapi': {
+        target: realApiUrl, // localhost:5001
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cmsapi/, '/cmsapi')
       },
       '/_api': {
         target: realApiUrl, // localhost:5001 

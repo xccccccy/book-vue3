@@ -16,7 +16,7 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import { getAllReposInfo, getAllVersionInfo } from './scmapi'
+import { getAllReposInfo, getAllVersionInfo } from '../foundation/api/scmapi'
 import Repository from './repository.vue';
 import { utc2beijing } from '../utils'
 

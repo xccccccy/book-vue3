@@ -20,13 +20,13 @@
           </a>
         </div>
         <div>
-          <a href="/test">
-            <span>测试</span>
+          <a href="/video">
+            <span>看视频</span>
           </a>
         </div>
         <div>
-          <a href="/image">
-            <span>图</span>
+          <a href="/template">
+            <span>组件样版</span>
           </a>
         </div>
         <div>
@@ -79,7 +79,7 @@
 
 <script>
 import $ from "jquery";
-import BackGround from './foundation/background.vue'
+import BackGround from './common/background.vue'
 
 export default {
   name: "home",

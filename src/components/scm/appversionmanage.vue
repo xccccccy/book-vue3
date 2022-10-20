@@ -45,7 +45,7 @@
 <script>
 import { computed, reactive, ref } from 'vue'
 import { Plus, Promotion } from '@element-plus/icons-vue'
-import { updateFastVersionApi } from './scmapi'
+import { updateFastVersionApi } from '../foundation/api/scmapi'
 import { ElLoading } from 'element-plus'
 
 export default {

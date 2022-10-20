@@ -1,6 +1,7 @@
 <template>
     <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header></Header>
+        <Background></Background>
         <div style="min-height: 90vh;" class="w-full flex">
             <div class="mt-2 mr-6">
                 <div class=" text-center">MENU</div>

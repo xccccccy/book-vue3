@@ -38,6 +38,12 @@ export default createRouter({
             import('@/components/music.vue')
     },
     {
+        path: '/video',
+        name: 'Video',
+        component: () =>
+            import('@/components/video/watch.vue')
+    },
+    {
         path: '/like',
         name: 'Like',
         component: () =>
@@ -66,6 +72,10 @@ export default createRouter({
             {
                 path: 'subrepossetting',
                 component: () => import('@/components/scm/subrepossetting.vue'),
+            },
+            {
+                path: 'cms',
+                component: () => import('@/components/admin/cms.vue'),
             }
         ]
     },

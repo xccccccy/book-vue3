@@ -33,6 +33,12 @@
                             <span>Sub-repos Setting</span>
                         </el-menu-item>
                     </el-sub-menu>
+                    <el-menu-item index="3">
+                        <el-icon>
+                            <SetUp />
+                        </el-icon>
+                        <span>內容管理系統(CMS)</span>
+                    </el-menu-item>
                 </el-menu>
             </div>
             <router-view class="flex-auto mt-5" />
@@ -42,7 +48,7 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import BackGround from '../foundation/background.vue'
+import BackGround from '../common/background.vue'
 import { useRouter } from 'vue-router';
 import { Setting, Menu, SetUp, View } from '@element-plus/icons-vue'
 
@@ -85,6 +91,12 @@ export default {
                         'icon': Setting,
                     }
                 ]
+            },
+            {
+                'type': 'menu-item',
+                'title': 'Global Setting',
+                'router': '/admin/cms',
+                'icon': SetUp,
             },
 
         ]
