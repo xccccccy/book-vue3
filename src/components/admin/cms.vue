@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button @click="initDownloadVideos" disabled>初始化视频数据库</el-button>
+        <el-button @click="initDownloadVideos">初始化视频数据库</el-button>
 
     </div>
 </template>

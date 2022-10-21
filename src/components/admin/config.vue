@@ -75,7 +75,6 @@ input {
     font-size: 16px;
     padding: 0.2rem 0.5rem;
     vertical-align: middle;
-    color: #000;
 }
 
 input:focus {
