@@ -1,5 +1,5 @@
 <template>
-    <div class="movie-item" @click="changeMovie">
+    <div class="movie-item" @click="changeVideo">
         <div class="cover">
             <img :src="item.pic" alt="cover" />
             <div class="duration">{{item.duration}}</div>
@@ -17,15 +17,13 @@ export default {
     props: {
         item: Object,
     },
-    name: 'MovieItem',
-    methods: {
-        changeMovie() {
-            if (location.search) {
-                location.href = location.href.replace(/\?vid=([a-z]+)/, '?vid=' + this.item.id)
-            } else {
-                location.href = location.href + '?vid=' + this.item.id
-            }
+    name: 'VideoItem',
+    emits: ['selectVideo'],
+    setup(props, context) {
+        const changeVideo = () => {
+            context.emit('selectVideo', props.item)
         }
+        return { changeVideo }
     },
 }
 </script>

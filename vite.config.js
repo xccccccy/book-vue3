@@ -70,6 +70,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/spy\/api/, '/')
       },
+      '/videoapi': {
+        target: realApiUrl, // localhost:5001
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/videoapi/, '/videoapi')
+      }
     }
   },
   build: {
