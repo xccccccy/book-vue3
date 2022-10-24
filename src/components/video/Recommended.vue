@@ -31,7 +31,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .movie-recommended {
     float: left;
     cursor: pointer;

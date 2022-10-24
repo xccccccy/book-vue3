@@ -1,32 +1,38 @@
 <template>
-    <div class="app w-full sm:w-11/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
+    <div class="app w-full sm:w-9/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header :headerSetting="headerSetting"></Header>
         <Background></Background>
         <div class="main relative">
             <transition name="bounce">
                 <div v-show="showing == 'player'">
-                    <div class="flex cursor-pointer" @click="togglePanel">
-                        <Back class="h-6 px-2" />
-                        <span> 返回 </span>
+                    <div class="flex mb-4 items-center">
+                        <div @click="togglePanel" class="flex items-center cursor-pointer pr-2">
+                            <ArrowLeft class="h-4 px-2" />
+                            <span> 返回 </span>
+                        </div>
+                        <el-divider direction="vertical" />
+                        <div class="pl-2">
+                            <h3> {{ options.name }}</h3>
+                        </div>
                     </div>
                     <div class="flex w-full">
                         <div class="flex-auto">
-                            <div>
-                                <div class="my-2"> {{ options.name }}</div>
-                            </div>
-                            <div class="mb-3 mr-6 ml-1 sm:ml-0">
+                            <div class="mb-3 mr-6 ml-1 sm:ml-0 shadow-xl">
                                 <video-player :src="options.src" :poster="options.poster" controls :loop="true"
                                     :volume="0.6" :muted="options.muted"
                                     class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted" />
                             </div>
-                            <div>
-                                <h3> {{ options.name }}</h3>
-                            </div>
+                            <ElInput v-model="test"></ElInput>
+                            <ElButton @click="test2"></ElButton>
                         </div>
-                        <div class="hidden sm:block" style="max-width: 21rem;">
-                            <div>
+                        <div class="hidden sm:block" style="max-width: 21rem;min-width: 19rem;">
+                            <div v-show="seriesShow">
+                                <SeriesItem :item="series" @selectVideoSeries="selectVideoSeries"></SeriesItem>
+                            </div>
+                            <div class="">
                                 <div class="my-2">播放列表</div>
-                                <MovieItem v-for="movie in movieList" :key="movie.cover" :item="movie"></MovieItem>
+                                <MovieItem v-for="movie in videoList" :key="movie.cover" :item="movie"
+                                    @selectVideo="selectVideo"></MovieItem>
                             </div>
                         </div>
                     </div>
@@ -52,9 +58,9 @@
                     </div>
                     <div class="list-title flex">
                         <span v-html="search_info"></span>
-                        <div class="flex cursor-pointer ml-auto" @click="togglePanel">
+                        <div class="flex cursor-pointer ml-auto items-center" @click="togglePanel">
                             <span>播放器</span>
-                            <Right class="h-6 px-2" />
+                            <ArrowRight class="h-4 px-2" />
                         </div>
                     </div>
                     <div>
@@ -71,13 +77,15 @@
 import { ref, reactive, onMounted, shallowRef } from 'vue'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
-import { Back, Right, Search } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, Search } from '@element-plus/icons-vue'
 import VideoItem from './VideoItem.vue'
+import SeriesItem from './seriesItem.vue'
 import axios from "axios";
 
 import MovieItem from './MovieItem.vue'
 import RecommendedItem from './Recommended.vue'
 import DATA from './data'
+import { computed } from '@vue/reactivity'
 
 const player = shallowRef()
 const options = reactive({
@@ -125,10 +133,17 @@ const headerSetting = ref({
     ]
 })
 
+const series = ref({});
+const seriesShow = computed(() => {
+    return Object.keys(series.value).length > 0
+})
 const videoList = ref([])
 const selectVideo = (item) => {
     let videoNumber = item.url.split('#').length
     if (videoNumber > 1) {
+        series.value = item;
+
+        // ------------------------------test-------------------------------------
         let movies = []
         item.url.split('#').forEach(movieUrl => {
             let movie = JSON.parse(JSON.stringify(item));
@@ -137,12 +152,22 @@ const selectVideo = (item) => {
             movies.push(movie)
         });
         movieList.value = movies;
+        // ----------------------------------------------------------------------
+
         options.src = item.url.split('#')[0].split('$')[1];
-        options.name = item.name + item.url.split('$')[0];
+        options.name = item.name + " " + item.url.split('$')[0];
     } else {
+        series.value = {};
         options.src = item.url.split('$')[1];
         options.name = item.name;
     }
+    options.poster = item.pic;
+    showing.value = 'player'
+}
+
+const selectVideoSeries = (item) => {
+    options.src = item.url;
+    options.name = item.name;
     options.poster = item.pic;
     showing.value = 'player'
 }
@@ -161,10 +186,15 @@ const togglePanel = () => {
         showing.value = 'search'
     }
 }
+const test = ref('')
+const test2 = () => {
+    options.src = test.value;
+    window.open('https://okjx.cc/?url=' + test.value, "_blank");
+}
 // ----------------------------------------------------------------------------------------
 </script>
   
-<style>
+<style scoped>
 .demo-player {
     aspect-ratio: 5 / 3;
 }

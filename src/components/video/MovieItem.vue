@@ -18,19 +18,17 @@ export default {
         item: Object,
     },
     name: 'MovieItem',
-    methods: {
-        changeMovie() {
-            if (location.search) {
-                location.href = location.href.replace(/\?vid=([a-z]+)/, '?vid=' + this.item.id)
-            } else {
-                location.href = location.href + '?vid=' + this.item.id
-            }
+    emits: ['selectVideo'],
+    setup(props, context) {
+        const changeMovie = () => {
+            context.emit('selectVideo', props.item)
         }
+        return { changeMovie }
     },
 }
 </script>
 
-<style>
+<style scoped>
 .movie-item {
     cursor: pointer;
     display: flex;
@@ -53,6 +51,8 @@ export default {
 .movie-item .cover img {
     width: 100%;
     transition: transform ease .25s;
+    aspect-ratio: 5/3;
+    object-fit: contain;
 }
 
 .movie-item .cover .duration {

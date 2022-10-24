@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .movie-item {
     cursor: pointer;
     display: flex;
@@ -45,7 +45,6 @@ export default {
 .movie-item:hover .cover img {
     opacity: .7;
     transform: scale(1.25, 1.25);
-
 }
 
 .movie-item .cover img {
