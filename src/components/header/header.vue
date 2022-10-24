@@ -100,6 +100,7 @@ export default {
         }
 
         const darkModeChange = computed(() => {
+            console.log(props.headerSetting.darkmodeSetting)
             if (props.headerSetting.darkmodeSetting) {
                 return props.headerSetting.darkmodeSetting.darkModeChangeHandle
             }

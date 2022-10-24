@@ -260,7 +260,18 @@ export default {
       header_show: false,
       self_mask_show: false,
       joinShelfBtnShow: true,
-      headerSetting: {}
+      headerSetting: {
+        userSetting: {
+          userLogHandle: this.userLog
+        },
+        darkmodeSetting: {
+          darkModeChangeHandle: this.darkModeChange
+        },
+        homeSetting: {
+          homeString: 'Home',
+          homeHref: '/book'
+        }
+      }
     };
   },
   mounted() {
@@ -592,11 +603,12 @@ export default {
     initseting() {
       var setting_ = JSON.parse(localStorage.setting);
       for (var key in setting_) {
-        if (key != 'currentbjcolor' && key != 'currentskin') {
+        if (key != 'dark' && key != 'light') {
           this.setting[key] = setting_[key];
         }
       }
       let darkmode = $('html').hasClass('dark');
+      console.log(darkmode, $('html'), $('html').class);
       if (darkmode) {
         this.setting['currentbjcolor'] = setting_['dark']['currentbjcolor'];
         this.setting['currentskin'] = setting_['dark']['currentskin'];
