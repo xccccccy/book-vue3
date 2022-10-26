@@ -1,6 +1,6 @@
 <template>
   <div class="user-all" :class="{ headeractivate: loginShow }" style="margin-right: .6rem">
-    <img v-show="icon_show" :src="user.icon" @click="loginShow = !loginShow" class=" rounded-full"/>
+    <img v-show="icon_show" :src="user.icon" @click="loginShow = !loginShow" class=" rounded-full" onerror="this.src='/icon/user/default.png'"/>
     <svg v-show="!icon_show" @click="loginShow = !loginShow" viewBox="0 0 1024 1024">
       <path
         d="M261.0688 813.5168c66.816 59.904 155.0848 96.4096 251.904 96.4096 94.72 0 181.1968-34.9696 247.4496-92.5696v-3.84c0-87.7056-71.1168-158.8224-158.8224-158.8224H419.8912c-87.7568 0-158.8224 71.1168-158.8224 158.8224z"
