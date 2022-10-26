@@ -90,7 +90,7 @@ export default {
     };
   },
   mounted() {
-    ElNotification({ title: '🐶', message: '目前只支持读书功能。', type: 'info', duration: 1000 });
+    
   }
 };
 </script>
