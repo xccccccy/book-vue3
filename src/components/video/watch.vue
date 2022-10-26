@@ -98,16 +98,22 @@ const options = reactive({
     name: 'something'
 })
 
-const movieList = ref([])
 const recommendList = [DATA[2], DATA[4], DATA[1], DATA[0]]
 
 const handleMounted = (payload) => {
-    console.log('Advanced player mounted', payload)
     player.value = payload.player
 }
 
-const toggleVideo = () => {
-    player.value?.pause()
+const pauseVideo = () => {
+    setTimeout(() => {
+        player.value?.pause()
+    }, 20)
+}
+
+const playVideo = () => {
+    setTimeout(() => {
+        player.value?.play()
+    }, 20)
 }
 
 const search_string = ref('')
@@ -119,6 +125,7 @@ const searchVideo = (s) => {
     }).then((res) => {
         console.log(res);
         videoList.value = res.data.videos;
+        search_info.value = videoList.value.length ? "搜索到" + String(videoList.value.length) + "条视频" : '暂无资源'
     }).catch((err) => {
         console.log(err)
     })
@@ -139,30 +146,13 @@ const seriesShow = computed(() => {
 })
 const videoList = ref([])
 const selectVideo = (item) => {
-    let videoNumber = item.url.split('#').length
-    if (videoNumber > 1) {
-        series.value = item;
-
-        // ------------------------------test-------------------------------------
-        let movies = []
-        item.url.split('#').forEach(movieUrl => {
-            let movie = JSON.parse(JSON.stringify(item));
-            movie.name = item.name + movieUrl.split('$')[0];
-            movie.url = movieUrl.split('$')[1];
-            movies.push(movie)
-        });
-        movieList.value = movies;
-        // ----------------------------------------------------------------------
-
-        options.src = item.url.split('#')[0].split('$')[1];
-        options.name = item.name + " " + item.url.split('$')[0];
-    } else {
-        series.value = {};
-        options.src = item.url.split('$')[1];
-        options.name = item.name;
-    }
+    options.src = item.currentUrl;
+    options.name = item.currentName;
     options.poster = item.pic;
     showing.value = 'player'
+    console.log(item.url.split('#').length)
+    series.value = item.url.split('#').length > 1 ? item : {};
+    console.log(series.value)
 }
 
 const selectVideoSeries = (item) => {
@@ -170,6 +160,7 @@ const selectVideoSeries = (item) => {
     options.name = item.name;
     options.poster = item.pic;
     showing.value = 'player'
+    playVideo()
 }
 // ---------------------------------test---------------------------------------------------
 const showing = ref('search')
@@ -180,6 +171,7 @@ const changeSrc = () => {
     }, 200)
 }
 const togglePanel = () => {
+    pauseVideo()
     if (showing.value == 'search') {
         showing.value = 'player'
     } else {
