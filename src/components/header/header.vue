@@ -100,12 +100,11 @@ export default {
         }
 
         const darkModeChange = computed(() => {
-            console.log(props.headerSetting.darkmodeSetting)
             if (props.headerSetting.darkmodeSetting) {
                 return props.headerSetting.darkmodeSetting.darkModeChangeHandle
             }
             return () => {
-                console.log('darkMode Change.')
+                // console.log('darkMode Change.')
             }
         })
 
@@ -114,7 +113,7 @@ export default {
                 return props.headerSetting.userSetting.userLogHandle
             }
             return (mode) => {
-                console.log(mode, 'user loged.')
+                // console.log(mode, 'user loged.')
             }
         })
 

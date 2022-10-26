@@ -11,7 +11,7 @@
             <div class="flex flex-wrap mt-auto ml-0">
                 <div v-for="(serie, index) in series.slice(0, maxShowNum)" :key="serie.name" @click="changeVideo(index)"
                     class="px-6 py-2 mx-2 mt-4 dark:bg-blue-800 dark:bg-opacity-60 cursor-pointer text-lg flex justify-center"
-                    :class="{ ww: series.length > (maxShowNum + 1) / 2}">
+                    :class="{ ww: series.length > (maxShowNum + 1) / 2 }">
                     {{ series.length > (maxShowNum + 1) / 2 ? String(index + 1) : serie.name }}
                 </div>
                 <div v-show="series.length > maxShowNum">

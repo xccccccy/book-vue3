@@ -31,6 +31,8 @@ export default {
     })
   },
 }
+
+localStorage.removeItem("bookuser");
 </script>
 
 

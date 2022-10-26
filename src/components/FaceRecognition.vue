@@ -40,7 +40,6 @@ export default {
       stopCapture();
     })
     const openCapture = () => {
-      console.log('opencaptrue');
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
           .then((stream) => {
@@ -154,9 +153,8 @@ export default {
         })
         .then((res) => {
           if (res.data.res) {
-            console.log(res.data.id, res.data.name);
             let _user = { id: res.data.id, name: res.data.name, faceid: true, icon: res.data.icon };
-            localStorage.bookuser = JSON.stringify(_user);
+            localStorage.user = JSON.stringify(_user);
             ElNotification({ title: '登录成功。', message: '欢迎你，' + res.data.name, type: 'success', duration: 3000 });
             context.emit('user_face_login', _user)
             setTimeout(() => {
@@ -202,7 +200,7 @@ export default {
               facecanvas.value.height = containerHeight;
               const { sx, sy, swidth, sheight, x, y, width, height } = getObjectFitSize('cover', containerWidth, containerHeight, imgWidth, imgHeight);
               _sx = sx, _sy = sy, _swidth = swidth, _sheight = sheight, _x = x, _y = y, _width = width, _height = height;
-              let _user = JSON.parse(localStorage.bookuser)
+              let _user = JSON.parse(localStorage.user)
               let face_id = _user.id;
               postAddFaceRecognitionApi(1, face_id)
             };
@@ -236,7 +234,6 @@ export default {
               img_base64s: img_base64s, face_id: face_id
             })
             .then((res) => {
-              console.log(res);
               if (res.data.res) {
                 ElNotification({ title: '添加面部识别成功。', type: 'success', duration: 3000 });
                 context.emit('add_face_success')

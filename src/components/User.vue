@@ -193,8 +193,8 @@ export default {
       inituser();
     })
     const inituser = () => {
-      if (localStorage.bookuser) {
-        let _user = JSON.parse(localStorage.bookuser)
+      if (localStorage.user) {
+        let _user = JSON.parse(localStorage.user)
         user.id = _user.id;
         if (user.id == '001') {
           admin_show.value = true;
@@ -223,7 +223,7 @@ export default {
             icon_show.value = true;
             userloged.value = true;
             let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
-            localStorage.bookuser = JSON.stringify(_user);
+            localStorage.user = JSON.stringify(_user);
             ElNotification({ title: '登录成功', message: '欢迎你，' + user.name, type: 'success', duration: 2000 });
             context.emit('userLog', 'login')
             if (user.id == '001') {
@@ -259,7 +259,7 @@ export default {
             user.faceid = false;
             icon_show.value = true;
             let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
-            localStorage.bookuser = JSON.stringify(_user);
+            localStorage.user = JSON.stringify(_user);
             ElNotification({ message: '注册成功。', type: 'success', duration: 1000 });
             context.emit('userLog', 'logon');
             if (user.id == '001') {
@@ -286,7 +286,7 @@ export default {
         (user.icon = "/static/icon/user/default.png"),
         (icon_show.value = false),
         (userloged.value = false);
-      localStorage.removeItem("bookuser");
+      localStorage.removeItem("user");
     }
 
     const user_face_login = (_user) => {
@@ -296,7 +296,7 @@ export default {
       user.icon = _user.icon;
       icon_show.value = true;
       user.faceid = true;
-      localStorage.bookuser = JSON.stringify(_user);
+      localStorage.user = JSON.stringify(_user);
       faceid_show.value = false;
       context.emit('userLog', 'login')
       loginShow.value = false;
@@ -316,7 +316,7 @@ export default {
     const add_face_success = () => {
       user.faceid = true;
       let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
-      localStorage.bookuser = JSON.stringify(_user);
+      localStorage.user = JSON.stringify(_user);
       faceid_show.value = false;
       loginShow.value = false;
       face_add_back_show.value = false;

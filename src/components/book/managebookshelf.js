@@ -1,8 +1,8 @@
 import axios from "axios";
 
 var getUser = () => {
-  if (localStorage.bookuser) {
-    return JSON.parse(localStorage.bookuser);
+  if (localStorage.user) {
+    return JSON.parse(localStorage.user);
   } else {
     return null;
   }
