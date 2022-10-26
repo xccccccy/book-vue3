@@ -1,6 +1,7 @@
 <template>
   <div class="user-all" :class="{ headeractivate: loginShow }" style="margin-right: .6rem">
-    <svg @click="loginShow = !loginShow" viewBox="0 0 1024 1024">
+    <img v-show="icon_show" :src="user.icon" @click="loginShow = !loginShow" class=" rounded-full"/>
+    <svg v-show="!icon_show" @click="loginShow = !loginShow" viewBox="0 0 1024 1024">
       <path
         d="M261.0688 813.5168c66.816 59.904 155.0848 96.4096 251.904 96.4096 94.72 0 181.1968-34.9696 247.4496-92.5696v-3.84c0-87.7056-71.1168-158.8224-158.8224-158.8224H419.8912c-87.7568 0-158.8224 71.1168-158.8224 158.8224z"
         fill="#F55C04" p-id="21196" />
@@ -182,10 +183,11 @@ export default {
     const logon_show = ref(false);
     const faceid_show = ref(false);
     const face_add_back_show = ref(false);
-    const user = reactive({ id: null, name: null, passwd: null, faceid: false });
+    const user = reactive({ id: null, name: null, passwd: null, faceid: false, icon: "/static/icon/user/default.png" });
     const userLogon = reactive({ id: null, name: null, passwd: null, faceid: false });
     const FaceRecognitionComponent = ref(null);
     const admin_show = ref(false);
+    const icon_show = ref(false)
 
     onMounted(() => {
       inituser();
@@ -199,6 +201,8 @@ export default {
         }
         user.name = _user.name;
         user.faceid = _user.faceid;
+        user.icon = _user.icon;
+        icon_show.value = true;
         userloged.value = true;
       }
     }
@@ -215,8 +219,10 @@ export default {
           if (res.data.res) {
             user.name = res.data.user_name;
             user.faceid = res.data.faceid;
+            user.icon = res.data.icon;
+            icon_show.value = true;
             userloged.value = true;
-            let _user = { id: user.id, name: user.name, faceid: user.faceid };
+            let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
             localStorage.bookuser = JSON.stringify(_user);
             ElNotification({ title: '登录成功', message: '欢迎你，' + user.name, type: 'success', duration: 2000 });
             context.emit('userLog', 'login')
@@ -251,7 +257,8 @@ export default {
             user.name = userLogon.name;
             user.id = userLogon.id;
             user.faceid = false;
-            let _user = { id: user.id, name: user.name, faceid: user.faceid };
+            icon_show.value = true;
+            let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
             localStorage.bookuser = JSON.stringify(_user);
             ElNotification({ message: '注册成功。', type: 'success', duration: 1000 });
             context.emit('userLog', 'logon');
@@ -276,6 +283,8 @@ export default {
       (user.id = null),
         (user.name = null),
         (user.passwd = null),
+        (user.icon = "/static/icon/user/default.png"),
+        (icon_show.value = false),
         (userloged.value = false);
       localStorage.removeItem("bookuser");
     }
@@ -284,6 +293,8 @@ export default {
       userloged.value = true;
       user.id = _user.id;
       user.name = _user.name;
+      user.icon = _user.icon;
+      icon_show.value = true;
       user.faceid = true;
       localStorage.bookuser = JSON.stringify(_user);
       faceid_show.value = false;
@@ -304,7 +315,7 @@ export default {
 
     const add_face_success = () => {
       user.faceid = true;
-      let _user = { id: user.id, name: user.name, faceid: user.faceid };
+      let _user = { id: user.id, name: user.name, faceid: user.faceid, icon: user.icon };
       localStorage.bookuser = JSON.stringify(_user);
       faceid_show.value = false;
       loginShow.value = false;
@@ -327,7 +338,7 @@ export default {
     const user_add_face_error = () => {
       face_add_back();
     }
-    return { logloading, userloged, loginShow, logon_show, faceid_show, face_add_back_show, user, userLogon, FaceRecognitionComponent, admin_show, user_login, user_logon, user_logout, user_face_login, addFaceRecognition, openCapture, add_face_success, user_face_login_error, not_have_captrue, close_face_id, face_add_back, user_add_face_error }
+    return { logloading, userloged, loginShow, logon_show, faceid_show, face_add_back_show, user, userLogon, FaceRecognitionComponent, admin_show, user_login, user_logon, user_logout, user_face_login, addFaceRecognition, openCapture, add_face_success, user_face_login_error, not_have_captrue, close_face_id, face_add_back, user_add_face_error, icon_show }
 
   }
 }
@@ -336,6 +347,11 @@ export default {
 <style scoped>
 svg {
   height: 1.8rem;
+}
+
+img {
+  height: 1.7rem;
+  margin-top: 0.2rem;
 }
 
 .user-all>div {

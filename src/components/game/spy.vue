@@ -19,7 +19,7 @@
             <div class="flex flex-row flex-wrap justify-evenly">
               <div v-for="(headiconid, index) in allheadicon" :key="index" @click="selecthead(headiconid)"
                 class="bg-purple-300 bg-opacity-20 rounded-full p-1 m-4 flex justify-center items-center cursor-pointer headicon">
-                <img :src="'/src/assets/img/spyimg/r' + String(headiconid) + '.png'" />
+                <img :src="'/static/icon/game/spy/r' + String(headiconid) + '.png'" />
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@
                   class="bg-purple-400 bg-opacity-50 rounded-full p-1 m-2 flex justify-center items-center cursor-pointer headicon border"
                   :class="[location == my.location ? selftag : '']">
                   <div class=" relative select-none">
-                    <img src="../../assets/img/spyimg/host.svg" class="h-6 w-16 absolute -top-6" v-show="value.host">
+                    <img src="/icon/game/spy/host.svg" class="h-6 w-16 absolute -top-6" v-show="value.host">
                     <div v-show="value.ids.length > 1"
                       class=" leading-none absolute -top-2 -right-3 p-1 bg-red-600 rounded-full h-6 w-6">
                       {{ value.ids.length }}</div>
@@ -88,7 +88,7 @@
                       </div>
                     </div>
                     <img
-                      :src="'/src/assets/img/spyimg/r' + String(value.ids.length > 1 ? (value.ids.indexOf(my.id) == -1 ? value.headicons[value.ids[0]] : value.headicons[my.id]) : value.headicons[value.ids[0]]) + '.png'"
+                      :src="'/static/icon/game/spy/r' + String(value.ids.length > 1 ? (value.ids.indexOf(my.id) == -1 ? value.headicons[value.ids[0]] : value.headicons[my.id]) : value.headicons[value.ids[0]]) + '.png'"
                       v-show="value.hasperson" />
                     <span class="text-2xl text-yellow-100" v-show="!value.hasperson">+</span>
                   </div>
@@ -160,7 +160,7 @@
             </div>
             <div class="flex items-center justify-between">
               <div class=" relative w-max mx-3">
-                <img :src="'/src/assets/img/spyimg/r' + willexposeheadicon + '.png'" class="h-32 w-32">
+                <img :src="'/static/icon/game/spy/r' + willexposeheadicon + '.png'" class="h-32 w-32">
                 <div class="leading-none absolute -top-0 -right-0 h-6 w-6 text-6xl text-red-400">
                   ?</div>
               </div>

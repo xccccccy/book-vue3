@@ -155,7 +155,7 @@ export default {
         .then((res) => {
           if (res.data.res) {
             console.log(res.data.id, res.data.name);
-            let _user = { id: res.data.id, name: res.data.name, faceid: true };
+            let _user = { id: res.data.id, name: res.data.name, faceid: true, icon: res.data.icon };
             localStorage.bookuser = JSON.stringify(_user);
             ElNotification({ title: '登录成功。', message: '欢迎你，' + res.data.name, type: 'success', duration: 3000 });
             context.emit('user_face_login', _user)
