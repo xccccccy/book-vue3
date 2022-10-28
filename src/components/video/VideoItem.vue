@@ -1,23 +1,35 @@
 <template>
-    <div class="movie-item">
-        <div class="cover">
+    <div
+        class="movie-item border rounded-md shadow-xl dark:bg-slate-800 border-gray-300 overflow-hidden dark:border-opacity-20 dark:border-violet-500">
+        <div class="cover cursor-pointer" @click="changeVideo(0)">
             <img :src="item.pic" alt="cover" />
-            <div class="duration">{{item.duration}}</div>
+            <div class="duration">{{ item.year }}</div>
         </div>
-        <div class="detail flex-1 flex flex-col items-start" style="">
-            <div class="title">{{item.name}}</div>
-            <div class="author">{{item.director}}</div>
-            <div class="date">{{item.year}}</div>
-            <div class="flex flex-wrap mt-auto ml-0">
-                <div v-for="(serie, index) in series.slice(0, maxShowNum)" :key="serie.name" @click="changeVideo(index)"
-                    class="px-6 py-2 mx-2 mt-4 dark:bg-blue-800 dark:bg-opacity-60 cursor-pointer text-lg flex justify-center"
-                    :class="{ ww: series.length > (maxShowNum + 1) / 2 }">
-                    {{ series.length > (maxShowNum + 1) / 2 ? String(index + 1) : serie.name }}
-                </div>
-                <div v-show="series.length > maxShowNum">
-                    <div @click="changeVideo(0)"
-                        class="px-6 py-2 mx-2 mt-4 dark:bg-blue-800 dark:bg-opacity-60 cursor-pointer text-lg flex justify-center">
-                        ...
+        <div class="detail flex-1 flex flex-col items-start py-4 px-6" style="">
+            <div class="title cursor-pointer" @click="changeVideo(0)">{{ item.name }}</div>
+            <div class="flex space-x-3 items-center text-gray-500">
+                <div class="date">{{ item.area }}</div>
+                <div class="border-current h-1 border-r" v-show="item.director.length"></div>
+                <div class="author" v-show="item.director.length">{{ item.director }}</div>
+                <div class="border-current h-1 border-r" v-show="item.lang.length"></div>
+                <div class="date">{{ item.lang }}</div>
+            </div>
+            <div class="mt-auto des">
+                {{ item.des }}
+            </div>
+            <div class="hidden">
+                <div class="flex flex-wrap">
+                    <div v-for="(serie, index) in series.slice(0, maxShowNum)" :key="serie.name"
+                        @click="changeVideo(index)"
+                        class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center"
+                        :class="{ ww: series.length > (maxShowNum + 1) / 2 }">
+                        {{ series.length > (maxShowNum + 1) / 2 ? String(index + 1) : serie.name }}
+                    </div>
+                    <div v-show="series.length > maxShowNum">
+                        <div @click="changeVideo(0)"
+                            class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center">
+                            ...
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,9 +51,8 @@ export default {
         const maxShowNum = computed(() => {
             let fontsize = Number(window.getComputedStyle(document.getElementsByTagName('html')[0], null).getPropertyValue('font-size').slice(0, 2));
             let screenWidth = document.getElementsByTagName("html")[0].clientWidth;
-            let maxInRow = parseInt(((screenWidth > 640 ? (screenWidth * 3 / 4) : screenWidth) - 170) / (5 * fontsize));
-            console.log(maxInRow)
-            return maxInRow * 2 - 1
+            let maxInRow = parseInt(((screenWidth > 640 ? (screenWidth * 3 / 4) : screenWidth) - 163 - 1 * fontsize) / (5 * fontsize));
+            return maxInRow * 1 - 1
         })
 
         const series = computed(() => {
@@ -71,18 +82,18 @@ export default {
 <style scoped>
 .movie-item {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
 }
 
 .movie-item .cover {
     position: relative;
-    width: 166px;
+    width: 160px;
     overflow: hidden;
     background: #000;
 }
 
 .movie-item .cover img:hover {
-    opacity: .8;
+    opacity: .9;
     transform: scale(1.25, 1.25);
 }
 
@@ -104,23 +115,13 @@ export default {
     border-radius: 2px;
 }
 
-.movie-item .detail {
-    padding-left: 0.5rem;
-    font-size: 14px;
-}
-
 .movie-item .detail>div {
-    margin-bottom: 0.4rem;
-    margin-left: 0.5rem;
-}
-
-.ml-0 {
-    margin-left: 0px !important;
-    margin-bottom: 0px !important;
+    margin-bottom: .6rem;
 }
 
 .movie-item .detail .title {
-    font-size: 1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -130,19 +131,10 @@ export default {
     -webkit-line-clamp: 2;
 }
 
+.movie-item .detail .date,
 .movie-item .detail .author {
-    font-size: .7rem;
-    line-height: 1rem;
-}
-
-.movie-item .detail .date {
-    display: inline-block;
-    padding: 4px 9px;
-    line-height: 1em;
-    background-color: #31C2F2;
-    color: #fff;
-    font-size: 0.5rem;
-    border-radius: 2px;
+    font-size: .9rem;
+    font-weight: 500;
 }
 
 .movie-item .detail .data.hot {
@@ -151,6 +143,16 @@ export default {
 
 .ww {
     width: 4rem;
+}
+
+.des {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: -o-ellipsis-lastline;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    -webkit-line-clamp: 2;
 }
 </style>
 

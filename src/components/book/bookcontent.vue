@@ -197,11 +197,9 @@ import $ from "jquery";
 import MusicPlayer from "../MusicPlayer.vue";
 import { List } from '@element-plus/icons-vue';
 import { getBookShelf, addBookToBookshelf, updataBookShelf } from './managebookshelf'
-import DrakMode from "../DrakMode.vue";
-import User from "../User.vue";
 
 export default {
-  components: { List: List, DrakMode, User },
+  components: { List: List },
   name: "bookcontent",
   data() {
     return {

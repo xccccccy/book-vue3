@@ -56,12 +56,12 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from '../foundation/api/scmapi'
+import { getAllVersionInfo, getAllCommitsInfo, newVersionWithData } from '../../foundation/api/scmapi'
 import VersionHistory from './versionHistory.vue';
 import Commits from './commits.vue';
 import { GobletSquareFull, Plus, House, Fold, Expand, RefreshRight } from '@element-plus/icons-vue'
-import { utc2beijing } from '../utils'
-import Drawer from '../common/drawer/drawer.vue'
+import { utc2beijing } from '../../common/utils'
+import Drawer from '../../common/drawer/drawer.vue'
 
 
 export default {

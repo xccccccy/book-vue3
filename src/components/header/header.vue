@@ -13,10 +13,9 @@
 
 <script>
 import { ref, onMounted, watch, reactive, computed } from 'vue'
-import $ from "jquery";
 import axios from 'axios';
-import DrakMode from '../DrakMode.vue';
-import User from '../User.vue'
+import DrakMode from '../foundation/DrakMode.vue';
+import User from '../foundation/User.vue'
 import HeaderHome from './headerHome.vue'
 import CommonHeader from './commonHeader.vue'
 import SearchHeader from './searchHeader.vue'
@@ -131,7 +130,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    box-shadow: 2px -2px 10px #00000058;
+    /* box-shadow: 2px -2px 10px #00000058; */
     backdrop-filter: blur(25px);
     z-index: 99;
 }

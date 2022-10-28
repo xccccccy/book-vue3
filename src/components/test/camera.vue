@@ -21,7 +21,7 @@
 import { ref, onMounted, defineComponent, watch } from 'vue'
 import $ from "jquery";
 import axios from 'axios';
-import { guid } from './utils';
+import { guid } from '../common/utils';
 
 export default {
   name: 'CameraComponent',

@@ -88,8 +88,8 @@
 <script>
 import { computed, ref } from 'vue';
 import CommitInfo from './commitInfo.vue'
-import BottomLine from '../common/bottomLine.vue'
-import { updateVersion } from '../foundation/api/scmapi'
+import BottomLine from '../../common/bottomLine.vue'
+import { updateVersion } from '../../foundation/api/scmapi'
 
 export default {
     name: "VersionHistory",

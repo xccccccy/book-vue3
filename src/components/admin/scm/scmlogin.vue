@@ -15,9 +15,9 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import { scmlogin, scmtesttoken } from '../foundation/api/scmapi';
+import { scmlogin, scmtesttoken } from '../../foundation/api/scmapi';
 import { useRouter } from "vue-router";
-import BackGround from '../common/background.vue'
+import BackGround from '../../common/background.vue'
 
 
 export default {

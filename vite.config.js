@@ -6,21 +6,31 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 let localDevApiUrl = 'http://localhost:5001'
-let remoteApiUrl = ''
+let remoteApiUrl = 'http://8.142.136.153:5001'
 
-var realApiUrl = localDevApiUrl
+var realApiUrl = remoteApiUrl
 
 // https://vitejs.dev/config/
 export default defineConfig({
   // 要用到的插件数组
   plugins: [
-  vue(),
-  AutoImport({
-    resolvers: [ElementPlusResolver()],
-  }),
-  Components({
-    resolvers: [ElementPlusResolver()],
-  }),
+    vue(),
+    AutoImport({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/, /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      resolvers: [ElementPlusResolver()],
+    }),
+    Components({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/, /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      resolvers: [ElementPlusResolver()],
+    }),
   ],
   // 开发或生产环境服务的公共基础路径,可以是/foo/、https://foo.com/、空字符串或./(用于开发环境) 几种类型，这个选项也可以通过命令行参数指定（例：vite build --base=/my/public/path/）
   base: '/',
@@ -66,7 +76,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/_api/, '/api')
       },
       '/spy/api': {
-        target: realApiUrl, // 8.142.136.153:5001
+        target: realApiUrl, // localhost:5001
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/spy\/api/, '/')
       },
@@ -83,7 +93,7 @@ export default defineConfig({
 
     // 指定生成静态资源的存放路径(相对于build.outDir)
     assetsDir: 'assets',
-    
+
     // 小于此阈值的导入或引用资源将内联为base64编码，设置为0可禁用此项。默认4096（4kb）
     assetsInlineLimit: '4096',
 
@@ -92,7 +102,7 @@ export default defineConfig({
 
     // 构建后是否生成source map文件，默认false
     sourcemap: false,
-    
+
     // 为true时，会生成manifest.json文件，用于后端集成
     manifest: false
   }

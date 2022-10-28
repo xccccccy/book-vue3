@@ -4,6 +4,7 @@
             <el-option v-for="item in urlNames" :key="item" :label="item" :value="item" />
         </el-select>
         <el-button @click="initDownloadVideos">初始化视频数据库</el-button>
+        <el-button @click="delDownloadVideos">删除视频数据库所有数据</el-button>
     </div>
 </template>
 

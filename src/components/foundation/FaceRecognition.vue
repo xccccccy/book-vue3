@@ -18,7 +18,6 @@
 import { ref, onMounted, defineComponent, watch, onUnmounted } from 'vue'
 import $ from "jquery";
 import axios from 'axios';
-import { guid } from './utils';
 
 export default {
   name: 'FaceRecognitionComponent',
@@ -30,7 +29,6 @@ export default {
     const facevideo = ref(null);
     const facecanvas = ref(null);
     var captureOpening = false;
-    const uuid = guid();
     var containerWidth, containerHeight, imgWidth, imgHeight;
     var _sx, _sy, _swidth, _sheight, _x, _y, _width, _height;
     onMounted(() => {

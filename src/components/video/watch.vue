@@ -23,7 +23,8 @@
                                     class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted" />
                             </div>
                             <ElInput v-model="test"></ElInput>
-                            <ElButton @click="test2"></ElButton>
+                            <ElButton @click="test2">解析</ElButton>
+                            <ElButton @click="test3">换源</ElButton>
                         </div>
                         <div class="hidden sm:block" style="max-width: 21rem;min-width: 19rem;">
                             <div v-show="seriesShow">
@@ -31,7 +32,7 @@
                             </div>
                             <div class="">
                                 <div class="my-2">播放列表</div>
-                                <MovieItem v-for="movie in videoList" :key="movie.cover" :item="movie"
+                                <MovieItem v-for="movie in videoList.slice(0, 10)" :key="movie.cover" :item="movie"
                                     @selectVideo="selectVideo"></MovieItem>
                             </div>
                         </div>
@@ -47,7 +48,8 @@
             <transition name="bouncereverse">
                 <div v-show="showing == 'search'">
                     <div class="search-two">
-                        <el-input v-model="search_string" placeholder="搜索视频。" class="input-with-select"
+                        <el-input v-model="search_string" placeholder="搜索电影、剧集、人物"
+                            class="input-with-select dark:bg-slate-900 dark:bg-opacity-30 rounded-md"
                             @keyup.enter="searchVideo()" size="large">
                             <template #suffix>
                                 <el-icon class="el-input__icon" @click="searchVideo()">
@@ -63,9 +65,49 @@
                             <ArrowRight class="h-4 px-2" />
                         </div>
                     </div>
-                    <div>
-                        <VideoItem v-for="video in videoList" :key="video.id" :item="video" @selectVideo="selectVideo">
-                        </VideoItem>
+                    <div v-show="videoList.length > 0">
+                        <div class="flex items-start">
+                            <div class="rounded-lg border overflow-hidden shadow-lg" style="width: 27%;">
+                                <h3 class="p-5 bg-sky-500 text-white font-semibold text-xl">搜索结果</h3>
+                                <ul class="py-2 type">
+                                    <li class="activateli">
+                                        <div class="flex justify-between items-center">
+                                            <span>电影</span>
+                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">166</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex justify-between items-center">
+                                            <span>剧集</span>
+                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">26</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex justify-between items-center">
+                                            <span>综艺</span>
+                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">828</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex justify-between items-center">
+                                            <span>动漫</span>
+                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">720</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex justify-between items-center">
+                                            <span>电视剧</span>
+                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">8,969</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="ml-6 w-full">
+                                <VideoItem v-for="video in videoList" :key="video.id" :item="video"
+                                    @selectVideo="selectVideo">
+                                </VideoItem>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </transition>
@@ -120,12 +162,16 @@ const search_string = ref('')
 const search_info = ref('暂无搜索。')
 const searchVideo = (s) => {
     let search_s = s || search_string.value;
+    if (search_s == "" || !search_s) {
+        ElNotification({ title: '搜索不能为空。', type: 'warning', duration: 1600 });
+        return
+    };
     axios.post("/videoapi/search", {
         's': search_s
     }).then((res) => {
         console.log(res);
         videoList.value = res.data.videos;
-        search_info.value = videoList.value.length ? "搜索到" + String(videoList.value.length) + "条视频" : '暂无资源'
+        search_info.value = videoList.value.length ? "搜索到" + String(videoList.value.length) + "条相关资源" : '暂无资源'
     }).catch((err) => {
         console.log(err)
     })
@@ -180,8 +226,10 @@ const togglePanel = () => {
 }
 const test = ref('')
 const test2 = () => {
-    options.src = test.value;
     window.open('https://okjx.cc/?url=' + test.value, "_blank");
+}
+const test3 = () => {
+    options.src = test.value;
 }
 // ----------------------------------------------------------------------------------------
 </script>
@@ -292,7 +340,6 @@ const test2 = () => {
 
 .search-two {
     margin: 1rem auto;
-    max-width: 40rem;
 }
 
 .search-two .el-input__icon {
@@ -301,7 +348,7 @@ const test2 = () => {
 }
 
 .input-with-select {
-    opacity: 0.8;
+    opacity: 0.9;
     color: #000;
 }
 
@@ -319,5 +366,34 @@ const test2 = () => {
 
 .list-title span {
     vertical-align: middle;
+}
+
+.type li {
+    padding: .8rem 1.3rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.activateli {
+    background-color: rgb(241 245 249);
+}
+
+.activateli span {
+    font-weight: 600;
+}
+
+.activateli>div>div {
+    background-color: white;
+}
+
+.type li:hover {
+    background-color: rgb(241 245 249);
+}
+
+.type li:hover span {
+    font-weight: 600;
+}
+
+.type li:hover>div>div {
+    background-color: white;
 }
 </style>

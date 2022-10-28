@@ -67,11 +67,11 @@ export default createRouter({
             },
             {
                 path: 'appversionmanage',
-                component: () => import('@/components/scm/appversionmanage.vue'),
+                component: () => import('@/components/admin/scm/appversionmanage.vue'),
             },
             {
                 path: 'subrepossetting',
-                component: () => import('@/components/scm/subrepossetting.vue'),
+                component: () => import('@/components/admin/scm/subrepossetting.vue'),
             },
             {
                 path: 'cms',
@@ -83,7 +83,7 @@ export default createRouter({
         path: '/scmlogin',
         name: 'ScmLogin',
         component: () =>
-            import('@/components/scm/scmlogin.vue')
+            import('@/components/admin/scm/scmlogin.vue')
     },
     {
         path: '/template',
@@ -112,7 +112,7 @@ export default createRouter({
         path: '/404',
         name: 'notFound',
         component: () =>
-            import('@/components/notfound.vue')
+            import('@/components/foundation/notfound.vue')
     }, {
         path: '/:pathMatch(.*)*',
         redirect: '/404'

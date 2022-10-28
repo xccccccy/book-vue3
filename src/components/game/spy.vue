@@ -210,7 +210,7 @@ import $ from "jquery";
 import axios from 'axios';
 import { ArrowLeft, Close } from '@element-plus/icons-vue'
 import { InfoFilled } from '@element-plus/icons-vue'
-import { guid } from '../utils';
+import { guid } from '../common/utils';
 
 export default {
   name: 'GameSpyComponent',

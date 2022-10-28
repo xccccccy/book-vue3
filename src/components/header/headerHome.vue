@@ -1,6 +1,7 @@
 <template>
     <div class="home">
-        <a @click="$router.push(homeSetting.homeHref)" class="bg-clip-text linear-gradient inverse text-fill-transparent">{{ homeSetting.homeString }}</a>
+        <a @click="$router.push(homeSetting.homeHref)" class="hidden bg-clip-text linear-gradient inverse text-fill-transparent">{{ homeSetting.homeString }}</a>
+        <img src="@/assets/img/home.svg"/>
     </div>
 </template>
 

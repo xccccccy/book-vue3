@@ -54,8 +54,6 @@ import axios from "axios";
 import $ from "jquery";
 import { defineAsyncComponent } from 'vue'
 import { getBookShelf, addBookToBookshelf } from './managebookshelf'
-import DrakMode from "../DrakMode.vue";
-import User from "../User.vue";
 
 const cataloguebox = defineAsyncComponent(() => import('./cataloguebox.vue'))
 
