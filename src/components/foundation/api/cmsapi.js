@@ -9,3 +9,7 @@ export const initVideoDatabase = (cmsUrlName) => {
 export const initUrlNames = () => {
     return service.get("/cmsapi/init/urlnames")
 }
+
+export const delAllVideos = () => {
+    return service.get("/cmsapi/del/allvideos")
+}

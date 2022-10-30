@@ -76,6 +76,13 @@ export default {
 .resume {
   line-height: 2;
   padding-top: 0.8rem;
+  display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: -o-ellipsis-lastline;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    -webkit-line-clamp: 2;
 }
 .bookname span {
   font-size: 1.5rem;

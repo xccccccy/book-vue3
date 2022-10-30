@@ -15,7 +15,7 @@
                 <div v-for="(serie, index) in series" :key="serie.name" :class="{ active: activateindex == index }"
                     @click="changeMovie(index)"
                     class="w-full flex items-center p-2 cursor-pointer text-sm rounded-md hover:text-blue-800 hover:bg-blue-100 hover:dark:bg-slate-600 hover:dark:text-blue-300">
-                    <span class="pr-2">{{ "P" + index }}</span>
+                    <span class="pr-2">{{ "P" + (index + 1) }}</span>
                     <span>{{ serie.name }}</span>
                     <svg t="1666626600841" viewBox="0 0 1024 1024" version="1.1" class="ml-auto hidden"
                         xmlns="http://www.w3.org/2000/svg" p-id="7788" width="1.3rem" height="1.3rem">

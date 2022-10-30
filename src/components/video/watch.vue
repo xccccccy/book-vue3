@@ -1,116 +1,131 @@
 <template>
-    <div class="app w-full sm:w-9/12 2xl:w-9/12 pt-12 sm:pt-16 text-left pb-14">
+    <div class="app w-full lg:w-9/12 pt-12 sm:pt-16 text-left pb-14">
         <Header :headerSetting="headerSetting"></Header>
         <Background></Background>
-        <div class="main relative">
-            <transition name="bounce">
-                <div v-show="showing == 'player'">
-                    <div class="flex mb-4 items-center">
-                        <div @click="togglePanel" class="flex items-center cursor-pointer pr-2">
-                            <ArrowLeft class="h-4 px-2" />
-                            <span> 返回 </span>
-                        </div>
-                        <el-divider direction="vertical" />
-                        <div class="pl-2">
-                            <h3> {{ options.name }}</h3>
-                        </div>
+        <!-- <iframe width="100%" style="height: 50vh; width:100%;" allowTransparency="true" frameborder="0" scrolling="no"
+                            allowfullscreen="true"
+                            src="https://api.okjx.cc:3389/jx.php?url=https://v.qq.com/x/cover/mzc002007rb113r/p0044l78gj3.html"
+                            autoPlay=true></iframe> -->
+        <!-- <iframe style="height: 50vh; width:100%;"
+            src="https://jx.xmflv.com/?url=https://v.qq.com/x/cover/mzc002002064ykw/p0044njv2yq.html"></iframe> -->
+        <!-- <iframe style="height: 50vh; width:100%;"
+            src="https://okjx.cc/?url=https://v.qq.com/x/cover/mzc002002064ykw/p0044njv2yq.html&a=32nb42"></iframe> -->
+        <!-- <iframe style="height: 50vh; width:100%;"
+            src="https://jx.m3u8.tv/jiexi/?url=https://v.qq.com/x/cover/i4d7psclvhc4q0o.html"></iframe> -->
+        <div class="main">
+            <div v-show="showing == 'search'">
+                <div class="search-two">
+                    <el-input v-model="search_string" placeholder="搜索电影、剧集、人物，或者输入其他视频网站地址进行解析"
+                        class="input-with-select dark:bg-slate-900 dark:bg-opacity-30 rounded-md"
+                        @keyup.enter="searchVideo()" size="large">
+                        <template #suffix>
+                            <el-icon class="el-input__icon" @click="searchVideo()" v-show="!JX_show">
+                                <Search />
+                            </el-icon>
+                            <div v-show="JX_show">
+                                <el-select v-model="currentJXUrl" class="m-2 w-32" placeholder="Select" size="default">
+                                    <el-option v-for="(value, key) in JXUrlDict" :key="key" :label="key"
+                                        :value="value" />
+                                </el-select>
+                                <ElButton @click="searchVideo()">解析</ElButton>
+                            </div>
+                        </template>
+                    </el-input>
+                </div>
+                <div class="list-title flex">
+                    <span v-html="search_info"></span>
+                    <div class="flex cursor-pointer ml-auto items-center" @click="togglePanel">
+                        <span>播放器</span>
+                        <ArrowRight class="h-4 px-2" />
                     </div>
-                    <div class="flex w-full">
-                        <div class="flex-auto">
-                            <div class="mb-3 mr-6 ml-1 sm:ml-0 shadow-xl">
-                                <video-player :src="options.src" :poster="options.poster" controls :loop="true"
-                                    :volume="0.6" :muted="options.muted"
-                                    class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted" />
-                            </div>
-                            <ElInput v-model="test"></ElInput>
-                            <ElButton @click="test2">解析</ElButton>
-                            <ElButton @click="test3">换源</ElButton>
+                </div>
+                <div v-show="videoList.length > 0">
+                    <div class="flex items-start">
+                        <div class="rounded-lg border dark:border-slate-700 overflow-hidden shadow-lg hidden sm:block"
+                            style="width: 27%; min-width: 260px;">
+                            <h3 class="p-5 bg-sky-500 text-white dark:bg-slate-700 font-semibold text-xl">搜索结果</h3>
+                            <ul class="py-2 type bg-white dark:bg-slate-900">
+                                <li :class="{ activateli : searchTypeActivateType == key}" class="cursor-pointer"
+                                    v-for="(value, key) in searchType" :key="key" @click="selectType(key)">
+                                    <div class="flex justify-between items-center">
+                                        <span>{{ key }}</span>
+                                        <div
+                                            class="px-3 font-medium text-sm bg-slate-100 dark:bg-slate-200 text-stone-900 rounded-md">
+                                            {{ value }}</div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="hidden sm:block" style="max-width: 21rem;min-width: 19rem;">
-                            <div v-show="seriesShow">
-                                <SeriesItem :item="series" @selectVideoSeries="selectVideoSeries"></SeriesItem>
-                            </div>
-                            <div class="">
-                                <div class="my-2">播放列表</div>
-                                <MovieItem v-for="movie in videoList.slice(0, 10)" :key="movie.cover" :item="movie"
-                                    @selectVideo="selectVideo"></MovieItem>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="false">
-                        <div class="recommend-list">
-                            <RecommendedItem v-for="movie in recommendList" :key="movie.cover" :item="movie">
-                            </RecommendedItem>
+                        <div class="ml-6 w-full">
+                            <VideoItem v-for="video in filterVideoList" :key="video.id" :item="video"
+                                @selectVideo="selectVideo">
+                            </VideoItem>
                         </div>
                     </div>
                 </div>
-            </transition>
-            <transition name="bouncereverse">
-                <div v-show="showing == 'search'">
-                    <div class="search-two">
-                        <el-input v-model="search_string" placeholder="搜索电影、剧集、人物"
-                            class="input-with-select dark:bg-slate-900 dark:bg-opacity-30 rounded-md"
-                            @keyup.enter="searchVideo()" size="large">
-                            <template #suffix>
-                                <el-icon class="el-input__icon" @click="searchVideo()">
-                                    <Search />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </div>
-                    <div class="list-title flex">
-                        <span v-html="search_info"></span>
-                        <div class="flex cursor-pointer ml-auto items-center" @click="togglePanel">
-                            <span>播放器</span>
-                            <ArrowRight class="h-4 px-2" />
+                <div class="mt-auto">
+                    <ElInput v-model="test"></ElInput>
+                    <ElButton @click="test2">解析</ElButton>
+                    <ElButton @click="test3">换源</ElButton>
+                </div>
+            </div>
+            <div v-show="showing == 'player'">
+                <div class="flex w-full">
+                    <div class="flex-auto">
+                        <!-- player 一列 -->
+                        <div class="flex mb-4 items-center">
+                            <div @click="togglePanel" class="flex items-center cursor-pointer pr-2">
+                                <ArrowLeft class="h-4 px-2" />
+                                <span> 返回 </span>
+                            </div>
+                            <el-divider direction="vertical" />
+                            <div class="pl-2">
+                                <h3> {{ options.name }}</h3>
+                            </div>
+                        </div>
+                        <div class="mb-3 mr-6 ml-1 sm:ml-0 shadow-xl">
+                            <video-player :src="options.src" :poster="options.poster" controls :loop="true"
+                                :volume="0.6" :muted="options.muted"
+                                class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted" />
+                        </div>
+                        <div class="">
+                            <div class="flex flex-wrap">
+                                <div v-for="(serie, index) in series_bottom.slice(0, maxShowNum)" :key="serie.name"
+                                    @click="changeVideo(index)"
+                                    class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center"
+                                    :class="{ ww: series_bottom.length > (maxShowNum + 1) / 2 }">
+                                    {{ series_bottom.length > (maxShowNum + 1) / 2 ? String(index + 1) : serie.name }}
+                                </div>
+                                <div v-show="series_bottom.length > maxShowNum">
+                                    <div @click="changeVideo(0)"
+                                        class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div v-show="videoList.length > 0">
-                        <div class="flex items-start">
-                            <div class="rounded-lg border overflow-hidden shadow-lg" style="width: 27%;">
-                                <h3 class="p-5 bg-sky-500 text-white font-semibold text-xl">搜索结果</h3>
-                                <ul class="py-2 type">
-                                    <li class="activateli">
-                                        <div class="flex justify-between items-center">
-                                            <span>电影</span>
-                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">166</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex justify-between items-center">
-                                            <span>剧集</span>
-                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">26</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex justify-between items-center">
-                                            <span>综艺</span>
-                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">828</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex justify-between items-center">
-                                            <span>动漫</span>
-                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">720</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex justify-between items-center">
-                                            <span>电视剧</span>
-                                            <div class="px-3 font-light text-sm bg-slate-100 rounded-md">8,969</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="ml-6 w-full">
-                                <VideoItem v-for="video in videoList" :key="video.id" :item="video"
-                                    @selectVideo="selectVideo">
-                                </VideoItem>
-                            </div>
+                    <div class="hidden sm:block" style="max-width: 21rem;min-width: 19rem;">
+                        <!-- 剧集列表 -->
+                        <div v-show="seriesShow" class="mt-10">
+                            <SeriesItem :item="seriesItem" @selectVideoSeries="selectVideoSeries"></SeriesItem>
+                        </div>
+                        <!-- 播放列表 -->
+                        <div class="">
+                            <div class="my-2">播放列表</div>
+                            <MovieItem v-for="movie in videoList.slice(0, 10)" :key="movie.cover" :item="movie"
+                                @selectVideo="selectVideo"></MovieItem>
                         </div>
                     </div>
                 </div>
-            </transition>
+                <div v-if="false">
+                    <div class="recommend-list">
+                        <RecommendedItem v-for="movie in recommendList" :key="movie.cover" :item="movie">
+                        </RecommendedItem>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -129,6 +144,21 @@ import RecommendedItem from './Recommended.vue'
 import DATA from './data'
 import { computed } from '@vue/reactivity'
 
+const showing = ref('search')
+
+const togglePanel = () => {
+    pauseVideo()
+    if (showing.value == 'search') {
+        showing.value = 'player'
+        setTimeout(() => {
+            document.getElementsByClassName('demo-player')[0].scrollIntoView({ block: "center" });
+        }, 10)
+    } else {
+        showing.value = 'search'
+    }
+}
+
+// player
 const player = shallowRef()
 const options = reactive({
     autoplay: false,
@@ -136,11 +166,17 @@ const options = reactive({
     muted: false,
     poster: '/1.jpg',
     volume: 0.1,
-    src: 'https://hnzy.bfvvs.com/play/YerknV2a/index.m3u8',
+    src: '',
     name: 'something'
 })
+const videoList = ref([])
 
-const recommendList = [DATA[2], DATA[4], DATA[1], DATA[0]]
+const filterVideoList = computed(() =>
+    videoList.value.filter((item) =>
+        searchTypeActivateType.value == "all" ||
+        item.type == searchTypeActivateType.value
+    )
+)
 
 const handleMounted = (payload) => {
     player.value = payload.player
@@ -156,12 +192,22 @@ const playVideo = () => {
     setTimeout(() => {
         player.value?.play()
     }, 20)
+    setTimeout(() => {
+        document.getElementsByClassName('demo-player')[0].scrollIntoView({ block: "center" });
+    }, 10)
 }
 
+const recommendList = [DATA[2], DATA[4], DATA[1], DATA[0]]
+
+// search
 const search_string = ref('')
 const search_info = ref('暂无搜索。')
 const searchVideo = (s) => {
     let search_s = s || search_string.value;
+    if (search_s.includes("http")) {
+        jumpJX(search_s)
+        return
+    }
     if (search_s == "" || !search_s) {
         ElNotification({ title: '搜索不能为空。', type: 'warning', duration: 1600 });
         return
@@ -172,10 +218,93 @@ const searchVideo = (s) => {
         console.log(res);
         videoList.value = res.data.videos;
         search_info.value = videoList.value.length ? "搜索到" + String(videoList.value.length) + "条相关资源" : '暂无资源'
+        let types = {}
+        res.data.videos.forEach(item => {
+            types[item.type] ? types[item.type] += 1 : types[item.type] = 1;
+        });
+        searchType.value = types;
     }).catch((err) => {
         console.log(err)
+    }).finally(() => {
+        searchTypeActivateType.value = "all";
     })
 }
+const JX_show = computed(() => {
+    return search_string.value.includes("http")
+})
+const JXUrlDict = ref({
+    "m3u8": "https://jx.m3u8.tv/jiexi/?url=",
+    "okjx": "https://okjx.cc/?url=",
+    "虾米": "https://jx.xmflv.com/?url="
+})
+const currentJXUrl = ref('https://jx.m3u8.tv/jiexi/?url=')
+const jumpJX = (url) => {
+    window.open(currentJXUrl.value + url, "_blank");
+}
+
+const searchType = ref({
+    "电影": 166,
+    "剧集": 26,
+    "综艺": 828,
+    "动漫": 720,
+    "电视剧": 8969
+})
+const searchTypeActivateType = ref("all");
+const selectType = (type) => {
+    type == searchTypeActivateType.value ? searchTypeActivateType.value = "all" : searchTypeActivateType.value = type;
+}
+
+// 剧集列表 series_right
+const seriesItem = ref({});
+const seriesShow = computed(() => {
+    return Object.keys(seriesItem.value).length > 0
+})
+
+// videoItem select func
+const selectVideo = (item) => {
+    options.src = item.currentUrl;
+    options.name = item.currentName;
+    options.poster = item.pic;
+    showing.value = 'player'
+    seriesItem.value = item.url.split('#').length > 1 ? item : {};
+    setTimeout(() => {
+        document.getElementsByClassName('demo-player')[0].scrollIntoView({ block: "center" });
+    }, 10)
+}
+
+// SeriesItem 剧集列表 select func
+const selectVideoSeries = (item) => {
+    options.src = item.url;
+    options.name = item.name;
+    options.poster = item.pic;
+    showing.value = 'player'
+    playVideo()
+}
+
+// series_bottom
+const series_bottom = computed(() => {
+    let _series = []
+    if (Object.keys(seriesItem.value).length == 0) { return _series }
+    seriesItem.value.url.split('#').forEach(movieUrl => {
+        let serie = {};
+        serie.name = movieUrl.split('$')[0];
+        serie.url = movieUrl.split('$')[1];
+        _series.push(serie)
+    });
+    return _series
+})
+
+const maxShowNum = ref(100);
+
+const test = ref('')
+const test2 = (url) => {
+    let _url = url || test.value;
+    window.open('https://okjx.cc/?url=' + _url, "_blank");
+}
+const test3 = () => {
+    options.src = test.value;
+}
+
 const headerSetting = ref({
     headerSettings: [
         {
@@ -186,52 +315,6 @@ const headerSetting = ref({
     ]
 })
 
-const series = ref({});
-const seriesShow = computed(() => {
-    return Object.keys(series.value).length > 0
-})
-const videoList = ref([])
-const selectVideo = (item) => {
-    options.src = item.currentUrl;
-    options.name = item.currentName;
-    options.poster = item.pic;
-    showing.value = 'player'
-    console.log(item.url.split('#').length)
-    series.value = item.url.split('#').length > 1 ? item : {};
-    console.log(series.value)
-}
-
-const selectVideoSeries = (item) => {
-    options.src = item.url;
-    options.name = item.name;
-    options.poster = item.pic;
-    showing.value = 'player'
-    playVideo()
-}
-// ---------------------------------test---------------------------------------------------
-const showing = ref('search')
-const changeSrc = () => {
-    options.src = "/rainmood.m4a"
-    setTimeout(() => {
-        player.value?.play()
-    }, 200)
-}
-const togglePanel = () => {
-    pauseVideo()
-    if (showing.value == 'search') {
-        showing.value = 'player'
-    } else {
-        showing.value = 'search'
-    }
-}
-const test = ref('')
-const test2 = () => {
-    window.open('https://okjx.cc/?url=' + test.value, "_blank");
-}
-const test3 = () => {
-    options.src = test.value;
-}
-// ----------------------------------------------------------------------------------------
 </script>
   
 <style scoped>
@@ -284,57 +367,8 @@ const test3 = () => {
     clear: both;
 }
 
-.bounce-enter-active {
-    animation: bounce-in 0.2s ease-in-out;
-}
-
-.bounce-leave-active {
-    animation: bounce-in 0.2s ease-in-out reverse;
-}
-
-.bouncereverse-enter-active {
-    animation: bounce-out 0.2s ease-in-out;
-}
-
-.bouncereverse-leave-active {
-    animation: bounce-out 0.2s ease-in-out reverse;
-}
-
-@keyframes bounce-in {
-    0% {
-        /* opacity: 0; */
-        -webkit-transform: translateX(100vw);
-        -ms-transform: translateX(100vw);
-        transform: translateX(100vw);
-    }
-
-    100% {
-        /* opacity: 1; */
-        -webkit-transform: translateX(0);
-        -ms-transform: translateX(0);
-        transform: translateX(0);
-    }
-}
-
-@keyframes bounce-out {
-    0% {
-        /* opacity: 0; */
-        -webkit-transform: translateX(-100vw);
-        -ms-transform: translateX(-100vw);
-        transform: translateX(-100vw);
-    }
-
-    100% {
-        /* opacity: 1; */
-        -webkit-transform: translateX(0);
-        -ms-transform: translateX(0);
-        transform: translateX(0);
-    }
-}
-
 .main>div {
     min-height: 80vh;
-    position: relative;
     width: 100%;
 }
 
@@ -377,6 +411,10 @@ const test3 = () => {
     background-color: rgb(241 245 249);
 }
 
+.dark .activateli {
+    background-color: rgb(61, 61, 62);
+}
+
 .activateli span {
     font-weight: 600;
 }
@@ -389,11 +427,19 @@ const test3 = () => {
     background-color: rgb(241 245 249);
 }
 
+.dark .type li:hover {
+    background-color: rgb(61, 61, 62);
+}
+
 .type li:hover span {
     font-weight: 600;
 }
 
 .type li:hover>div>div {
     background-color: white;
+}
+
+.ww {
+    width: 4rem;
 }
 </style>

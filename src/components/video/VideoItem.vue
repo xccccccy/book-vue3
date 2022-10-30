@@ -1,12 +1,18 @@
 <template>
     <div
-        class="movie-item border rounded-md shadow-xl dark:bg-slate-800 border-gray-300 overflow-hidden dark:border-opacity-20 dark:border-violet-500">
+        class="movie-item border rounded-md shadow-xl dark:bg-slate-700 dark:bg-opacity-70 border-gray-300 overflow-hidden dark:border-opacity-20 dark:border-violet-500">
         <div class="cover cursor-pointer" @click="changeVideo(0)">
-            <img :src="item.pic" alt="cover" />
+            <img :src="item.pic" alt="cover" loading="lazy" />
             <div class="duration">{{ item.year }}</div>
         </div>
         <div class="detail flex-1 flex flex-col items-start py-4 px-6" style="">
-            <div class="title cursor-pointer" @click="changeVideo(0)">{{ item.name }}</div>
+            <div class="title cursor-pointer flex w-full items-baseline" @click="changeVideo(0)">
+                <span>{{ item.name }}</span>
+                <div class="mx-1 text-xs font-normal bg-orange-100 dark:bg-black rounded" style="padding: 2px 6px;">
+                    {{ item.note }}
+                </div>
+                <div class="ml-auto text-xs font-light opacity-50">{{ item.id}}</div>
+            </div>
             <div class="flex space-x-3 items-center text-gray-500">
                 <div class="date">{{ item.area }}</div>
                 <div class="border-current h-1 border-r" v-show="item.director.length"></div>
@@ -14,8 +20,8 @@
                 <div class="border-current h-1 border-r" v-show="item.lang.length"></div>
                 <div class="date">{{ item.lang }}</div>
             </div>
-            <div class="mt-auto des">
-                {{ item.des }}
+            <div class="actor text-sm text-slate-600 dark:text-slate-400">{{ item.actor }}</div>
+            <div class="mt-auto des" v-html="item.des">
             </div>
             <div class="hidden">
                 <div class="flex flex-wrap">
@@ -153,6 +159,16 @@ export default {
     text-overflow: ellipsis;
     word-break: break-word;
     -webkit-line-clamp: 2;
+}
+
+.actor {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: -o-ellipsis-lastline;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    -webkit-line-clamp: 1;
 }
 </style>
 
