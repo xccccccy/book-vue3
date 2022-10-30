@@ -150,9 +150,7 @@ export default {
     }
   },
   components: {
-    cataloguebox,
-    DrakMode,
-    User
+    cataloguebox
   },
 };
 </script>
