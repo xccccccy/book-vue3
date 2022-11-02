@@ -4,11 +4,12 @@ import { resolve } from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Icons from 'unplugin-icons/vite'
 
 let localDevApiUrl = 'http://localhost:5001'
-let remoteApiUrl = ''
+let remoteApiUrl = 'http://8.142.136.153:5001'
 
-var realApiUrl = localDevApiUrl
+var realApiUrl = remoteApiUrl
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -31,6 +32,7 @@ export default defineConfig({
       ],
       resolvers: [ElementPlusResolver()],
     }),
+    Icons({})
   ],
   // 开发或生产环境服务的公共基础路径,可以是/foo/、https://foo.com/、空字符串或./(用于开发环境) 几种类型，这个选项也可以通过命令行参数指定（例：vite build --base=/my/public/path/）
   base: '/',
