@@ -1,7 +1,5 @@
 <template>
   <div class="back-all w-full min-h-screen">
-    <Header></Header>
-    <BackGround></BackGround>
     <div id="main">
       <div class="page-title">
         <span

@@ -1,12 +1,13 @@
 <template>
-    <div class="header-container bg-slate-100 bg-opacity-30 dark:bg-slate-900 dark:bg-opacity-30">
-        <div class="header space-x-0.5 sm:space-x-2 w-full sm:w-11/12  mx-auto">
+    <div v-show="!isHidden" class="header-container bg-slate-200 bg-opacity-30 dark:bg-zinc-900 dark:bg-opacity-30 border-b dark:border-opacity-10 dark:border-indigo-600">
+        <div class="header space-x-0.5 sm:space-x-2 w-full mx-auto">
             <HeaderHome :homeSetting="homeSetting"></HeaderHome>
             <component v-for="(headerSetting, index) in headerSettings" :is="headers[headerSetting.type]"
                 v-show="!headerSetting.hidden" @click="activateHeaderOfIndex(index)" :key="index"
                 :class="{ headeractivate: headeractivate[index] }" :headerSetting="headerSetting"></component>
             <DrakMode @darkModeChange="darkModeChange"></DrakMode>
             <User @userLog="userLog"></User>
+            <component is="carbon-accessibility"/>
         </div>
     </div>
 </template>
@@ -34,6 +35,13 @@ export default {
             common: CommonHeader,
             search: SearchHeader
         }
+
+        const isHidden = computed(() => {
+            if (props.headerSetting.hiddenSetting) {
+                return props.headerSetting.hiddenSetting
+            }
+            return false
+        })
 
         const homeSetting = computed(() => {
             if (props.headerSetting.homeSetting) {
@@ -116,7 +124,7 @@ export default {
             }
         })
 
-        return { homeSetting, headerSettings, headers, activateHeaderOfIndex, headeractivate, userLog, darkModeChange };
+        return { homeSetting, headerSettings, headers, activateHeaderOfIndex, headeractivate, userLog, darkModeChange, isHidden };
     },
     components: { DrakMode, User, HeaderHome }
 }
@@ -126,12 +134,12 @@ export default {
 <style scoped>
 
 .header-container {
-    position: fixed;
+    /* position: fixed;
     top: 0;
-    left: 0;
+    left: 0; */
     width: 100%;
     /* box-shadow: 2px -2px 10px #00000058; */
-    backdrop-filter: blur(25px);
+    /* backdrop-filter: blur(25px); */
     z-index: 99;
 }
 
@@ -149,10 +157,10 @@ export default {
 }
 
 .header>div:hover {
-    border-bottom: 2px solid rgb(218, 175, 0);
+    border-bottom: 1px solid rgb(218, 175, 0);
 }
 
 .headeractivate {
-    border-bottom: 2px solid rgb(20, 175, 103);
+    border-bottom: 1px solid rgb(20, 175, 103);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <el-col :md="24" :lg="11"
-    class="dark-transition rounded-md shadow-2xl dark:shadow-none bg-white dark:bg-slate-800 backdrop-filter bg-opacity-50 dark:bg-opacity-50 mr-4 mb-6">
+    class="dark-transition rounded-md shadow-lg dark:shadow-none bg-gray-100 dark:bg-zinc-800 backdrop-filter bg-opacity-50 dark:bg-opacity-50 mr-4 mb-6">
     <el-row class="bookbox" @mouseenter="bottom_bar_hover = true" @mouseleave="bottom_bar_hover = false">
       <el-col class="bookimg" :span="8">
         <img

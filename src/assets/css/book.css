@@ -4,7 +4,7 @@
 }
 
 .book-list {
-    padding: 1rem;
+    padding: 0.3rem;
     background: none;
     border-radius: 1px;
     margin-bottom: 15rem;
@@ -15,7 +15,7 @@
 
 .list-title {
     font-size: 1.6rem;
-    padding: .7rem 1%;
+    padding: .5rem 1%;
     text-align: left;
     font-weight: 500;
 }

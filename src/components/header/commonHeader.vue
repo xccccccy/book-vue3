@@ -1,5 +1,6 @@
 <template>
     <div @click="headerSetting.clickHandle" :class="headerSetting.class">
+        <component :is="headerSetting.iconSetting" class="h-6 w-6 text-indigo-600"/>
         <span :style="headerSetting.style">{{ headerSetting.headerString }}</span>
     </div>
 </template>
