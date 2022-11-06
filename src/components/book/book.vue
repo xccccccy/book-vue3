@@ -1,7 +1,5 @@
 <template>
-    <div class="app w-full sm:w-3/4 2xl:w-2/3 pt-12 sm:pt-20">
-        <Header :headerSetting="headerSetting"></Header>
-        <Background></Background>
+    <div class="app w-full sm:w-3/4 2xl:w-2/3 pt-8">
         <div class="book-list" v-if="bookshelf_show">
             <div class="list-title">
                 <span>我的书架</span>
@@ -49,10 +47,14 @@
 <script>
 import axios from "axios";
 import $ from "jquery";
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, markRaw } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getBookShelf, fromBookshelfDelBook, addBookToBookshelf } from './managebookshelf'
 import Like from "../like.vue";
+import { useHeaderStore } from '../../stores/header'
+import CarbonBook from '~icons/carbon/book'
+import CarbonSearch from '~icons/carbon/search'
+import notoMoneyBag from '~icons/healthicons/money-bag-outline'
 
 const Bookbox = defineAsyncComponent(() => import('./bookbox.vue'))
 const Bookshelfbox = defineAsyncComponent(() => import('./bookshelfbox.vue'))
@@ -71,7 +73,6 @@ export default {
             shang_show: false,
             searchloading: false,
             ismobile: false,
-            headerSetting: {}
         };
     },
     watch: {
@@ -87,37 +88,49 @@ export default {
         document.title = "My Book";
         $("html,body").scrollTop(0);
     },
+    unmounted() {
+        console.log("ddd");
+        const headerStore = useHeaderStore()
+        headerStore.resetHeader()
+        console.log(headerStore)
+    },
     methods: {
         initHeader() {
-            this.headerSetting = {
-                headerSettings:
-                    [
-                        {
-                            type: 'search',
-                            placeholder: "搜索书籍。",
-                            clickHandle: this.searchbook
-                        },
-                        {
-                            type: 'common',
-                            headerString: '书架',
-                            clickHandle: this.backbookshelf
-                        },
-                        {
-                            type: 'common',
-                            headerString: '搜索',
-                            clickHandle: this.back_search
-                        },
-                        {
-                            type: 'common',
-                            headerString: 'Shǎng',
-                            clickHandle: this.shangqian,
-                            style: "font-weight: 500; color: #CD9D02"
-                        }
-                    ],
-                userSetting: {
-                    userLogHandle: this.userLog
+            const headerStore = useHeaderStore()
+            headerStore.$patch({
+                headerSetting: {
+                    headerSettings:
+                        [
+                            // {
+                            //     type: 'search',
+                            //     placeholder: "搜索书籍。",
+                            //     clickHandle: this.searchbook
+                            // },
+                            {
+                                type: 'common',
+                                // headerString: '搜索',
+                                iconSetting: markRaw(CarbonSearch),
+                                clickHandle: this.back_search
+                            },
+                            {
+                                type: 'common',
+                                // headerString: '书架',
+                                iconSetting: markRaw(CarbonBook),
+                                clickHandle: this.backbookshelf
+                            },
+                            {
+                                type: 'common',
+                                // headerString: 'Shǎng',
+                                iconSetting: markRaw(notoMoneyBag),
+                                clickHandle: this.shangqian,
+                                style: "font-weight: 500; color: #CD9D02"
+                            }
+                        ],
+                    userSetting: {
+                        userLogHandle: this.userLog
+                    }
                 }
-            }
+            })
         },
         initBookShelf() {
             this.bookshelf = JSON.parse(localStorage.bookshelf);

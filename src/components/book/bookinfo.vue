@@ -1,7 +1,6 @@
 <template>
   <div :style="{ background: backimg }" class="w-full bookinfo-back z-0">
     <div id="app">
-      <Header :headerSetting="headerSetting"></Header>
       <div id="box" v-loading="!bookboxshow"
         class="w-full sm:w-2/3 mt-0 sm:mt-16 pt-12 sm:pt-0 mb-0 sm:mb-12 bg-white dark:bg-slate-900 dark-transition">
         <div class="bookbox">
@@ -54,6 +53,7 @@ import axios from "axios";
 import $ from "jquery";
 import { defineAsyncComponent } from 'vue'
 import { getBookShelf, addBookToBookshelf } from './managebookshelf'
+import { useHeaderStore } from '../../stores/header'
 
 const cataloguebox = defineAsyncComponent(() => import('./cataloguebox.vue'))
 
@@ -75,7 +75,6 @@ export default {
       continueread_show: false,
       joinShelfBtnShow: true,
       backimg: "url('/rain.jpeg') center center / cover fixed no-repeat",
-      headerSetting: {}
     };
   },
   mounted() {
@@ -84,17 +83,24 @@ export default {
     this.initBookShelf();
     $("html,body").scrollTop(0);
   },
+  unmounted() {
+    const headerStore = useHeaderStore()
+    headerStore.resetHeader()
+  },
   methods: {
     initHeader() {
-      this.headerSetting = {
-        userSetting: {
-          userLogHandle: this.userLog
-        },
-        homeSetting: {
-          homeString: 'Home',
-          homeHref: '/book'
+      const headerStore = useHeaderStore()
+      headerStore.$patch({
+        headerSetting: {
+          userSetting: {
+            userLogHandle: this.userLog
+          },
+          homeSetting: {
+            homeString: 'Home',
+            homeHref: '/book'
+          }
         }
-      }
+      })
     },
     initCatalogue() {
       axios
@@ -103,7 +109,7 @@ export default {
           this.bookboxshow = true;
           this.book = res.data;
           document.title = this.book.book_name;
-          this.backimg = "url(" + res.data.book_img_url + ") center center / cover no-repeat";
+          this.backimg = "url(" + res.data.book_img_url + ") center center / cover fixed no-repeat";
         })
         .catch((err) => {
           ElNotification({ message: '请求失败！请刷新！', type: 'error', duration: 2000 });
@@ -146,7 +152,7 @@ export default {
     userLog(mode) {
       if (mode == 'login') {
         this.initBookShelf();
-      } 
+      }
     }
   },
   components: {

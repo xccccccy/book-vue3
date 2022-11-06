@@ -211,11 +211,19 @@ import axios from 'axios';
 import { ArrowLeft, Close } from '@element-plus/icons-vue'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { guid } from '../common/utils';
+import { useHeaderStore } from '../../stores/header';
 
 export default {
   name: 'GameSpyComponent',
   components: { ArrowLeft, InfoFilled, Close },
   setup(props, context) {
+    const headerStore = useHeaderStore()
+    headerStore.$patch({
+      headerSetting: {
+        hiddenSetting: true
+      }
+    })
+
     const roomshow = ref(false);
     const selectheadiconshow = ref(false);
     const selectroomidshow = ref(false);
@@ -402,6 +410,7 @@ export default {
 
     onUnmounted(() => {
       leaveroom();
+      headerStore.resetHeader()
     })
 
     const willexposelocation = ref(1);

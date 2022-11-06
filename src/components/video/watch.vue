@@ -1,6 +1,5 @@
 <template>
     <div class="app w-full lg:w-9/12 pt-12 sm:pt-16 text-left pb-14">
-        <Header :headerSetting="headerSetting"></Header>
         <Background></Background>
         <!-- <iframe width="100%" style="height: 50vh; width:100%;" allowTransparency="true" frameborder="0" scrolling="no"
                             allowfullscreen="true"
@@ -134,18 +133,21 @@
 </template>
   
 <script setup>
-import { ref, reactive, onMounted, shallowRef } from 'vue'
+import { ref, reactive, onMounted, shallowRef, onUnmounted } from 'vue'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import { ArrowLeft, ArrowRight, Search } from '@element-plus/icons-vue'
 import VideoItem from './VideoItem.vue'
 import SeriesItem from './seriesItem.vue'
 import axios from "axios";
+import { useHeaderStore } from '../../stores/header'
 
 import MovieItem from './MovieItem.vue'
 import RecommendedItem from './Recommended.vue'
 import DATA from './data'
 import { computed } from '@vue/reactivity'
+
+
 
 const showing = ref('search')
 
@@ -307,15 +309,20 @@ const test2 = (url) => {
 const test3 = () => {
     options.src = test.value;
 }
-
-const headerSetting = ref({
-    headerSettings: [
-        {
-            type: 'search',
-            placeholder: "搜索。",
-            clickHandle: searchVideo
-        }
-    ]
+const headerStore = useHeaderStore();
+headerStore.$patch({
+    headerSetting: {
+        headerSettings: [
+            {
+                type: 'search',
+                placeholder: "搜索。",
+                clickHandle: searchVideo
+            }
+        ]
+    }
+})
+onMounted(() => {
+    headerStore.$patch({});
 })
 
 </script>
