@@ -32,6 +32,9 @@
                         </template>
                     </el-input>
                 </div>
+                <div>
+                    <div class="border border-l-8 border-l-green-400 p-4">可以搜索影视资源，或者输入网址进行解析播放。</div>
+                </div>
                 <div class="list-title flex">
                     <span v-html="search_info"></span>
                     <div class="flex cursor-pointer ml-auto items-center" @click="togglePanel">
@@ -63,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-auto">
+                <div class="hidden">
                     <ElInput v-model="test"></ElInput>
                     <ElButton @click="test2">解析</ElButton>
                     <ElButton @click="test3">换源</ElButton>
@@ -237,7 +240,7 @@ const JXUrlDict = ref({
     "okjx": "https://okjx.cc/?url=",
     "虾米": "https://jx.xmflv.com/?url="
 })
-const currentJXUrl = ref('https://jx.m3u8.tv/jiexi/?url=')
+const currentJXUrl = ref('https://okjx.cc/?url=')
 const jumpJX = (url) => {
     window.open(currentJXUrl.value + url, "_blank");
 }
