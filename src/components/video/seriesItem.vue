@@ -1,5 +1,5 @@
 <template>
-    <div
+    <div v-show="Object.keys(videoStore.videoItem).length > 0 ? videoStore.videoItem.url.split('#').length > 1 : false"
         class="pl-2 pb-2 mb-4 border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 border rounded-md dark-transition shadow-xl dark:shadow-none bg-slate-200 dark:bg-slate-700 backdrop-filter bg-opacity-50 dark:bg-opacity-50">
         <div
             class="my-2 flex items-center border-b pb-2 border-violet-300 border-opacity-80 dark:border-opacity-60 dark:border-violet-500">
@@ -10,8 +10,8 @@
                 <el-switch v-model="autoPlayContinue" />
             </div>
         </div>
-        <div style="max-height: 55vh; overflow:scroll;padding-right: .6rem;">
-            <div >
+        <div style="max-height: 55vh; overflow:scroll; padding-right: .6rem;">
+            <div>
                 <div v-for="(serie, index) in series" :key="serie.name" :class="{ active: activateindex == index }"
                     @click="changeMovie(index)"
                     class="w-full flex items-center p-2 cursor-pointer text-sm rounded-md hover:text-blue-800 hover:bg-blue-100 hover:dark:bg-slate-600 hover:dark:text-blue-300">
@@ -33,19 +33,19 @@
 import { computed } from '@vue/reactivity';
 import { ref } from 'vue';
 
+import { useVideoStore } from './videoStore'
+
+var videoStore = useVideoStore()
+
 export default {
-    props: {
-        item: Object,
-    },
     name: 'SeriesItem',
-    emits: ['selectVideoSeries'],
     setup(props, context) {
 
         const activateindex = ref(0);
         const series = computed(() => {
             let _series = []
-            if (Object.keys(props.item).length == 0) { return _series }
-            props.item.url.split('#').forEach(movieUrl => {
+            if (Object.keys(videoStore.videoItem).length == 0) { return _series }
+            videoStore.videoItem.url.split('#').forEach(movieUrl => {
                 let serie = {};
                 serie.name = movieUrl.split('$')[0];
                 serie.url = movieUrl.split('$')[1];
@@ -56,14 +56,15 @@ export default {
 
         const changeMovie = (index) => {
             activateindex.value = index;
-            let item = JSON.parse(JSON.stringify(props.item));
-            item.url = series.value[index].url;
-            item.name = props.item.name + series.value[index].name;
-            context.emit('selectVideoSeries', item)
+            videoStore.playerOptions.poster = videoStore.videoItem.pic;
+            videoStore.playerOptions.name = videoStore.videoItem.name + " " + series.value[index].name;
+            videoStore.playerOptions.src = series.value[index].url;
+            videoStore.showing = 'player';
+            videoStore.playVideo();
         }
 
         const autoPlayContinue = ref(true);
-        return { changeMovie, series, autoPlayContinue, activateindex }
+        return { changeMovie, series, autoPlayContinue, activateindex, videoStore }
     },
 }
 </script>

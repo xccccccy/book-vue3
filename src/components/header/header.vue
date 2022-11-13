@@ -1,5 +1,5 @@
 <template>
-    <div v-show="!isHidden" class="header-container bg-slate-200 bg-opacity-30 dark:bg-zinc-900 dark:bg-opacity-30 border-b dark:border-opacity-10 dark:border-indigo-600">
+    <div v-show="!isHidden" class="fixed top-0 left-0 header-container bg-slate-200 bg-opacity-50 dark:bg-zinc-900 dark:bg-opacity-50">
         <div class="header space-x-0.5 sm:space-x-2 w-full mx-auto">
             <HeaderHome :homeSetting="homeSetting"></HeaderHome>
             <component v-for="(headerSetting, index) in headerSettings" :is="headers[headerSetting.type]"
@@ -139,7 +139,7 @@ export default {
     left: 0; */
     width: 100%;
     /* box-shadow: 2px -2px 10px #00000058; */
-    /* backdrop-filter: blur(25px); */
+    backdrop-filter: blur(25px);
     z-index: 99;
 }
 

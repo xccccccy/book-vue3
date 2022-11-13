@@ -90,3 +90,6 @@ body {
     right: 16px;
     margin-top: 2.1rem;
 }
+.w-24\/25 {
+    width: 96%;
+}

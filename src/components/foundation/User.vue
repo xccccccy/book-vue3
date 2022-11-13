@@ -3,7 +3,7 @@
     <img v-show="icon_show" :src="user.icon" @click="loginShow = !loginShow" class=" rounded-full" onerror="this.src='/icon/user/default.png'"/>
     <uil:chat-bubble-user v-show="!icon_show" @click="loginShow = !loginShow" class="h-6 w-6 text-indigo-500" />
     <div v-show="loginShow" v-loading="logloading" @mouseleave="loginShow = false"
-      class="w-full sm:w-max rounded-md bg-white bg-opacity-90 dark:bg-slate-900 dark:bg-opacity-75 p-2 cursor-auto">
+      class="w-full sm:w-max rounded-md bg-white bg-opacity-90 dark:bg-zinc-900 dark:bg-opacity-75 p-2 cursor-auto">
       <div class="login" v-show="!userloged">
         <div v-show="!logon_show">
           <div>

@@ -17,7 +17,7 @@ export default {
     props: {
         item: Object,
     },
-    name: 'MovieItem',
+    name: 'PlayList',
     emits: ['selectVideo'],
     setup(props, context) {
         const changeMovie = () => {

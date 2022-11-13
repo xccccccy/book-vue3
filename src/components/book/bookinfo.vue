@@ -2,7 +2,7 @@
   <div :style="{ background: backimg }" class="w-full bookinfo-back z-0">
     <div id="app">
       <div id="box" v-loading="!bookboxshow"
-        class="w-full sm:w-2/3 mt-0 sm:mt-16 pt-12 sm:pt-0 mb-0 sm:mb-12 bg-white dark:bg-slate-900 dark-transition">
+        class="w-full sm:w-2/3 mt-0 sm:mt-16 pt-12 sm:pt-0 mb-0 sm:mb-12 bg-white dark:bg-zinc-900 dark-transition">
         <div class="bookbox">
           <div class="bookimg">
             <a @click="$router.push('/book/' + book.book_id)" class="cursor-pointer">

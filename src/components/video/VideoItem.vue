@@ -1,65 +1,50 @@
 <template>
     <div
-        class="movie-item border rounded-md shadow-xl dark:bg-slate-700 dark:bg-opacity-70 border-gray-300 overflow-hidden dark:border-opacity-20 dark:border-violet-500">
-        <div class="cover cursor-pointer" @click="changeVideo(0)">
+        class="movie-item border rounded-md shadow-xl dark:bg-slate-700 dark:bg-opacity-70 border-gray-300  dark:border-opacity-20 dark:border-violet-500">
+        <div class="cover cursor-pointer" @click="toinfo">
             <img :src="item.pic" alt="cover" loading="lazy" />
             <div class="duration">{{ item.year }}</div>
         </div>
-        <div class="detail flex-1 flex flex-col items-start py-4 px-6" style="">
-            <div class="title cursor-pointer flex w-full items-baseline" @click="changeVideo(0)">
+        <div class="detail flex-1 py-4 px-5 flex flex-col" style="">
+            <div class="title cursor-pointer flex w-full items-baseline" @click="toinfo">
                 <span>{{ item.name }}</span>
                 <div class="mx-1 text-xs font-normal bg-orange-100 dark:bg-black rounded" style="padding: 2px 6px;">
                     {{ item.note }}
                 </div>
                 <div class="ml-auto text-xs font-light opacity-50">{{ item.id}}</div>
             </div>
-            <div class="flex space-x-3 items-center text-gray-500">
-                <div class="date">{{ item.area }}</div>
-                <div class="border-current h-1 border-r" v-show="item.director.length"></div>
-                <div class="author" v-show="item.director.length">{{ item.director }}</div>
-                <div class="border-current h-1 border-r" v-show="item.lang.length"></div>
-                <div class="date">{{ item.lang }}</div>
+            <div class="actor text-gray-500">
+                {{ item.area }} / {{ item.director }}/ {{ item.lang }}
             </div>
             <div class="actor text-sm text-slate-600 dark:text-slate-400">{{ item.actor }}</div>
-            <div class="mt-auto des" v-html="item.des">
+            <div class="mt-auto des hidden" v-html="item.des">
             </div>
-            <div class="hidden">
-                <div class="flex flex-wrap">
-                    <div v-for="(serie, index) in series.slice(0, maxShowNum)" :key="serie.name"
-                        @click="changeVideo(index)"
-                        class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center"
-                        :class="{ ww: series.length > (maxShowNum + 1) / 2 }">
-                        {{ series.length > (maxShowNum + 1) / 2 ? String(index + 1) : serie.name }}
-                    </div>
-                    <div v-show="series.length > maxShowNum">
-                        <div @click="changeVideo(0)"
-                            class="border border-violet-300 border-opacity-50 dark:border-opacity-60 dark:border-violet-500 rounded px-6 py-1 mx-2 mt-3 bg-indigo-200 bg-opacity-30 dark:bg-indigo-800 dark:bg-opacity-40 cursor-pointer text-lg flex justify-center">
-                            ...
-                        </div>
-                    </div>
+            <div class="mt-auto flex space-x-2 items-center">
+                <div class="cursor-pointer py-2 pl-4 pr-5 bg-amber-500" style="border-radius: 1rem .5rem .5rem 1rem;"
+                    @click="changeVideo(0)">
+                    <carbon:play-filled-alt class="h-4 w-4 text-white"></carbon:play-filled-alt>
                 </div>
+                <div class="cursor-pointer border bg-zinc-300 dark:bg-zinc-800 text-amber-600 text-smborder-gray-300  dark:border-opacity-30 dark:border-violet-300"
+                    @click="toinfo"
+                    style="border-radius: .3rem .7rem .7rem .3rem; padding: 0.35rem 2.5rem 0.35rem 1.5rem;">详情</div>
             </div>
         </div>
+        <div class="clear-both"></div>
     </div>
 </template>
 
 <script>
 import { ref, computed } from 'vue'
+import { useVideoStore } from './videoStore'
 
 export default {
     props: {
         item: Object,
     },
     name: 'VideoItem',
-    emits: ['selectVideo'],
     setup(props, context) {
 
-        const maxShowNum = computed(() => {
-            let fontsize = Number(window.getComputedStyle(document.getElementsByTagName('html')[0], null).getPropertyValue('font-size').slice(0, 2));
-            let screenWidth = document.getElementsByTagName("html")[0].clientWidth;
-            let maxInRow = parseInt(((screenWidth > 640 ? (screenWidth * 3 / 4) : screenWidth) - 163 - 1 * fontsize) / (5 * fontsize));
-            return maxInRow * 1 - 1
-        })
+        var videoStore = useVideoStore()
 
         const series = computed(() => {
             let _series = []
@@ -74,13 +59,21 @@ export default {
         })
 
         const changeVideo = (index) => {
-            let item = JSON.parse(JSON.stringify(props.item));
-            item.currentUrl = series.value[index].url;
-            item.currentName = props.item.name + series.value[index].name;
-            item.series = series.value;
-            context.emit('selectVideo', item)
+            videoStore.videoItem = JSON.parse(JSON.stringify(props.item));
+            videoStore.playerOptions.poster = videoStore.videoItem.pic;
+            videoStore.playerOptions.name = videoStore.videoItem.name + " " + series.value[index].name;
+            videoStore.playerOptions.src = series.value[index].url;
+            videoStore.showing = 'player'
+            setTimeout(() => {
+                document.getElementsByClassName('demo-player')[0].scrollIntoView({ block: "center" });
+            }, 10)
         }
-        return { changeVideo, series, maxShowNum }
+
+        const toinfo = () => {
+            videoStore.videoItem = JSON.parse(JSON.stringify(props.item));
+            videoStore.showing = 'info';
+        }
+        return { changeVideo, toinfo }
     },
 }
 </script>
@@ -88,7 +81,8 @@ export default {
 <style scoped>
 .movie-item {
     display: flex;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    margin-top: 2.5rem;
 }
 
 .movie-item .cover {
@@ -96,6 +90,9 @@ export default {
     width: 160px;
     overflow: hidden;
     background: #000;
+    margin: -2rem 0 .5rem .5rem;
+    border-radius: .5rem;
+    float: left;
 }
 
 .movie-item .cover img:hover {
