@@ -1,5 +1,5 @@
 <template>
-    <div class="mr-6">
+    <div class="">
         <div
             class="movie-item rounded-md shadow-xl overflow-hidden dark:bg-slate-700 dark:bg-opacity-70 border-gray-300 dark:border-opacity-20 dark:border-violet-500">
             <div class="detail flex-1 flex flex-col items-start py-4 px-6" style="">
@@ -60,6 +60,7 @@ const selectSerie = (index) => {
     videoStore.playerOptions.poster = videoStore.videoItem.pic;
     videoStore.playerOptions.name = videoStore.videoItem.name + " " + series_bottom.value[index].name;
     videoStore.playerOptions.src = series_bottom.value[index].url;
+    videoStore.showing = "player";
     videoStore.playVideo();
 }
 

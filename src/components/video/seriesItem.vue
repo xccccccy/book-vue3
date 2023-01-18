@@ -40,8 +40,10 @@ var videoStore = useVideoStore()
 export default {
     name: 'SeriesItem',
     setup(props, context) {
-
-        const activateindex = ref(0);
+        const activateindex = computed(() => {
+            let index = series.value.findIndex((serie) => { return videoStore.playerOptions.src == serie.url });
+            return index >= 0 ? index : 0;
+        });
         const series = computed(() => {
             let _series = []
             if (Object.keys(videoStore.videoItem).length == 0) { return _series }
@@ -55,7 +57,6 @@ export default {
         })
 
         const changeMovie = (index) => {
-            activateindex.value = index;
             videoStore.playerOptions.poster = videoStore.videoItem.pic;
             videoStore.playerOptions.name = videoStore.videoItem.name + " " + series.value[index].name;
             videoStore.playerOptions.src = series.value[index].url;

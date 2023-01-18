@@ -1,7 +1,7 @@
 <template>
     <div class="search hidden sm:flex my-2 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
         <el-input v-model="search_string" :placeholder="headerSetting.placeholder" class="input-with-select"
-            @keyup.enter="headerSetting.clickHandle(search_string)" size="large">
+            @keyup.enter="headerSetting.clickHandle(search_string)">
             <template #suffix>
                 <el-icon class="el-input__icon" @click="headerSetting.clickHandle(search_string)">
                     <Search />

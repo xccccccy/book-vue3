@@ -1,6 +1,6 @@
 <template>
     <div class="home" @click="$router.push(homeSetting.homeHref)">
-        <fluent-emoji:astronaut-medium-light class="h-8 w-8 m-1"/>
+        <fluent-emoji:astronaut-medium-light class="h-6 w-6 m-1"/>
         <a class="bg-clip-text linear-gradient inverse text-fill-transparent">{{ homeSetting.homeString }}</a>
     </div>
 </template>

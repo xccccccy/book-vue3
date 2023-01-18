@@ -32,7 +32,7 @@
             <div class="flex items-start">
                 <div class="rounded-lg border dark:border-slate-700 overflow-hidden shadow-lg hidden sm:block"
                     style="width: 32%; min-width: 200px;">
-                    <h3 class="p-5 bg-sky-500 text-white dark:bg-slate-700 font-semibold text-xl">搜索结果</h3>
+                    <h3 class="p-5 bg-indigo-500 text-white dark:bg-slate-700 font-semibold text-xl">搜索结果</h3>
                     <ul class="pb-2 bg-white dark:bg-slate-700">
                         <li>
                             <div class="bg-white dark:bg-zinc-900 flex items-center cursor-pointer"
@@ -140,6 +140,12 @@ import { computed } from '@vue/reactivity'
 import { ArrowLeft, ArrowRight, ArrowDown, Search, Close } from '@element-plus/icons-vue'
 import axios from "axios";
 import VideoItem from './VideoItem.vue'
+import { useRouter } from 'vue-router'
+import { useVideoStore } from './videoStore'
+
+var videoStore = useVideoStore()
+
+var router = useRouter()
 
 const emit = defineEmits(['togglePanel'])
 
@@ -173,6 +179,9 @@ const searchVideo = (s) => {
         ElNotification({ title: '搜索不能为空。', type: 'warning', duration: 1600 });
         return
     };
+
+    router.push("/video?s=" + search_s)
+    videoStore.showing = "search"
     axios.post("/videoapi/search", {
         's': search_s
     }).then((res) => {

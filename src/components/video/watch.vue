@@ -1,6 +1,7 @@
 <template>
-    <div class="bg-zinc-200 dark:bg-zinc-900">
-        <div class="app w-24/25 lg:w-10/12 xl:w-9/12 pt-12 sm:pt-16 text-left pb-14 mx-auto">
+    <div class="">
+        <!-- bg-zinc-200 dark:bg-zinc-900 -->
+        <div class="app w-24/25 lg:w-10/12 xl:w-9/12 pt-3 text-left pb-14 mx-auto">
             <!-- <iframe width="100%" style="height: 50vh; width:100%;" allowTransparency="true" frameborder="0" scrolling="no"
                             allowfullscreen="true"
                             src="https://api.okjx.cc:3389/jx.php?url=https://v.qq.com/x/cover/mzc002007rb113r/p0044l78gj3.html"
@@ -32,11 +33,18 @@
                                     <h3> {{ videoStore.playerOptions.name }}</h3>
                                 </div>
                             </div>
-                            <div class="mb-3 mr-6 ml-1 sm:ml-0 shadow-xl">
+                            <div class="mb-3 mr-6 ml-1 sm:ml-0 shadow-xl relative">
                                 <video-player :src="videoStore.playerOptions.src"
-                                    :poster="videoStore.playerOptions.poster" controls :loop="true" :volume="0.6"
+                                    :poster="videoStore.playerOptions.poster" controls :loop="true"
+                                    v-model:volume="videoStore.playerOptions.volume"
                                     :muted="videoStore.playerOptions.muted"
-                                    class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted" />
+                                    class="demo-player w-auto h-auto vjs-big-play-centered" @mounted="handleMounted"
+                                    @canplay="handleCanplay" @play="handlePlay"
+                                    @leavepictureinpicture="handleLeavepictureinpicture" />
+                                <div v-show="lastPlayshow && videoStore.lastPlay.currentTime > videoStore.playerOptions.currentTime"
+                                    @click="toLastPlay"
+                                    class=" absolute cursor-pointer px-2 py-1 text-sm bg-zinc-200 bg-opacity-80 text-zinc-800 rounded-md left-3 bottom-10">
+                                    跳转到上次观看位置: {{ lastPlayShowTime }}</div>
                             </div>
                         </div>
                         <div class="hidden sm:block" style="max-width: 21rem;min-width: 19rem;">
@@ -59,13 +67,14 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div @click="test">test pinia:{{ videoStore.lastPlay.currentTime }}</div> -->
             </div>
         </div>
     </div>
 </template>
   
 <script setup>
-import { ref, onUnmounted, watch } from 'vue'
+import { ref, onUnmounted, watch, onMounted, reactive, computed } from 'vue'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import { ArrowLeft, ArrowRight, ArrowDown, Search, Close } from '@element-plus/icons-vue'
@@ -83,8 +92,56 @@ import SearchRelation from './searchRelation.vue'
 const searchComponent = ref(null)
 var videoStore = useVideoStore()
 
+onMounted(() => {
+    let newurl = location.href;
+    if (newurl.indexOf('?') != -1) {
+        let params = decodeURI(newurl.split("?")[1]);
+        let s = params.split("=")[0];
+        if (s == "s") {
+            searchVideo(params.split("=")[1]);
+        } else if (s == "p") {
+            videoStore.showing = 'player'
+            setTimeout(() => {
+                document.getElementsByClassName('demo-player')[0].scrollIntoView({ block: "center" });
+            }, 10)
+        }
+    }
+    monitorkeydowm()
+})
+
+const monitorkeydowm = () => {
+    document.onkeydown = (e) => {
+        if (videoStore.showing != "player") {
+            return;
+        }
+        let key = window.event.keyCode;
+        if (key == 39 && videoStore.playerOptions.playing) {
+            window.event.preventDefault()
+            videoStore.player.currentTime(videoStore.lastPlay.currentTime + 5);
+        } else if (key == 37 && !videoStore.playerOptions.playing) {
+            window.event.preventDefault()
+            videoStore.player.currentTime(videoStore.lastPlay.currentTime - 5);
+        } else if (key == 38) {
+            window.event.preventDefault()
+            videoStore.playerOptions.volume += 0.05;
+        } else if (key == 40) {
+            window.event.preventDefault()
+            videoStore.playerOptions.volume -= 0.05;
+        } else if (key == 32) {
+            window.event.preventDefault()
+            if (videoStore.playerOptions.playing) {
+                videoStore.pauseVideo()
+            } else {
+                videoStore.playVideo()
+            }
+        }
+    };
+}
+
 const togglePanel = () => {
-    videoStore.pauseVideo();
+    // if (!videoStore.playerOptions.isPip) {
+    //     videoStore.pauseVideo();
+    // }
     if (videoStore.showing == 'search') {
         videoStore.showing = 'player'
         setTimeout(() => {
@@ -92,11 +149,98 @@ const togglePanel = () => {
         }, 10)
     } else {
         videoStore.showing = 'search'
+        videoStore.player.requestPictureInPicture();
     }
 }
 
 const handleMounted = (payload) => {
     videoStore.player = payload.player;
+    videoStore.playerOptions.currentTime = computed(() => {
+        if (videoStore.lastPlay.currentTime < payload.state.currentTime) {
+            videoStore.lastPlay.currentTime = payload.state.currentTime;
+        }
+        return payload.state.currentTime;
+    });
+    videoStore.playerOptions.duration = computed(() => {
+        return payload.state.duration;
+    });
+    videoStore.playerOptions.playing = computed(() => {
+        return payload.state.playing;
+    })
+    videoStore.playerOptions.isFullscreen = computed(() => {
+        return payload.state.isFullscreen;
+    })
+    videoStore.playerOptions.isPip = computed(() => {
+        return payload.state.isInPictureInPicture;
+    })
+}
+
+const handleCanplay = () => {
+    console.log("Player can play.")
+}
+
+const lastPlayshow = ref(false)
+
+let lastPlayshowed = false;
+const handlePlay = () => {
+    if (lastPlayshowed) {
+        return;
+    }
+    lastPlayshowed = true;
+    if (videoStore.videoItem.id == videoStore.lastPlay.id) {
+        lastPlayshow.value = true;
+        setTimeout(() => {
+            if (videoStore.lastPlay.currentTime >= videoStore.playerOptions.currentTime) {
+                videoStore.lastPlay.currentTime = videoStore.playerOptions.currentTime;
+            }
+            lastPlayshow.value = false;
+        }, 12000);
+    } else {
+        videoStore.lastPlay = {
+            id: videoStore.videoItem.id,
+            currentTime: 0,
+            duration: 0,
+            seeked: false
+        }
+    }
+}
+
+const handleLeavepictureinpicture = () => {
+    console.log("handleLeavepictureinpicture");
+    videoStore.showing = "player"
+}
+
+const toLastPlay = () => {
+    videoStore.player.currentTime(videoStore.lastPlay.currentTime);
+}
+
+const lastPlayShowTime = computed(() => {
+    return secTotime(videoStore.lastPlay.currentTime)
+})
+
+const secTotime = (s) => {
+    var t = '';
+    if (s > -1) {
+        var hour = Math.floor(s / 3600)
+        var min = Math.floor(s / 60) % 60
+        var sec = s % 60
+        if (hour > 0) {
+            if (hour < 10) {
+                t = '0' + hour + ":"
+            } else {
+                t = hour + ":"
+            }
+        }
+        if (min < 10) {
+            t += "0"
+        }
+        t += min + ":"
+        if (sec < 10) {
+            t += "0"
+        }
+        t += sec.toFixed(0)
+    }
+    return t
 }
 
 const recommendList = [DATA[2], DATA[4], DATA[1], DATA[0]]
@@ -119,9 +263,15 @@ headerStore.$patch({
 })
 
 onUnmounted(() => {
-    headerStore.resetHeader()
+    headerStore.resetHeader();
+    document.onkeydown = null;
 })
 
+const test = () => {
+    console.log('test')
+    videoStore.player.currentTime(videoStore.lastPlay.currentTime);
+    videoStore.playVideo()
+}
 </script>
   
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-    <div class="app w-full sm:w-3/4 2xl:w-2/3 pt-8">
+    <div class="app w-full sm:w-3/4 2xl:w-2/3">
         <div class="book-list" v-if="bookshelf_show">
             <div class="list-title">
                 <span>我的书架</span>
@@ -89,10 +89,8 @@ export default {
         $("html,body").scrollTop(0);
     },
     unmounted() {
-        console.log("ddd");
         const headerStore = useHeaderStore()
         headerStore.resetHeader()
-        console.log(headerStore)
     },
     methods: {
         initHeader() {
@@ -101,11 +99,11 @@ export default {
                 headerSetting: {
                     headerSettings:
                         [
-                            // {
-                            //     type: 'search',
-                            //     placeholder: "搜索书籍。",
-                            //     clickHandle: this.searchbook
-                            // },
+                            {
+                                type: 'search',
+                                placeholder: "搜索书籍。",
+                                clickHandle: this.searchbook
+                            },
                             {
                                 type: 'common',
                                 // headerString: '搜索',
